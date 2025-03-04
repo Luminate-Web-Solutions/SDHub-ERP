@@ -65,6 +65,7 @@ import { StudentDialogComponent } from './dashboard/students/student-dialog/stud
 import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
 import { TrainerComponent } from './trainer/trainer.component';
 import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
+import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
 
 
@@ -105,6 +106,7 @@ import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.co
     UserDialogComponent,
     StudentDialogComponent,
     MoreGalleryComponent,
+    ViewReportComponent,
     NewsDialogComponent
   ],
   imports: [

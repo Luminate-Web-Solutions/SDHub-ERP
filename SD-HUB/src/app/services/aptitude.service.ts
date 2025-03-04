@@ -97,17 +97,34 @@ export class AptitudeService {
     return this.getQuestions().pipe(
       switchMap(questions => {
         const score = this.calculateScore(testData.answers, questions);
+        const states = this.calculateStates(testData.answers, questions);
         const submission = {
           ...testData.personalInfo,
-          marksScored: `${score}/${43}`, // Assuming 40 total questions
-          answers: testData.answers
+          marksScored: `${score}/${43}`, // Assuming 43 total questions
+          answers: testData.answers,
+          states: states
         };
         return this.http.post(`${this.apiUrl}/submit-test`, submission);
       })
     );
   }
+  
+  calculateStates(answers: { [key: string]: string }, questions: any[]): string[] {
+    const states: string[] = [];
+    ['aptitudeQuestions', 'generalKnowledgeQuestions', 'criticalThinkingQuestions'].forEach(section => {
+      questions[0][section][0].questions.forEach((q: any, index: number) => {
+        const questionId = section.split('Questions')[0] + '_' + index;
+        states.push(answers[questionId] === q.correctAnswer ? 'yes' : 'no');
+      });
+    });
+    return states;
+  }
 
   getTestResults(): Observable<TestResult[]> {
     return this.http.get<TestResult[]>(`${this.apiUrl}/test-results`);
+  }
+
+  getTestResultsWithAnswers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/test-results-with-answers`);
   }
 }

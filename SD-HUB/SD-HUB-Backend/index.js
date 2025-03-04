@@ -445,6 +445,16 @@ app.post('/submit-test', async (req, res) => {
       'INSERT INTO test_results (email, fullName, gender, courseApplied, marksScored) VALUES (?, ?, ?, ?, ?)',
       [testData.email, testData.fullName, testData.gender, testData.courseApplied, testData.marksScored]
     );
+
+    const testResultId = result.insertId;
+    const selectedAnswers = Object.values(testData.answers).join(',');
+    const states = testData.states.join(',');
+
+    await pool.query(
+      'INSERT INTO stored_results (test_result_id, selected_answer, states) VALUES (?, ?, ?)',
+      [testResultId, selectedAnswers, states]
+    );
+
     res.status(201).json({ message: 'Test submitted successfully' });
   } catch (error) {
     console.error('Error submitting test:', error);
@@ -500,6 +510,20 @@ app.delete('/students/:id', async (req, res) => {
   } catch (error) {
     console.error('Error deleting student:', error);
     res.status(500).json({ error: 'Failed to delete student' });
+  }
+});
+
+app.get('/test-results-with-answers', async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT tr.*, sr.selected_answer, sr.states
+      FROM test_results tr
+      JOIN stored_results sr ON tr.id = sr.test_result_id
+    `);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching test results with answers:', error);
+    res.status(500).json({ error: 'Failed to fetch test results with answers' });
   }
 });
 
