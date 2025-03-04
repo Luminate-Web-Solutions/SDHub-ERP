@@ -318,6 +318,90 @@ app.get('/aptitude', async (req, res) => {
   res.status(200).json(rows);
 });
 
+// News API endpoints
+app.get('/news', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM news ORDER BY created_at DESC');
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching news:', error);
+    res.status(500).json({ error: 'Failed to fetch news' });
+  }
+});
+
+app.post('/news', async (req, res) => {
+  try {
+    const { title, description, date, image } = req.body;
+    
+    if (!title || !description || !date) {
+      return res.status(400).json({ error: 'Title, description, and date are required' });
+    }
+    
+    const [result] = await pool.query(
+      'INSERT INTO news (title, description, date, image) VALUES (?, ?, ?, ?)',
+      [title, description, date, image]
+    );
+    
+    res.status(201).json({ 
+      id: result.insertId,
+      title,
+      description,
+      date,
+      image
+    });
+  } catch (error) {
+    console.error('Error adding news:', error);
+    res.status(500).json({ error: 'Failed to add news' });
+  }
+});
+
+app.put('/news/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, date, image } = req.body;
+    
+    if (!title || !description || !date) {
+      return res.status(400).json({ error: 'Title, description, and date are required' });
+    }
+    
+    const [result] = await pool.query(
+      'UPDATE news SET title = ?, description = ?, date = ?, image = ? WHERE id = ?',
+      [title, description, date, image, id]
+    );
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'News not found' });
+    }
+    
+    res.status(200).json({
+      id: parseInt(id),
+      title,
+      description,
+      date,
+      image
+    });
+  } catch (error) {
+    console.error('Error updating news:', error);
+    res.status(500).json({ error: 'Failed to update news' });
+  }
+});
+
+app.delete('/news/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const [result] = await pool.query('DELETE FROM news WHERE id = ?', [id]);
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'News not found' });
+    }
+    
+    res.status(200).json({ message: 'News deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting news:', error);
+    res.status(500).json({ error: 'Failed to delete news' });
+  }
+});
 
 app.post('/contact', async (req, res) => {
   try {
