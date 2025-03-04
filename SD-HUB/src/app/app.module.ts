@@ -69,6 +69,7 @@ import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,

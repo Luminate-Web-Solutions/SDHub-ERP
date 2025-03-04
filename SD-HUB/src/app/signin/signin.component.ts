@@ -93,10 +93,10 @@ export class SigninComponent implements OnInit {
 
   roles = [
     { value: 'student', label: 'Student', route: '/aptitude' },
-    { value: 'trainer', label: 'Trainer', route: '/trainer-dashboard' },
-    { value: 'stakeholder', label: 'Stakeholder', route: '/stakeholder-dashboard' },
-    { value: 'admin', label: 'Admin', route: '/dashboard' },
-    { value: 'staff', label: 'Staff', route: '/staff-dashboard' }
+    // { value: 'trainer', label: 'Trainer', route: '/trainer-dashboard' },
+    // { value: 'stakeholder', label: 'Stakeholder', route: '/stakeholder-dashboard' },
+    // { value: 'admin', label: 'Admin', route: '/dashboard' },
+    // { value: 'staff', label: 'Staff', route: '/staff-dashboard' }
   ];
 
   constructor(

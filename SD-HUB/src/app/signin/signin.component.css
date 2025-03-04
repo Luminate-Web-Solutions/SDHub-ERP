@@ -225,7 +225,32 @@ mat-form-field {
   justify-content: space-between;
   align-items: center;
   margin-top: 16px;
+  margin-bottom: 16px;
+}
 
+.forgot-password {
+  color: #3f51b5;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.signin-button {
+  min-width: 120px;
+  position: relative;
+}
+
+.spinner {
+  margin: 0 auto;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
 }
 
 button[type="submit"] {

@@ -27,7 +27,7 @@
   }
   
   .logo img {
-    height: 64px;
+    height: 56px;
   }
   
   .logo-text {
@@ -71,9 +71,14 @@
     background-color: #2e53aa;
     color: #fff;
   }
-  
+
+  .contact-btn a.active {
+    /* color: #4285f4; */
+    background-color: #2e53aa !important;
+    color: #fff   !important;
+  }
   .contact-btn {
-    color: rgb(8, 8, 8) !important;
+
     border-radius: 20px !important;
     padding: 0 20px !important;
     display: flex;
@@ -92,14 +97,10 @@
   }
   .contact-btn:hover{
     background-color: #2e53aa !important;
-  color: #fff !important;
-  transition: 0.5s
+   color: #fff !important;
+   transition: 0.5s
   }
-  .contact-btn:active{
-    background-color: #2e53aa !important;
-  color: #fff !important;
-  /* transition: 0.5s */
-  }
+  
   
   /* Responsive Design */
   @media (max-width: 960px) {

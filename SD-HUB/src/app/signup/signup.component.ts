@@ -43,11 +43,19 @@ export class SignupComponent implements OnInit {
 
       this.StudentsService.signup({ course, name, email, password, contactNumber, status }).subscribe(user => {
         console.log(user);
-        this.snackBar.open('Signup successful!', 'Close', { duration: 3000 });
+        this.snackBar.open('Registration Successful!', 'Close', {
+          duration: 3000,  // Keep it as per your requirement
+          verticalPosition: 'top',  // Change from 'bottom' to 'top'
+          horizontalPosition: 'center'  // Optional: 'start' | 'center' | 'end' | 'left' | 'right'
+        });
         this.router.navigate(['/signin']);
       });
     } else {
-      this.snackBar.open('Please fill all required fields correctly', 'Close', { duration: 3000 });
+      this.snackBar.open('Please fill all required fields correctly', 'Close', {
+        duration: 3000,  // Keep it as per your requirement
+        verticalPosition: 'top',  // Change from 'bottom' to 'top'
+        horizontalPosition: 'center'  // Optional: 'start' | 'center' | 'end' | 'left' | 'right'
+      });
     }
   }
 }
