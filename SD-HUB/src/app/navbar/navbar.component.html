@@ -15,10 +15,10 @@
         <a mat-button routerLink="/signin" routerLinkActive="active">SIGN-IN</a>
       </div>
   
-      <a mat-button class="contact-btn" routerLink="/contact" routerLinkActive="active">
+      <button mat-button class="contact-btn" routerLink="/contact" routerLinkActive="active">
         Contact Us
         <mat-icon>mail_outline</mat-icon>
-      </a>
+      </button>
   
       <button mat-icon-button class="menu-btn" (click)="toggleMenu()">
         <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>

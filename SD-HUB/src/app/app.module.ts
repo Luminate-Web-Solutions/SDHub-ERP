@@ -30,6 +30,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SigninComponent } from './signin/signin.component';
@@ -67,7 +68,7 @@ import { TrainerComponent } from './trainer/trainer.component';
 import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
-
+import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.component';
 
 
 @NgModule({
@@ -108,7 +109,8 @@ import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.co
     StudentDialogComponent,
     MoreGalleryComponent,
     ViewReportComponent,
-    NewsDialogComponent
+    NewsDialogComponent,
+    ForgotPasswordDialogComponent
   ],
   imports: [
     BrowserModule,

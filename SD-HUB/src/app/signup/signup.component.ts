@@ -37,11 +37,11 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     if (this.signupForm.valid) {
-      const { course, name, email, password, contactNumber, status } = this.signupForm.value;
+      const { course, name, email, password, confirmPassword, contactNumber, status } = this.signupForm.value;
 
-      console.log('Sign-Up Data: ', { course, name, email, password, contactNumber, status });
+      console.log('Sign-Up Data: ', { course, name, email, password, confirmPassword, contactNumber, status });
 
-      this.StudentsService.signup({ course, name, email, password, contactNumber, status }).subscribe(user => {
+      this.StudentsService.signup({ course, name, email, password, confirmPassword, contactNumber, status }).subscribe(user => {
         console.log(user);
         this.snackBar.open('Registration Successful!', 'Close', {
           duration: 3000,  // Keep it as per your requirement

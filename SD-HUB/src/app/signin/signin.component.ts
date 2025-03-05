@@ -81,6 +81,8 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StudentsService } from '../students.service';
 import { AuthService } from '../services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ForgotPasswordDialogComponent } from './forgot-password-dialog.component';
 
 @Component({
   selector: 'app-signin',
@@ -91,23 +93,15 @@ export class SigninComponent implements OnInit {
   signinForm: FormGroup;
   hidePassword = true;
 
-  roles = [
-    { value: 'student', label: 'Student', route: '/aptitude' },
-    // { value: 'trainer', label: 'Trainer', route: '/trainer-dashboard' },
-    // { value: 'stakeholder', label: 'Stakeholder', route: '/stakeholder-dashboard' },
-    // { value: 'admin', label: 'Admin', route: '/dashboard' },
-    // { value: 'staff', label: 'Staff', route: '/staff-dashboard' }
-  ];
-
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private snackBar: MatSnackBar,
     private studentsService: StudentsService,
     private authService: AuthService,
+    private dialog: MatDialog
   ) {
     this.signinForm = this.formBuilder.group({
-      role: ['student', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
@@ -117,35 +111,46 @@ export class SigninComponent implements OnInit {
 
   onSubmit(): void {
     if (this.signinForm.valid) {
-      const credentials = this.signinForm.value;
+      const credentials = {
+        ...this.signinForm.value,
+        role: 'student' // Always set role as student
+      };
       
       this.studentsService.signin(credentials).subscribe({
         next: (response) => {
           this.authService.signin(response.token, credentials);
-          this.snackBar.open(`${credentials.role.charAt(0).toUpperCase() + credentials.role.slice(1)} sign-in successful!`, 'Close', { duration: 3000 });
-          
-          const roleConfig = this.roles.find(r => r.value === credentials.role);
-          if (roleConfig) {
-            this.router.navigate([roleConfig.route]);
-          }
+          this.snackBar.open('Sign-in successful!', 'Close', { duration: 3000 });
+          this.router.navigate(['/aptitude']);
         },
         error: (error) => {
           console.error('Sign-in error:', error);
-          this.snackBar.open(error.error.message || 'Sign-in failed', 'Close', { duration: 3000 });
+          this.snackBar.open(error.error?.message || 'Sign-in failed', 'Close', { duration: 3000 });
         }
       });
     }
   }
 
   forgotPassword(): void {
-    this.snackBar.open('Password reset link sent to your email.', 'Close', { duration: 3000 });
+    const dialogRef = this.dialog.open(ForgotPasswordDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(email => {
+      if (email) {
+        // Call service to send password reset email
+        this.studentsService.sendPasswordResetEmail(email).subscribe({
+          next: () => {
+            this.snackBar.open('Password reset instructions sent to your email.', 'Close', { duration: 3000 });
+          },
+          error: (error) => {
+            this.snackBar.open(error.error?.message || 'Failed to send reset email', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   redirectToSignup(): void {
     this.router.navigate(['/signup']);
-  }
-
-  isStudent(): boolean {
-    return this.signinForm.get('role')?.value === 'student';
   }
 }

@@ -14,6 +14,10 @@ export class StudentsService {
     return this.http.get<any>(`${this.apiUrl}/generate-unique-id`);
   }
 
+  sendPasswordResetEmail(email: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/forgot-password`, { email });
+  }
+
   addstudents(students: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/addstudents`, students);
   }

@@ -31,7 +31,7 @@ const transporter = nodemailer.createTransport({
   secure: false, // Use TLS
   auth: {
     user: 'mohdyousuf9059@gmail.com',
-    pass: 'jjfi atzp frdz znil'
+    pass: ''
   }
 });
 
@@ -121,14 +121,26 @@ app.get('/generate-unique-id', async (req, res) => {
 
 app.post('/addstudents', async (req, res) => {
   console.log(req.body);
+  // When a student submits registration form, set status to TBD
+  req.body.status = 'TBD';
   const [result] = await pool.query('INSERT INTO students SET ?', req.body);
+  
+  // Also update the user status if the email exists
+  if (req.body.email) {
+    await pool.query('UPDATE user SET status = ? WHERE email = ? AND role = ?', ['TBD', req.body.email, 'student']);
+  }
+  
   console.log(result);
   res.status(201).json(result);
 });
 
 app.post('/signup', async (req, res) => {
   console.log(req.body);
-  req.body['role'] = 'student';
+  // Set default status to pending for new signups
+  if (req.body.role === 'student' || !req.body.role) {
+    req.body.role = 'student';
+    req.body.status = 'pending';
+  }
   const [result] = await pool.query('INSERT INTO user SET ?', req.body);
   console.log(result);
   res.status(200).json(result);
@@ -136,7 +148,7 @@ app.post('/signup', async (req, res) => {
 
 app.post('/approve', async (req, res) => {
   console.log(req.body);
-  const [result] = await pool.query('UPDATE students SET status = ? WHERE email = ?', ['active', req.body.email]);
+  const [result] = await pool.query('UPDATE user SET status = ? WHERE email = ?', ['active', req.body.email]);
   console.log('Updated documents =>', result);
   res.status(200).json(result);
 });
@@ -148,13 +160,24 @@ app.post('/signin', async (req, res) => {
 
     if (rows.length > 0) {
       const user = rows[0];
-      if (user.status === 'pending') {
-        res.status(200).json({ message: 'Account is pending activation' });
-        return;
+      
+      // Check user status for students only
+      if (role === 'student') {
+        if (user.status === 'pending') {
+          return res.status(403).json({ message: 'Your account is pending activation. Please contact the Admin.' });
+        }
+        
+        if (user.status === 'TBD') {
+          return res.status(403).json({ message: 'Your registration is under review. Please wait for approval.' });
+        }
+        
+        if (user.status !== 'active') {
+          return res.status(403).json({ message: 'Your account is not active. Please contact the Admin.' });
+        }
       }
 
       const token = jwt.sign(
-        { id: user.id, email: user.email, role: user.role },
+        { id: user.id, email: user.email, role: user.role, status: user.status },
         SECRET_KEY,
         { expiresIn: '1h' }
       );
@@ -164,7 +187,8 @@ app.post('/signin', async (req, res) => {
         user: {
           id: user.id,
           email: user.email,
-          role: user.role
+          role: user.role,
+          status: user.status
         },
         message: `${role.charAt(0).toUpperCase() + role.slice(1)} sign-in successful!`
       });
@@ -524,6 +548,47 @@ app.get('/test-results-with-answers', async (req, res) => {
   } catch (error) {
     console.error('Error fetching test results with answers:', error);
     res.status(500).json({ error: 'Failed to fetch test results with answers' });
+  }
+});
+
+
+// Add this new endpoint for forgot password
+app.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if email exists in database
+    const [users] = await pool.query('SELECT * FROM user WHERE email = ? AND role = ?', [email, 'student']);
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'No student account found with this email' });
+    }
+
+    const user = users[0];
+
+    // Send password to email
+    const mailOptions = {
+      from: 'mohdyousuf9059@gmail.com',
+      to: email,
+      subject: 'Your Password Recovery - Skills Development Hub',
+      html: `
+        <h2>Password Recovery</h2>
+        <p>Dear Student,</p>
+        <p>As requested, here is your password for your Skills Development Hub account:</p>
+        <p><strong>Password: ${user.password}</strong></p>
+        <p>If you did not request this password recovery, please contact us immediately.</p>
+        <br>
+        <p>Best regards,</p>
+        <p>Skills Development Hub Team</p>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Password has been sent to your email' });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: 'Failed to process password recovery request' });
   }
 });
 
