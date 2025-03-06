@@ -201,6 +201,65 @@ app.post('/signin', async (req, res) => {
   }
 });
 
+app.post('/login', async (req, res) => {
+  const { email, password, role } = req.body;
+  try {
+    // Validate role
+    const validRoles = ['stakeholder', 'director', 'adminstaff', 'trainer'];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({ message: 'Invalid role' });
+    }
+
+    // Corrected table name to 'user'
+    const [rows] = await pool.query(
+      'SELECT * FROM user WHERE email = ? AND password = ? AND role = ?',
+      [email, password, role]
+    );
+
+    if (rows.length === 0) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const user = rows[0];
+    
+    // Check account status
+    if (user.status !== 'active') {
+      return res.status(403).json({ 
+        message: 'Account is not active. Please contact administrator.' 
+      });
+    }
+
+    // Map adminstaff to admin role for frontend
+    const frontendRole = user.role === 'adminstaff' ? 'admin' : user.role;
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        id: user.id, 
+        email: user.email, 
+        role: frontendRole 
+      },
+      SECRET_KEY,
+      { expiresIn: '1h' }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: frontendRole,
+        name: user.name
+      },
+      message: 'Sign-in successful'
+    });
+
+  } catch (error) {
+    console.error('Sign-in error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 app.get('/users', async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM students');
   res.status(200).json(rows);

@@ -1,0 +1,148 @@
+.signin-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .animation {
+    width: 100%;
+    max-width: 530px;
+    height: 535px;
+    margin-bottom: 20px;
+  }
+  
+  .signin {
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .signin-card {
+    width: 100%;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  mat-card-header {
+    background: #2e53aa;
+    color: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-container {
+    width: 60px;
+    height: 60px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 16px;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+  }
+  
+  .header-text {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  mat-card-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  
+  mat-card-subtitle {
+    color: #fff;
+    font-size: 15px;
+    margin-top: 0;
+  }
+  
+  mat-card-content {
+    padding: 24px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+  }
+  
+  .mat-btn {
+    color: #2e53aa;
+  }
+  
+  button[type="submit"] {
+    background-color: #2e53aa;
+    color: white;
+  }
+  
+  button[type="submit"]:disabled {
+    background-color: rgba(0, 0, 0, 0.12);
+    color: rgba(0, 0, 0, 0.26);
+  }
+  
+  @media (min-width: 768px) {
+    .signin-container {
+      flex-wrap: nowrap;
+    }
+  
+    .animation {
+      width: 40%;
+      margin-bottom: 0;
+      margin-right: 20px;
+    }
+  
+    .signin {
+      width: 40%;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    mat-card-header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .logo-container {
+      margin-right: 0;
+      margin-bottom: 16px;
+    }
+  
+    .header-text {
+      align-items: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    mat-card-title {
+      font-size: 20px;
+    }
+  
+    mat-card-subtitle {
+      font-size: 14px;
+    }
+  }

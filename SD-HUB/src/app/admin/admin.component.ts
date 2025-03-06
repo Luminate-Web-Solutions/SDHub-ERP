@@ -12,13 +12,13 @@ export class AdminComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
   navItems = [
-    { icon: 'dashboard', label: 'Dashboard', link: '/dashboard' },
-    { icon: 'person', label: 'Trainers', link: '/trainers' },
-    { icon: 'groups', label: 'Students', link: '/students' },
-    { icon: 'book', label: 'Courses', link: '/courses' },
-    { icon: 'library_books', label: 'Syllabus', link: '/syllabus' },
-    { icon: 'newspaper', label: 'News', link: '/news' },
-    { icon: 'account_circle', label: 'Profile', link: '/profile' },
+    { icon: 'dashboard', label: 'Dashboard', link: '/admin/dashboard' },
+    { icon: 'person', label: 'Trainers', link: '/admin/trainers' },
+    { icon: 'groups', label: 'Students', link: '/admin/students' },
+    { icon: 'book', label: 'Courses', link: '/admin/courses' },
+    { icon: 'library_books', label: 'Syllabus', link: '/admin/syllabus' },
+    { icon: 'newspaper', label: 'News', link: '/admin/news' },
+    { icon: 'account_circle', label: 'Profile', link: '/admin/profile' },
   ];
 
   constructor(

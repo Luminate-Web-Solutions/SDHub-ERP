@@ -25,6 +25,8 @@ import { ContactComponent } from './contact/contact.component';
 import { TestResultComponent } from './test-result/test-result.component';
 import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { ViewReportComponent } from './view-report/view-report.component';
+import { LoginComponent } from './login/login.component';
+import { adminGuard } from './admin.guard';
 
 
 const routes: Routes = [
@@ -34,35 +36,29 @@ const routes: Routes = [
   { path: 'aboutus', component: AboutusComponent },
   { path: 'staff', component: StaffComponent},
   { path: 'main-course', component: MainCourseComponent },
-  // { path: 'aptitue', component: AptituedTestComponent },
-  // { path: 'registration', component: RegistrationComponent },
   { path: 'navbar', component: NavbarComponent},
   { path: 'signup', component: SignupComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'more-gallery', component: MoreGalleryComponent },
   { path: 'view-report', component: ViewReportComponent },
-  // {path: 'dashboard', component:DashboardComponent},
-  // { path: 'profile', component: ProfileComponent },
-  
-  {
-    path: '',
+  { path: 'login', component: LoginComponent },
+  { 
+    path: 'admin', 
     component: AdminComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [adminGuard],
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'profile', component: ProfileComponent },
       { path: 'students', component: StudentsComponent },
       { path: 'trainers', component: TrainersComponent },
-      { path: 'deans', component: DeansComponent },
       { path: 'courses', component: CoursesComponent },
-      { path: 'news', component: NewsComponent },
       { path: 'syllabus', component: SyllabusComponent },
-      { path: 'test-result', component: TestResultComponent },
-      
-
-      // Add other routes here
+      { path: 'news', component: NewsComponent },
+      { path: 'profile', component: ProfileComponent }
     ]
   },
+  
+  
   {
     path: '',
     component: StdDashboardComponent,

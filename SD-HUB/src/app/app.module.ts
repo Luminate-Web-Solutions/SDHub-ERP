@@ -70,6 +70,7 @@ import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
 import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.component';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -111,7 +112,8 @@ import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.c
     MoreGalleryComponent,
     ViewReportComponent,
     NewsDialogComponent,
-    ForgotPasswordDialogComponent
+    ForgotPasswordDialogComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

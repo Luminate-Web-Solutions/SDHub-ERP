@@ -53,6 +53,10 @@ export class StudentsService {
     return this.http.post<any>(`${this.apiUrl}/signin`, credentials);
   }
 
+  login(credentials: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/signin`, credentials);
+  }
+
   getsignupusers(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/signupusers`);
   }
