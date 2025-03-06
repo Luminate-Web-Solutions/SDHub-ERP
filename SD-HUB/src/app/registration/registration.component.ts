@@ -48,6 +48,7 @@ export class RegistrationComponent implements OnInit {
       stream: [''],
       collegeName: [''],
       yearOfPassing: ['',Validators.required],
+      currentYear: [''],
       percentage: ['', [Validators.required, Validators.min(0), Validators.max(100)]]
     });
 

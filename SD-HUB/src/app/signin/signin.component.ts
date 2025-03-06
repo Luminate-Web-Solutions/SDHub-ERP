@@ -119,12 +119,22 @@ export class SigninComponent implements OnInit {
       this.studentsService.signin(credentials).subscribe({
         next: (response) => {
           this.authService.signin(response.token, credentials);
-          this.snackBar.open('Sign-in successful!', 'Close', { duration: 3000 });
+          this.snackBar.open('Sign-in successful!', 'Close', {
+            duration: 3000,  // Keep it as per your requirement
+            verticalPosition: 'top',  // Change from 'bottom' to 'top'
+            horizontalPosition: 'center'  // Optional: 'start' | 'center' | 'end' | 'left' | 'right'
+          });
+          
           this.router.navigate(['/aptitude']);
         },
         error: (error) => {
           console.error('Sign-in error:', error);
-          this.snackBar.open(error.error?.message || 'Sign-in failed', 'Close', { duration: 3000 });
+          this.snackBar.open(error.error?.message || 'Sign-in failed', 'Close', {
+            duration: 3000,  // Keep it as per your requirement
+            verticalPosition: 'top',  // Change from 'bottom' to 'top'
+            horizontalPosition: 'center'  // Optional: 'start' | 'center' | 'end' | 'left' | 'right'
+          });
+          
         }
       });
     }
@@ -140,10 +150,20 @@ export class SigninComponent implements OnInit {
         // Call service to send password reset email
         this.studentsService.sendPasswordResetEmail(email).subscribe({
           next: () => {
-            this.snackBar.open('Password reset instructions sent to your email.', 'Close', { duration: 3000 });
+            this.snackBar.open('Password reset instructions sent to your email.', 'Close', {
+              duration: 3000,  // Keep it as per your requirement
+              verticalPosition: 'top',  // Change from 'bottom' to 'top'
+              horizontalPosition: 'center'  // Optional: 'start' | 'center' | 'end' | 'left' | 'right'
+            });
+            
           },
           error: (error) => {
-            this.snackBar.open(error.error?.message || 'Failed to send reset email', 'Close', { duration: 3000 });
+            this.snackBar.open(error.error?.message || 'Failed to send reset email', 'Close', {
+              duration: 3000,  // Keep it as per your requirement
+              verticalPosition: 'top',  // Change from 'bottom' to 'top'
+              horizontalPosition: 'center'  // Optional: 'start' | 'center' | 'end' | 'left' | 'right'
+            });
+            
           }
         });
       }

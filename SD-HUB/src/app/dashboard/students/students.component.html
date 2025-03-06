@@ -5,13 +5,34 @@
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyUserFilter($event)" placeholder="Ex. name or email" #userInput>
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="openAddUserDialog()">
-        <mat-icon>add</mat-icon>
-        Add User
-      </button>
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="exportSelectedUsers()">
+          <mat-icon>download</mat-icon>
+          Export Selected
+        </button>
+        <button mat-raised-button color="primary" (click)="openAddUserDialog()">
+          <mat-icon>add</mat-icon>
+          Add User
+        </button>
+      </div>
     </div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="userDataSource" matSort #userSort="matSort">
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggleUsers() : null"
+                          [checked]="userSelection.hasValue() && isAllUsersSelected()"
+                          [indeterminate]="userSelection.hasValue() && !isAllUsersSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? userSelection.toggle(row) : null"
+                          [checked]="userSelection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="course">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Course </th>
           <td mat-cell *matCellDef="let row"> {{row.course}} </td>
@@ -58,13 +79,34 @@
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyStudentFilter($event)" placeholder="Ex. name or email" #studentInput>
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="openAddStudentDialog()">
-        <mat-icon>add</mat-icon>
-        Add Student
-      </button>
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="exportSelectedStudents()">
+          <mat-icon>download</mat-icon>
+          Export Selected
+        </button>
+        <button mat-raised-button color="primary" (click)="openAddStudentDialog()">
+          <mat-icon>add</mat-icon>
+          Add Student
+        </button>
+      </div>
     </div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="studentDataSource" matSort #studentSort="matSort">
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggleStudents() : null"
+                          [checked]="studentSelection.hasValue() && isAllStudentsSelected()"
+                          [indeterminate]="studentSelection.hasValue() && !isAllStudentsSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? studentSelection.toggle(row) : null"
+                          [checked]="studentSelection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="uniqueId">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Unique ID </th>
           <td mat-cell *matCellDef="let row"> {{row.uniqueId}} </td>

@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { StudentsService } from '../../students.service';
 import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { StudentDialogComponent } from './student-dialog/student-dialog.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 export interface UserData {
   id?: number;
@@ -35,11 +36,14 @@ export interface StudentData {
   styleUrls: ['./students.component.css']
 })
 export class StudentsComponent implements OnInit, AfterViewInit {
-  displayedUserColumns: string[] = ['course', 'name', 'contactNumber', 'email', 'status', 'actions'];
-  displayedStudentColumns: string[] = ['uniqueId', 'firstName', 'lastName', 'applicationDate', 'course', 'email', 'actions'];
+  displayedUserColumns: string[] = ['select','course', 'name', 'contactNumber', 'email', 'status', 'actions'];
+  displayedStudentColumns: string[] = ['select','uniqueId', 'firstName', 'lastName', 'applicationDate', 'course', 'email', 'actions'];
   
   userDataSource: MatTableDataSource<UserData>;
   studentDataSource: MatTableDataSource<StudentData>;
+
+   userSelection = new SelectionModel<UserData>(true, []);
+   studentSelection = new SelectionModel<StudentData>(true, []);
 
   @ViewChild('userPaginator') userPaginator!: MatPaginator;
   @ViewChild('studentPaginator') studentPaginator!: MatPaginator;
@@ -53,6 +57,84 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   ) {
     this.userDataSource = new MatTableDataSource<UserData>();
     this.studentDataSource = new MatTableDataSource<StudentData>();
+  }
+
+  // Selection methods for Users
+  isAllUsersSelected() {
+    const numSelected = this.userSelection.selected.length;
+    const numRows = this.userDataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggleUsers() {
+    if (this.isAllUsersSelected()) {
+      this.userSelection.clear();
+      return;
+    }
+    this.userSelection.select(...this.userDataSource.data);
+  }
+
+  // Selection methods for Students
+  isAllStudentsSelected() {
+    const numSelected = this.studentSelection.selected.length;
+    const numRows = this.studentDataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggleStudents() {
+    if (this.isAllStudentsSelected()) {
+      this.studentSelection.clear();
+      return;
+    }
+    this.studentSelection.select(...this.studentDataSource.data);
+  }
+
+  // Export methods
+  exportSelectedUsers() {
+    const selectedUsers = this.userSelection.selected;
+    if (selectedUsers.length === 0) {
+      this.snackBar.open('Please select at least one user to export', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const csvData = this.convertToCSV(selectedUsers);
+    this.downloadCSV(csvData, 'users.csv');
+  }
+
+  exportSelectedStudents() {
+    const selectedStudents = this.studentSelection.selected;
+    if (selectedStudents.length === 0) {
+      this.snackBar.open('Please select at least one student to export', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const csvData = this.convertToCSV(selectedStudents);
+    this.downloadCSV(csvData, 'students.csv');
+  }
+
+  convertToCSV(data: any[]): string {
+    const headers = Object.keys(data[0]).filter(key => key !== 'id' && key !== 'password' && key !== 'confirmPassword');
+    const csvRows = [headers.join(',')];
+
+    for (const item of data) {
+      const values = headers.map(header => {
+        const value = item[header];
+        return typeof value === 'string' ? `"${value}"` : value;
+      });
+      csvRows.push(values.join(','));
+    }
+
+    return csvRows.join('\n');
+  }
+
+  downloadCSV(csvData: string, filename: string) {
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 
   ngOnInit() {
