@@ -32,6 +32,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 
+
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SigninComponent } from './signin/signin.component';
@@ -64,9 +67,15 @@ import { GalleryComponent } from './gallery/gallery.component';
 import { TrainerDialogComponent } from './dashboard/trainers/trainer-dialog/trainer-dialog.component';
 import { UserDialogComponent } from './dashboard/students/user-dialog/user-dialog.component';
 import { StudentDialogComponent } from './dashboard/students/student-dialog/student-dialog.component';
-import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
 import { TrainerComponent } from './trainer/trainer.component';
 import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
+import { TaskDialogComponent } from './staff/task-dialog/task-dialog.component';
+import { TaskCardComponent } from './staff/task-card/task-card.component';
+import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
+import { AttendanceComponent } from './staff/attendance/attendance.component';
+import { HelloComponent } from './hello/hello.component';
+import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
 import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.component';
@@ -102,7 +111,6 @@ import { LoginComponent } from './login/login.component';
     TestResultComponent,
     StaffComponent,
     GalleryComponent,
-    StakeholderDashComponent,
     TrainerComponent,
     StaffComponent,
     GalleryComponent,
@@ -110,6 +118,12 @@ import { LoginComponent } from './login/login.component';
     UserDialogComponent,
     StudentDialogComponent,
     MoreGalleryComponent,
+    TaskDialogComponent,
+    TaskCardComponent,
+    KanbanBoardComponent,
+    AttendanceComponent,
+    HelloComponent,
+    SyllabusTrackerComponent,
     ViewReportComponent,
     NewsDialogComponent,
     ForgotPasswordDialogComponent,
@@ -145,7 +159,8 @@ import { LoginComponent } from './login/login.component';
     MatDialogModule,
     MatGridListModule,
     MatProgressSpinnerModule,
-    FormsModule
+    FormsModule,
+    DragDropModule  
   ],
   providers: [
     provideAnimationsAsync(),
