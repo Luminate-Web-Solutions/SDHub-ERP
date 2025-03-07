@@ -12,9 +12,10 @@ interface TestResult {
 }
 
 @Component({
-  selector: 'app-view-report',
-  templateUrl: './view-report.component.html',
-  styleUrls: ['./view-report.component.css']
+    selector: 'app-view-report',
+    templateUrl: './view-report.component.html',
+    styleUrls: ['./view-report.component.css'],
+    standalone: false
 })
 export class ViewReportComponent implements OnInit {
   results: TestResult[] = [];

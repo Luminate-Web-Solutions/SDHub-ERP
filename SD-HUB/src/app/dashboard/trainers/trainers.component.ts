@@ -17,9 +17,10 @@ export interface UserData {
 }
 
 @Component({
-  selector: 'app-trainers',
-  templateUrl: './trainers.component.html',
-  styleUrl: './trainers.component.css'
+    selector: 'app-trainers',
+    templateUrl: './trainers.component.html',
+    styleUrl: './trainers.component.css',
+    standalone: false
 })
 export class TrainersComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'course', 'contactNumber', 'email', 'currentBatch', 'actions'];

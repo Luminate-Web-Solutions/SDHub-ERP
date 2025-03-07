@@ -7,9 +7,10 @@ interface Message {
 }
 
 @Component({
-  selector: 'app-chat-widget',
-  templateUrl: './chat-widget.component.html',
-  styleUrl: './chat-widget.component.css'
+    selector: 'app-chat-widget',
+    templateUrl: './chat-widget.component.html',
+    styleUrl: './chat-widget.component.css',
+    standalone: false
 })
 export class ChatWidgetComponent implements OnInit {
   isOpen = false;

@@ -31,9 +31,10 @@ export interface StudentData {
 }
 
 @Component({
-  selector: 'app-students',
-  templateUrl: './students.component.html',
-  styleUrls: ['./students.component.css']
+    selector: 'app-students',
+    templateUrl: './students.component.html',
+    styleUrls: ['./students.component.css'],
+    standalone: false
 })
 export class StudentsComponent implements OnInit, AfterViewInit {
   displayedUserColumns: string[] = ['select','course', 'name', 'contactNumber', 'email', 'status', 'actions'];

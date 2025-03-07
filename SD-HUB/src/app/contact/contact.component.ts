@@ -4,9 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ContactService } from '../services/contact.service';
 
 @Component({
-  selector: 'app-contact',
-  templateUrl: './contact.component.html',
-  styleUrl: './contact.component.css'
+    selector: 'app-contact',
+    templateUrl: './contact.component.html',
+    styleUrl: './contact.component.css',
+    standalone: false
 })
 export class ContactComponent {
   contactForm: FormGroup;

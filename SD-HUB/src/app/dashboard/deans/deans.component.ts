@@ -13,9 +13,10 @@ export interface UserData {
 }
 
 @Component({
-  selector: 'app-deans',
-  templateUrl: './deans.component.html',
-  styleUrl: './deans.component.css'
+    selector: 'app-deans',
+    templateUrl: './deans.component.html',
+    styleUrl: './deans.component.css',
+    standalone: false
 })
 export class DeansComponent implements AfterViewInit {
   displayedColumns: string[] = ['number', 'name', 'age', 'email'];

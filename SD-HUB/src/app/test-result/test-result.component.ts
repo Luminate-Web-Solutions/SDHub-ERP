@@ -10,9 +10,10 @@ interface TestResult {
 }
 
 @Component({
-  selector: 'app-test-result',
-  templateUrl: './test-result.component.html',
-  styleUrl: './test-result.component.css'
+    selector: 'app-test-result',
+    templateUrl: './test-result.component.html',
+    styleUrl: './test-result.component.css',
+    standalone: false
 })
 export class TestResultComponent implements OnInit {
   results: TestResult[] = [];

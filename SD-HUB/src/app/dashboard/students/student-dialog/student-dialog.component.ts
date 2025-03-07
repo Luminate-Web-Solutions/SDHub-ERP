@@ -4,9 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { StudentsService } from '../../../students.service';
 
 @Component({
-  selector: 'app-student-dialog',
-  templateUrl: './student-dialog.component.html',
-  styleUrl: './student-dialog.component.css'
+    selector: 'app-student-dialog',
+    templateUrl: './student-dialog.component.html',
+    styleUrl: './student-dialog.component.css',
+    standalone: false
 })
 export class StudentDialogComponent {
   studentForm: FormGroup;

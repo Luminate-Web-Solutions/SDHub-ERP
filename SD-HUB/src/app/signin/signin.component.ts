@@ -85,9 +85,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { ForgotPasswordDialogComponent } from './forgot-password-dialog.component';
 
 @Component({
-  selector: 'app-signin',
-  templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css']
+    selector: 'app-signin',
+    templateUrl: './signin.component.html',
+    styleUrls: ['./signin.component.css'],
+    standalone: false
 })
 export class SigninComponent implements OnInit {
   signinForm: FormGroup;

@@ -4,9 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NewsItem } from '../../../services/news.service';
 
 @Component({
-  selector: 'app-news-dialog',
-  templateUrl: './news-dialog.component.html',
-  styleUrl: './news-dialog.component.css'
+    selector: 'app-news-dialog',
+    templateUrl: './news-dialog.component.html',
+    styleUrl: './news-dialog.component.css',
+    standalone: false
 })
 export class NewsDialogComponent {
   newsForm: FormGroup;

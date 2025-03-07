@@ -4,9 +4,10 @@ import { MatSidenav } from '@angular/material/sidenav';
 
 
 @Component({
-  selector: 'app-std-dashboard',
-  templateUrl: './std-dashboard.component.html',
-  styleUrl: './std-dashboard.component.css'
+    selector: 'app-std-dashboard',
+    templateUrl: './std-dashboard.component.html',
+    styleUrl: './std-dashboard.component.css',
+    standalone: false
 })
 export class StdDashboardComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
