@@ -1,3 +1,5 @@
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+  <mat-tab label="trainers">
 <div class="button">
   <mat-form-field>
     <mat-label>Filter</mat-label>
@@ -66,3 +68,8 @@
 
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 </div>
+</mat-tab>
+<mat-tab label="trainers management">
+  <app-hello></app-hello>
+</mat-tab>
+</mat-tab-group>

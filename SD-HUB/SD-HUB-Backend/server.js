@@ -220,21 +220,8 @@ app.get('/dashboard-stats', authenticateToken, async (req, res) => {
   }
 });
 
+
 // Start Server
 const server = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-// Handle Port Already in Use Error
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`❌ Port ${PORT} is already in use. Trying a new port...`);
-    setTimeout(() => {
-      app.listen(0, () => {
-        console.log(`✅ New server started on an available port.`);
-      });
-    }, 1000);
-  } else {
-    console.error('❌ Server error:', err);
-  }
 });
