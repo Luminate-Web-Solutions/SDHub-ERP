@@ -8,6 +8,7 @@ import { StudentsService } from '../../students.service';
 import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { StudentDialogComponent } from './student-dialog/student-dialog.component';
 import { SelectionModel } from '@angular/cdk/collections';
+import { DatePipe } from '@angular/common';
 
 export interface UserData {
   id?: number;
@@ -53,7 +54,8 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   constructor(
     private studentsService: StudentsService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private datePipe: DatePipe
   ) {
     this.userDataSource = new MatTableDataSource<UserData>();
     this.studentDataSource = new MatTableDataSource<StudentData>();
@@ -297,5 +299,207 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     if (this.studentDataSource.paginator) {
       this.studentDataSource.paginator.firstPage();
     }
+  }
+
+  printRegistrationForm(student: any) {
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      this.snackBar.open('Please allow pop-ups to print the form', 'Close', { duration: 3000 });
+      return;
+    }
+
+    // Format the date
+    const formattedDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy');
+    const dob = this.datePipe.transform(student.dateOfBirth, 'dd/MM/yyyy');
+
+    // Create the print content
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Registration Form</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+          .header img {
+            max-width: 200px;
+          }
+          .photo-box {
+            float: right;
+            width: 150px;
+            height: 180px;
+            border: 1px solid #000;
+            text-align: center;
+            padding-top: 70px;
+          }
+          .form-section {
+            margin-bottom: 20px;
+          }
+          .form-field {
+            margin-bottom: 10px;
+          }
+          .form-field label {
+            font-weight: bold;
+            display: inline-block;
+            width: 200px;
+          }
+          .form-field span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+          }
+          .declaration {
+            margin: 20px 0;
+          }
+          .signature-section {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+          }
+          .signature-line {
+            width: 200px;
+            border-top: 1px solid #000;
+            text-align: center;
+            padding-top: 5px;
+          }
+          @media print {
+            body {
+              padding: 0;
+              margin: 0;
+            }
+            .no-print {
+              display: none;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <img src="/assets/SD logo M Rectangle.png" alt="SD Hub Logo">
+          <h2>Admission Application Form</h2>
+        </div>
+        
+        <div class="photo-box">
+          Paste your passport size<br>Photograph here
+        </div>
+
+        <div class="form-section">
+          <div class="form-field">
+            <label>Student ID:</label>
+            <span>${student.uniqueId || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Date:</label>
+            <span>${formattedDate || ''}</span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Applicant Information</h3>
+          <div class="form-field">
+            <label>Full Name:</label>
+            <span>${student.firstName || ''} ${student.middleName || ''} ${student.lastName || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Father's Name:</label>
+            <span>${student.fatherFirstName || ''} ${student.fatherMiddleName || ''} ${student.fatherLastName || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Date of Birth:</label>
+            <span>${dob || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Phone No:</label>
+            <span>${student.phoneNumber || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Email:</label>
+            <span>${student.email || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Address (Permanent):</label>
+            <span>${student.address || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Parent/Guardian Contact:</label>
+            <span>${student.guardianContact || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Household Income (Yearly):</label>
+            <span>${student.householdIncome || ''}</span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Course Details</h3>
+          <div class="form-field">
+            <label>Course Applied for:</label>
+            <span>${student.course || ''}</span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Education Qualification</h3>
+          <div class="form-field">
+            <label>Degree:</label>
+            <span>${student.degree || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>College name:</label>
+            <span>${student.collegeName || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Year of Passing:</label>
+            <span>${student.yearOfPassing || ''}</span>
+          </div>
+          <div class="form-field">
+            <label>Percentage:</label>
+            <span>${student.percentage || ''}%</span>
+          </div>
+          <div class="form-field">
+            <label>Stream:</label>
+            <span>${student.stream || ''}</span>
+          </div>
+        </div>
+
+        <div class="declaration">
+          <p>I declare that my all the information given here are true and complete to the best of my knowledge.</p>
+          <p>I understand that false or misleading information may result in my rejection of the application.</p>
+        </div>
+
+        <div class="signature-section">
+          <div class="signature-line">Student's Signature</div>
+          <div class="signature-line">Parent/Guardian Signature</div>
+          <div class="signature-line">Director's Signature</div>
+        </div>
+
+        <div class="form-section">
+          <h3>ENCLOSURES:</h3>
+          <ol>
+            <li>Passport size photograph – 3 No.</li>
+            <li>Copy of Aadhar Card</li>
+            <li>Copy of Photo ID proof</li>
+            <li>Copy of College ID Card</li>
+            <li>Original Certificates</li>
+            <li>Income Certificate</li>
+          </ol>
+        </div>
+
+        <button class="no-print" onclick="window.print()" style="margin: 20px 0;">Print Form</button>
+      </body>
+      </html>
+    `;
+
+    // Write the content to the new window and print
+    printWindow.document.write(printContent);
+    printWindow.document.close();
   }
 }

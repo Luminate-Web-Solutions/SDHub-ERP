@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentsService } from '../students.service';
+import { ChartConfiguration } from 'chart.js';
 
 
 @Component({
@@ -10,19 +11,15 @@ import { StudentsService } from '../students.service';
 export class DashboardComponent implements OnInit {
   userlist = 0;
   user = [];
-
-  constructor(
-    private StudentsService: StudentsService,
-  ) {}
   studentSummary = {
-    activestd: 0,
-    completedStudents: 0
+    activestd: 8,
+    completedStudents: 20
   };
 
   teachingStaffSummary = {
-    totalStaff: 0,
-    activeStaff: 0,
-    guestStaff: 0
+    totalStaff: 6,
+    activeStaff: 7,
+    guestStaff: 5
   };
 
   nonTeachingStaffSummary = {
@@ -37,44 +34,121 @@ export class DashboardComponent implements OnInit {
     completedCourses: 3
   };
 
+   // Chart Configurations
+   studentChartData: ChartConfiguration<'pie'>['data'] = {
+    labels: ['Active', 'Completed', 'Pending'],
+    datasets: [{
+      data: [0, 0, 0],
+      backgroundColor: ['#4CAF50', '#2196F3', '#FFC107']
+    }]
+  };
+
+  enrollmentChartData: ChartConfiguration<'line'>['data'] = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [{
+      label: 'Enrollments',
+      data: [65, 59, 80, 81, 56, 55],
+      borderColor: '#2e53aa',
+      tension: 0.1
+    }]
+  };
+
+  staffChartData: ChartConfiguration<'doughnut'>['data'] = {
+    labels: ['Teaching Staff', 'Non-Teaching Staff', 'Guest Faculty'],
+    datasets: [{
+      data: [0, 0, 0],
+      backgroundColor: ['#4CAF50', '#2196F3', '#FFC107']
+    }]
+  };
+
+  chartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom'
+      }
+    }
+  };
+
+  lineChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
+
+  constructor(private studentsService: StudentsService) {}
+
   ngOnInit(): void {
     this.getStatus();
     this.get_tStatus();
     this.gettech();
-    this.StudentsService.getUsers().subscribe(users => {
-      console.log(users);
+    this.loadUsers();
+    this.updateCharts();
+  }
+
+  loadUsers(): void {
+    this.studentsService.getUsers().subscribe(users => {
       this.user = users;
-      console.log(this.user)
       this.userlist = users.length;
+      this.updateCharts();
     });
   }
 
-  getStatus = () => {
-    this.StudentsService.getStudentsStatus().subscribe(std_status => {
-      console.log(std_status);
-      var active = std_status.filter((each: any) => { return each._id == 'active' });
-      this.studentSummary.activestd = active[0].count;
+  getStatus(): void {
+    this.studentsService.getStudentsStatus().subscribe(std_status => {
+      const active = std_status.find((each: any) => each._id === 'active');
+      const completed = std_status.find((each: any) => each._id === 'completed');
       
-      var completed = std_status.filter((each: any) => { return each._id == 'completed' });
-      this.studentSummary.completedStudents = completed[0].count;
+      this.studentSummary.activestd = active ? active.count : 0;
+      this.studentSummary.completedStudents = completed ? completed.count : 0;
+      
+      this.updateCharts();
     });
   }
 
-  get_tStatus = () => {
-    this.StudentsService.get_tStatus().subscribe(t_status => {
-      console.log(t_status);
-      var active = t_status.filter((each: any) => { return each._id == 'active' });
-      this.teachingStaffSummary.activeStaff = active[0].count;
+  get_tStatus(): void {
+    this.studentsService.get_tStatus().subscribe(t_status => {
+      const active = t_status.find((each: any) => each._id === 'active');
+      const completed = t_status.find((each: any) => each._id === 'completed');
       
-      var completed = t_status.filter((each: any) => { return each._id == 'completed' });
-      this.teachingStaffSummary.guestStaff = completed[0].count;
+      this.teachingStaffSummary.activeStaff = active ? active.count : 0;
+      this.teachingStaffSummary.guestStaff = completed ? completed.count : 0;
+      
+      this.updateCharts();
     });
   }
-gettech = () => {
-  this.StudentsService.gettech().subscribe(gettech => {
-    console.log(gettech);
-    this.teachingStaffSummary.totalStaff = gettech.length;
-  });
-}
+
+  gettech(): void {
+    this.studentsService.gettech().subscribe(gettech => {
+      this.teachingStaffSummary.totalStaff = gettech.length;
+      this.updateCharts();
+    });
+  }
+
+  private updateCharts(): void {
+    // Update Student Distribution Chart
+    this.studentChartData.datasets[0].data = [
+      this.studentSummary.activestd,
+      this.studentSummary.completedStudents,
+      this.userlist - (this.studentSummary.activestd + this.studentSummary.completedStudents)
+    ];
+
+    // Update Staff Distribution Chart
+    this.staffChartData.datasets[0].data = [
+      this.teachingStaffSummary.totalStaff,
+      this.nonTeachingStaffSummary.totalStaff,
+      this.teachingStaffSummary.guestStaff
+    ];
+  }
 }
 

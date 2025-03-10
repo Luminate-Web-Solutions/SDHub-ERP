@@ -11,29 +11,27 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatSelectModule} from '@angular/material/select';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { provideHttpClient  } from '@angular/common/http';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { provideHttpClient } from '@angular/common/http';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatTableModule} from '@angular/material/table';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-
-
-
-
+import { NgChartsModule } from 'ng2-charts';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { DatePipe } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -75,12 +73,10 @@ import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.componen
 import { AttendanceComponent } from './staff/attendance/attendance.component';
 import { HelloComponent } from './hello/hello.component';
 import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
 import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.component';
 import { LoginComponent } from './login/login.component';
-
 
 @NgModule({
   declarations: [
@@ -112,8 +108,6 @@ import { LoginComponent } from './login/login.component';
     StaffComponent,
     GalleryComponent,
     TrainerComponent,
-    StaffComponent,
-    GalleryComponent,
     TrainerDialogComponent,
     UserDialogComponent,
     StudentDialogComponent,
@@ -160,10 +154,13 @@ import { LoginComponent } from './login/login.component';
     MatGridListModule,
     MatProgressSpinnerModule,
     FormsModule,
-    DragDropModule  
+    DragDropModule,
+    NgChartsModule,
+
   ],
   providers: [
     provideAnimationsAsync(),
+    DatePipe,
     provideHttpClient()
   ],
   bootstrap: [AppComponent]

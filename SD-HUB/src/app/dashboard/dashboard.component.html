@@ -92,3 +92,47 @@
           </mat-card-content>
         </mat-card>
       </div>
+<!-- Charts Section -->
+<div class="charts-grid">
+  <!-- Student Distribution Chart -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Student Distribution</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas baseChart
+        [data]="studentChartData"
+        [type]="'pie'"
+        [options]="chartOptions">
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Course Enrollment Trends -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Course Enrollment Trends</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas baseChart
+        [data]="enrollmentChartData"
+        [type]="'line'"
+        [options]="lineChartOptions">
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Staff Distribution -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Staff Distribution</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas baseChart
+        [data]="staffChartData"
+        [type]="'doughnut'"
+        [options]="chartOptions">
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+</div>
