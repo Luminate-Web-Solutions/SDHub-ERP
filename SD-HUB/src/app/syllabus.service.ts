@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 
-interface SyllabusTopic {
-  id: number;
+export interface SyllabusTopic {
+  id: string;
   title: string;
   week: number;
   completed: boolean;
+  dueDate?: Date;
+  labels?: string[];
 }
 
 interface WeekColumn {
@@ -18,31 +21,22 @@ interface WeekColumn {
 export class SyllabusService {
   private weeks = new BehaviorSubject<WeekColumn[]>(this.generateWeeks(4));
   weeks$ = this.weeks.asObservable();
+  searchQuery = '';
 
   get allWeeks() { return this.weeks.value; }
   get allTopics() { return this.weeks.value.flatMap(w => w.topics); }
 
   private generateWeeks(count: number) {
-    return Array.from({length: count}, (_, i) => ({
+    return Array.from({ length: count }, (_, i) => ({
       week: i + 1,
       topics: [],
       completionPercentage: 0
     }));
   }
 
-  addNewWeeks(count: number) {
-    const lastWeek = this.weeks.value[this.weeks.value.length - 1].week;
-    const newWeeks = Array.from({length: count}, (_, i) => ({
-      week: lastWeek + i + 1,
-      topics: [],
-      completionPercentage: 0
-    }));
-    this.weeks.next([...this.weeks.value, ...newWeeks]);
-  }
-
   addTopic(week: number, title: string) {
     const newTopic: SyllabusTopic = {
-      id: Date.now(),
+      id: uuidv4(),
       title,
       week,
       completed: false
@@ -53,7 +47,7 @@ export class SyllabusService {
     this.updateWeeks(updatedWeeks);
   }
 
-  deleteTopic(topicId: number) {
+  deleteTopic(topicId: string) {
     const updatedWeeks = this.weeks.value.map(week => ({
       ...week,
       topics: week.topics.filter(t => t.id !== topicId)
@@ -61,23 +55,7 @@ export class SyllabusService {
     this.updateWeeks(updatedWeeks);
   }
 
-  moveTopic(topicId: number, newWeek: number) {
-    const updatedWeeks = this.weeks.value.map(week => ({
-      ...week,
-      topics: week.topics.filter(t => t.id !== topicId)
-    }));
-    
-    const topic = this.allTopics.find(t => t.id === topicId);
-    if (topic) {
-      const targetWeek = updatedWeeks.find(w => w.week === newWeek);
-      if (targetWeek) {
-        targetWeek.topics.push({ ...topic, week: newWeek });
-      }
-    }
-    this.updateWeeks(updatedWeeks);
-  }
-
-  toggleComplete(topicId: number) {
+  toggleComplete(topicId: string) {
     const updatedWeeks = this.weeks.value.map(week => ({
       ...week,
       topics: week.topics.map(t => 
@@ -87,12 +65,13 @@ export class SyllabusService {
     this.updateWeeks(updatedWeeks);
   }
 
-  updateProgress() {
-    const updatedWeeks = this.weeks.value.map(week => ({
+  addNewWeeks(count: number) {
+    const currentLength = this.weeks.value.length;
+    const newWeeks = this.generateWeeks(count).map((week, index) => ({
       ...week,
-      completionPercentage: this.calculateWeekCompletion(week.topics)
+      week: currentLength + index + 1
     }));
-    this.weeks.next(updatedWeeks);
+    this.updateWeeks([...this.weeks.value, ...newWeeks]);
   }
 
   private updateWeeks(weeks: WeekColumn[]) {

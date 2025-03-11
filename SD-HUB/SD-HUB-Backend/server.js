@@ -67,26 +67,36 @@ const authenticateToken = (req, res, next) => {
 //   }
 // });
 
-// User Registration
-// app.post('/api/users', async (req, res) => {
-//   const { name, email, password, role, department, position, isActive } = req.body;
-//   if (!name || !email || !password || !role) {
-//     return res.status(400).json({ message: "All fields are required." });
-//   }
-//   try {
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     db.query(
-//       'INSERT INTO users (name, email, password, role, department, position, isActive) VALUES (?, ?, ?, ?, ?, ?, ?)',
-//       [name, email, hashedPassword, role, department, position, isActive],
-//       (err, results) => {
-//         if (err) return res.status(500).json({ message: "Database error." });
-//         res.status(201).json({ message: "User created successfully." });
-//       }
-//     );
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error." });
-//   }
-// });
+// User Registration - Modified to handle trainers
+app.post('/api/users', async (req, res) => {
+  const { name, email, password, role, department, position, isActive } = req.body;
+  if (!name || !email || !password || !role) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Insert into users
+    const result = await query(
+      'INSERT INTO users (name, email, password, role, department, position, isActive) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [name, email, hashedPassword, role, department, position, isActive]
+    );
+    const userId = result.insertId;
+
+    // Add to trainers table if role is trainer
+    if (role === 'trainer') {
+      await query(
+        'INSERT INTO trainers (name, email, password) VALUES (?, ?, ?)',
+        [name, email, hashedPassword]
+      );
+    }
+
+    res.status(201).json({ message: "User created successfully." });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ message: "Server error." });
+  }
+});
 
 // Fetch all users
 // app.get('/api/users', (req, res) => {
@@ -219,7 +229,6 @@ app.get('/dashboard-stats', authenticateToken, async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 // Start Server
 const server = app.listen(PORT, () => {

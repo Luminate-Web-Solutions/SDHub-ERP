@@ -32,6 +32,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgChartsModule } from 'ng2-charts';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DatePipe } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
+
+
+
+
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -160,7 +166,7 @@ import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-
     FormsModule,
     DragDropModule,
     NgChartsModule,
-
+    MatMenuModule 
   ],
   providers: [
     provideAnimationsAsync(),
