@@ -313,6 +313,49 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     const formattedDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy');
     const dob = this.datePipe.transform(student.dateOfBirth, 'dd/MM/yyyy');
 
+    // Split date of birth into components
+    let dobDay = '', dobMonth = '', dobYear = '';
+    if (dob) {
+      const dobParts = dob.split('/');
+      dobDay = dobParts[0] || '';
+      dobMonth = dobParts[1] || '';
+      dobYear = dobParts[2] || '';
+    }
+
+    // Create Angular initialization with student data
+    const angularInit = `
+      angular.module('admissionForm', [])
+        .controller('formController', ['$scope', function($scope) {
+          $scope.form = {
+            studentId: '${student.uniqueId || ''}',
+            currentDate: '${formattedDate || ''}',
+            firstName: '${student.firstName || ''}',
+            middleName: '${student.middleName || ''}',
+            lastName: '${student.lastName || ''}',
+            fatherFirst: '${student.fatherFirstName || ''}',
+            fatherMiddle: '${student.fatherMiddleName || ''}',
+            fatherLast: '${student.fatherLastName || ''}',
+            birthDay: '${dobDay}',
+            birthMonth: '${dobMonth}',
+            birthYear: '${dobYear}',
+            phone: '${student.phoneNumber || ''}',
+            email: '${student.email || ''}',
+            address: '${student.address || ''}',
+            guardianContact: '${student.guardianContact || ''}',
+            income: '${student.householdIncome || ''}',
+            course: '${student.course || ''}',
+            degree: '${student.degree || ''}',
+            college: '${student.collegeName || ''}',
+            passingYear: '${student.yearOfPassing || ''}',
+            percentage: '${student.percentage || ''}',
+            stream: '${student.stream || ''}'
+          };
+          
+          $scope.submitForm = function() {
+            console.log('Form submitted:', $scope.form);
+          };
+        }]);
+    `;
     // Create the print content
     const printContent = `
       <!DOCTYPE html>
@@ -538,14 +581,14 @@ export class StudentsComponent implements OnInit, AfterViewInit {
         </div>
 
         <div style="margin-bottom: 15px; font-size: 12px;">
-            <span style="float: left">Student ID:</span>
+            <span style="float: left">Student ID: {{form.studentId}}</span>
             <span style="margin-left: 250px;">Admission Application Form</span>
-            <span style="float: right">Date: <input type="text" class="form-control" style="width: 80px"></span>
+            <span style="float: right">Date: {{form.currentDate}}<input type="text" class="form-control" style="width: 80px"></span>
             <div style="clear: both"></div>
         </div>
 
-        <!-- Form -->
-        <form ng-submit="submitForm()">
+              <!-- Form -->
+              <form ng-submit="submitForm()">
             <div class="section-header">Applicant Information</div>
 
             <div class="form-group">
@@ -565,11 +608,11 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             <div class="form-group">
                 <label>Date of Birth:</label>
                 <div class="date-input">
-                    <input type="text" ng-model="form.birthDay" maxlength="2" placeholder="DD">
+                    <input type="text" ng-model="form.birthDay" readonly>
                     <span>/</span>
-                    <input type="text" ng-model="form.birthMonth" maxlength="2" placeholder="MM">
+                    <input type="text" ng-model="form.birthMonth" readonly>
                     <span>/</span>
-                    <input type="text" class="year" ng-model="form.birthYear" maxlength="4" placeholder="YYYY">
+                    <input type="text" class="year" ng-model="form.birthYear" readonly>
                 </div>
             </div>
 
@@ -577,17 +620,17 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             <div class="form-row">
                 <div class="form-group">
                     <label>Phone No:</label>
-                    <input type="text" class="form-control" ng-model="form.phone">
+                    <input type="text" class="form-control" ng-model="form.phone" readonly>
                 </div>
                 <div class="form-group">
                     <label>Email:</label>
-                    <input type="email" class="form-control" ng-model="form.email">
+                    <input type="email" class="form-control" ng-model="form.email" readonly>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Address (Permanent):</label>
-                <input type="text" class="form-control" ng-model="form.address">
+                <input type="text" class="form-control" ng-model="form.address" readonly>
             </div>
 
             <!-- Parent Contact and Income in the same line -->
@@ -598,14 +641,14 @@ export class StudentsComponent implements OnInit, AfterViewInit {
                 </div>
                 <div class="form-group">
                     <label>Household Income (Yearly):</label>
-                    <input type="text" class="form-control" ng-model="form.income">
+                    <input type="text" class="form-control" ng-model="form.income" readonly>
                 </div>
             </div>
 
             <div class="section-header">Course Details</div>
             <div class="form-group">
                 <label>Course Applied for:</label>
-                <input type="text" class="form-control" ng-model="form.course">
+                <input type="text" class="form-control" ng-model="form.course" readonly>
             </div>
 
             <div class="section-header">Education Qualification</div>
@@ -614,11 +657,11 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             <div class="form-row">
                 <div class="form-group">
                     <label>Degree:</label>
-                    <input type="text" class="form-control" ng-model="form.degree">
+                    <input type="text" class="form-control" ng-model="form.degree" readonly>
                 </div>
                 <div class="form-group">
                     <label>College name:</label>
-                    <input type="text" class="form-control" ng-model="form.college">
+                    <input type="text" class="form-control" ng-model="form.college" readonly>
                 </div>
             </div>
 
@@ -626,15 +669,15 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             <div class="form-row">
                 <div class="form-group">
                     <label>Year of Passing:</label>
-                    <input type="text" class="form-control" ng-model="form.passingYear">
+                    <input type="text" class="form-control" ng-model="form.passingYear" readonly>
                 </div>
                 <div class="form-group">
                     <label>Percentage:</label>
-                    <input type="text" class="form-control" ng-model="form.percentage">
+                    <input type="text" class="form-control" ng-model="form.percentage" readonly>
                 </div>
                 <div class="form-group">
                     <label>Stream:</label>
-                    <input type="text" class="form-control" ng-model="form.stream">
+                    <input type="text" class="form-control" ng-model="form.stream" readonly>
                 </div>
             </div>
 
@@ -684,21 +727,33 @@ export class StudentsComponent implements OnInit, AfterViewInit {
         </form>
     </div>
 
-    <script>
-        angular.module('admissionForm', [])
-            .controller('formController', ['$scope', function($scope) {
-                $scope.form = {};
-                
-                $scope.submitForm = function() {
-                    console.log('Form submitted:', $scope.form);
-                };
-            }]);
-    </script>
-</body>
-</html>
+    <script>${angularInit}</script>
+          <script>
+              // Add print button functionality
+              window.onload = function() {
+                  const printButton = document.createElement('button');
+                  printButton.innerHTML = 'Print Form';
+                  printButton.style.position = 'fixed';
+                  printButton.style.bottom = '20px';
+                  printButton.style.right = '20px';
+                  printButton.style.padding = '10px 20px';
+                  printButton.style.backgroundColor = '#2e53aa';
+                  printButton.style.color = 'white';
+                  printButton.style.border = 'none';
+                  printButton.style.borderRadius = '5px';
+                  printButton.style.cursor = 'pointer';
+                  printButton.onclick = function() {
+                      this.style.display = 'none';
+                      window.print();
+                      this.style.display = 'block';
+                  };
+                  document.body.appendChild(printButton);
+              };
+          </script>
+      </body>
+      </html>
     `;
 
-    // Write the content to the new window and print
     printWindow.document.write(printContent);
     printWindow.document.close();
   }

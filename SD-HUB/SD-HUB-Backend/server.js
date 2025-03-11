@@ -50,51 +50,51 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Login Route
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const users = await query('SELECT * FROM users WHERE email = ?', [email]);
-    if (users.length === 0) return res.status(400).json({ message: 'Invalid credentials' });
+// app.post('/api/login', async (req, res) => {
+//   const { email, password } = req.body;
+//   try {
+//     const users = await query('SELECT * FROM users WHERE email = ?', [email]);
+//     if (users.length === 0) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const user = users[0];
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) return res.status(400).json({ message: 'Invalid credentials' });
+//     const user = users[0];
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
+//     if (!isPasswordValid) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
-    res.json({ token });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+//     const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
+//     res.json({ token });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
 // User Registration
-app.post('/api/users', async (req, res) => {
-  const { name, email, password, role, department, position, isActive } = req.body;
-  if (!name || !email || !password || !role) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    db.query(
-      'INSERT INTO users (name, email, password, role, department, position, isActive) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [name, email, hashedPassword, role, department, position, isActive],
-      (err, results) => {
-        if (err) return res.status(500).json({ message: "Database error." });
-        res.status(201).json({ message: "User created successfully." });
-      }
-    );
-  } catch (error) {
-    res.status(500).json({ message: "Server error." });
-  }
-});
+// app.post('/api/users', async (req, res) => {
+//   const { name, email, password, role, department, position, isActive } = req.body;
+//   if (!name || !email || !password || !role) {
+//     return res.status(400).json({ message: "All fields are required." });
+//   }
+//   try {
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     db.query(
+//       'INSERT INTO users (name, email, password, role, department, position, isActive) VALUES (?, ?, ?, ?, ?, ?, ?)',
+//       [name, email, hashedPassword, role, department, position, isActive],
+//       (err, results) => {
+//         if (err) return res.status(500).json({ message: "Database error." });
+//         res.status(201).json({ message: "User created successfully." });
+//       }
+//     );
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error." });
+//   }
+// });
 
 // Fetch all users
-app.get('/api/users', (req, res) => {
-  db.query('SELECT * FROM users', (err, results) => {
-    if (err) return res.status(500).json({ message: "Database error." });
-    res.json(results);
-  });
-});
+// app.get('/api/users', (req, res) => {
+//   db.query('SELECT * FROM users', (err, results) => {
+//     if (err) return res.status(500).json({ message: "Database error." });
+//     res.json(results);
+//   });
+// });
 
 // Fetch single user
 app.get('/api/users/:id', (req, res) => {

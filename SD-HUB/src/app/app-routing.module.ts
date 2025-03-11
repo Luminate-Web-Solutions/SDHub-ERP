@@ -32,6 +32,8 @@ import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.co
 import { ViewReportComponent } from './view-report/view-report.component';
 import { LoginComponent } from './login/login.component';
 import { adminGuard } from './admin.guard';
+import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
+import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
 
 
 const routes: Routes = [
@@ -39,7 +41,7 @@ const routes: Routes = [
   { path: 'signin', component: SigninComponent },
   { path: 'home', component: HomeComponent },
   { path: 'aboutus', component: AboutusComponent },
-  { path: 'staff', component: StaffComponent},
+  // { path: 'staff', component: StaffComponent},
   { path: 'main-course', component: MainCourseComponent },
   { path: 'navbar', component: NavbarComponent},
   { path: 'signup', component: SignupComponent },
@@ -80,6 +82,19 @@ const routes: Routes = [
     children: [
       { path: 'aptitude', component: AptituedTestComponent },
       { path: 'registration', component: RegistrationComponent },
+    ]
+  },
+
+
+  { 
+    path: 'trainer', 
+    component: TrainerDashComponent,
+    // canActivate: [adminGuard],
+    children: [
+      { path: '', redirectTo: 'attendance', pathMatch: 'full' },
+      { path: 'attendance', component: StaffComponent },
+      { path: 'syllabus', component: SyllabusTrackerComponent },
+      { path: 'profile', component: TrainerProfileComponent }
     ]
   },
 ];

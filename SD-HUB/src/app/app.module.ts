@@ -77,6 +77,8 @@ import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
 import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.component';
 import { LoginComponent } from './login/login.component';
+import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
+import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
 
 @NgModule({
   declarations: [
@@ -121,7 +123,9 @@ import { LoginComponent } from './login/login.component';
     ViewReportComponent,
     NewsDialogComponent,
     ForgotPasswordDialogComponent,
-    LoginComponent
+    LoginComponent,
+    TrainerDashComponent,
+    TrainerProfileComponent,
   ],
   imports: [
     BrowserModule,

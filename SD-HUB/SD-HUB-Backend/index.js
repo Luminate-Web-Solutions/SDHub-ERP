@@ -141,7 +141,7 @@ app.post('/signup', async (req, res) => {
     req.body.role = 'student';
     req.body.status = 'pending';
   }
-  const [result] = await pool.query('INSERT INTO user SET ?', req.body);
+  const [result] = await pool.query('INSERT INTO signin SET ?', req.body);
   console.log(result);
   res.status(200).json(result);
 });
@@ -156,7 +156,7 @@ app.post('/approve', async (req, res) => {
 app.post('/signin', async (req, res) => {
   const { email, password, role } = req.body;
   try {
-    const [rows] = await pool.query('SELECT * FROM user WHERE email = ? AND password = ? AND role = ?', [email, password, role]);
+    const [rows] = await pool.query('SELECT * FROM signin WHERE email = ? AND password = ? AND role = ?', [email, password, role]);
 
     if (rows.length > 0) {
       const user = rows[0];
@@ -274,7 +274,7 @@ app.put('/users/:id', async (req, res) => {
       return res.status(400).json({ error: 'All fields are required' });
     }
     
-    const query = 'UPDATE user SET name = ?, course = ?, contactNumber = ?, email = ?, status = ? WHERE id = ?';
+    const query = 'UPDATE signin SET name = ?, course = ?, contactNumber = ?, email = ?, status = ? WHERE id = ?';
     const [result] = await pool.query(query, [name, course, contactNumber, email, status, id]);
     
     if (result.affectedRows === 0) {
@@ -292,7 +292,7 @@ app.delete('/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
     
-    const [result] = await pool.query('DELETE FROM user WHERE id = ?', [id]);
+    const [result] = await pool.query('DELETE FROM signin WHERE id = ?', [id]);
     
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'User not found' });
@@ -306,7 +306,7 @@ app.delete('/users/:id', async (req, res) => {
 });
 
 app.get('/signupusers', async (req, res) => {
-  const [rows] = await pool.query('SELECT * FROM user');
+  const [rows] = await pool.query('SELECT * FROM signin');
   res.status(200).json(rows);
 });
 

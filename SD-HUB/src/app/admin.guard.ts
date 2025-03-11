@@ -29,7 +29,7 @@ export class adminGuard implements CanActivate {
         stakeholder: ['/stakeholder-dashboard'],
         director: ['/admin'],
         admin: ['/admin-dashboard'],
-        trainer: ['/trainer-dashboard']
+        trainer: ['/staff']
       };
 
       // Check if user has permission to access the route
