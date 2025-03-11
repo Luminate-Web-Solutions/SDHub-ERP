@@ -327,20 +327,21 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
+            font-size: 12px;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
             background: white;
-            padding: 30px;
+            padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             position: relative;
         }
 
@@ -348,161 +349,178 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             display: flex;
             flex-direction: column;
             align-items: left;
-            gap: 20px;
+            gap: 10px;
         }
 
-
         .logo {
-            width: 495px;
-            height: 100px;
+            width: 400px;
+            height: 80px;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 10px;
+            font-size: 8px;
             text-align: center;
             line-height: 1.2;
-            margin-left: 50px;
+            margin-left: 30px;
         }
 
         .logo-2 {
-            width: 389px;
-            height: 100px;
+            width: 300px;
+            height: 80px;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 10px;
+            font-size: 8px;
             text-align: center;
             line-height: 1.2;
-            margin-left: 100px;
-        }
-
-        .logo-rahbar { background-color: #1e3a8a; }
-        .logo-tsewct { background-color: #15803d; }
-        .logo-psf { background-color: #2563eb; }
-
-        .brand-name {
-            margin: 0;
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .brand-name .sd { color: #dc2626; }
-        .brand-name .hub { color: #dc2626; }
-        .brand-name .qutubshahi { color: #1e3a8a; }
-
-        .subtitle {
-            color: #666;
-            margin: 0;
-            font-size: 14px;
+            margin-left: 60px;
         }
 
         .photo-box {
             position: absolute;
             top: 0;
             right: 0;
-            width: 120px;
-            height: 150px;
+            width: 100px;
+            height: 120px;
             border: 1px solid #000;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 12px;
-            padding: 10px;
+            font-size: 10px;
+            padding: 5px;
         }
 
         .section-header {
             background-color: #4b5563;
             color: white;
-            padding: 8px;
-            margin: 20px 0 15px 0;
+            padding: 5px;
+            margin: 15px 0 10px 0;
+            font-size: 14px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
         }
 
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
+        .form-group label {
+            width: 120px;
+            margin-right: 5px;
+            font-size: 12px;
         }
 
         .form-control {
             border: none;
             border-bottom: 1px solid #000;
             outline: none;
-            padding: 5px 0;
+            padding: 3px 0;
             width: 100%;
             font-family: inherit;
+            font-size: 12px;
         }
 
         .date-input {
             display: flex;
-            gap: 5px;
+            gap: 3px;
             align-items: center;
         }
 
         .date-input input {
-            width: 40px;
+            width: 30px;
             text-align: center;
             border: none;
             border-bottom: 1px solid #000;
             outline: none;
+            font-size: 12px;
         }
 
         .date-input input.year {
-            width: 60px;
+            width: 50px;
         }
 
         .signatures {
             display: flex;
             justify-content: space-between;
-            margin-top: 30px;
-            margin-bottom: 30px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .signature-line {
             border-bottom: 1px solid #000;
-            width: 150px;
+            width: 120px;
             display: inline-block;
-            margin-left: 10px;
-        }
-
-        .signature-line-2 {
-            border-bottom: 1px solid #000;
-            width: 150px;
-            display: inline-block;
-            margin-left: 10px;
-            
+            margin-left: 5px;
         }
 
         .enclosures {
-            padding-left: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            padding-left: 15px;
         }
 
         .enclosures li {
-            margin-bottom: 5px;
+            margin-bottom: 3px;
+            font-size: 12px;
         }
 
         .terms {
-            font-size: 12px;
+            font-size: 10px;
             text-align: justify;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .terms ol {
-            padding-left: 20px;
-            margin: 10px 0;
+            padding-left: 15px;
+            margin: 5px 0;
         }
 
         .terms li {
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
 
         .director-signature {
             text-align: right;
-            margin-top: 30px;
+            margin-top: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 0;
+            }
+
+            .section-header {
+                background-color: #4b5563 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .photo-box {
+                border: 1px solid #000 !important;
+            }
+
+            .signature-line, .signature-line-2 {
+                border-bottom: 1px solid #000 !important;
+            }
         }
     </style>
 </head>
@@ -519,9 +537,10 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             </div>
         </div>
 
-        <div style="margin-bottom: 20px">
+        <div style="margin-bottom: 15px; font-size: 12px;">
             <span style="float: left">Student ID:</span>
-            <span style="float: right">Date: <input type="text" class="form-control" style="width: 100px"></span>
+            <span style="margin-left: 250px;">Admission Application Form</span>
+            <span style="float: right">Date: <input type="text" class="form-control" style="width: 80px"></span>
             <div style="clear: both"></div>
         </div>
 
@@ -531,20 +550,16 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
             <div class="form-group">
                 <label>Full Name:</label>
-                <div class="form-row">
-                    <input type="text" class="form-control" ng-model="form.firstName" placeholder="First">
-                    <input type="text" class="form-control" ng-model="form.middleName" placeholder="Middle">
-                    <input type="text" class="form-control" ng-model="form.lastName" placeholder="Last">
-                </div>
+                <input type="text" class="form-control" ng-model="form.firstName" placeholder="First">
+                <input type="text" class="form-control" ng-model="form.middleName" placeholder="Middle">
+                <input type="text" class="form-control" ng-model="form.lastName" placeholder="Last">
             </div>
 
             <div class="form-group">
                 <label>Father's Name:</label>
-                <div class="form-row">
-                    <input type="text" class="form-control" ng-model="form.fatherFirst" placeholder="First">
-                    <input type="text" class="form-control" ng-model="form.fatherMiddle" placeholder="Middle">
-                    <input type="text" class="form-control" ng-model="form.fatherLast" placeholder="Last">
-                </div>
+                <input type="text" class="form-control" ng-model="form.fatherFirst" placeholder="First">
+                <input type="text" class="form-control" ng-model="form.fatherMiddle" placeholder="Middle">
+                <input type="text" class="form-control" ng-model="form.fatherLast" placeholder="Last">
             </div>
 
             <div class="form-group">
@@ -558,12 +573,13 @@ export class StudentsComponent implements OnInit, AfterViewInit {
                 </div>
             </div>
 
+            <!-- Phone and Email in the same line -->
             <div class="form-row">
-                <div class="form-group" style="flex: 1">
+                <div class="form-group">
                     <label>Phone No:</label>
                     <input type="text" class="form-control" ng-model="form.phone">
                 </div>
-                <div class="form-group" style="flex: 1">
+                <div class="form-group">
                     <label>Email:</label>
                     <input type="email" class="form-control" ng-model="form.email">
                 </div>
@@ -574,12 +590,13 @@ export class StudentsComponent implements OnInit, AfterViewInit {
                 <input type="text" class="form-control" ng-model="form.address">
             </div>
 
+            <!-- Parent Contact and Income in the same line -->
             <div class="form-row">
-                <div class="form-group" style="flex: 1">
+                <div class="form-group">
                     <label>Parent/Guardian Contact Details:</label>
                     <input type="text" class="form-control" ng-model="form.guardianContact">
                 </div>
-                <div class="form-group" style="flex: 1">
+                <div class="form-group">
                     <label>Household Income (Yearly):</label>
                     <input type="text" class="form-control" ng-model="form.income">
                 </div>
@@ -592,33 +609,36 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             </div>
 
             <div class="section-header">Education Qualification</div>
+
+            <!-- Degree and College Name in the same line -->
             <div class="form-row">
-                <div class="form-group" style="flex: 1">
+                <div class="form-group">
                     <label>Degree:</label>
                     <input type="text" class="form-control" ng-model="form.degree">
                 </div>
-                <div class="form-group" style="flex: 1">
+                <div class="form-group">
                     <label>College name:</label>
                     <input type="text" class="form-control" ng-model="form.college">
                 </div>
             </div>
 
+            <!-- Year of Passing, Percentage, and Stream in the same line -->
             <div class="form-row">
-                <div class="form-group" style="flex: 1">
+                <div class="form-group">
                     <label>Year of Passing:</label>
                     <input type="text" class="form-control" ng-model="form.passingYear">
                 </div>
-                <div class="form-group" style="flex: 1">
+                <div class="form-group">
                     <label>Percentage:</label>
                     <input type="text" class="form-control" ng-model="form.percentage">
                 </div>
-                <div class="form-group" style="flex: 1">
+                <div class="form-group">
                     <label>Stream:</label>
                     <input type="text" class="form-control" ng-model="form.stream">
                 </div>
             </div>
 
-            <div style="margin: 20px 0; text-align: center;">
+            <div style="margin: 15px 0; text-align: center; font-size: 12px;">
                 <p>I declare that my all the information given here are true and complete to the best of my knowledge.</p>
                 <p>I understand that false or misleading information may result in my rejection of the application.</p>
             </div>
@@ -636,6 +656,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             </div>
 
             <div class="section-header">ENCLOSURES:</div>
+            <!-- Enclosures in a 3x2 grid -->
             <ol class="enclosures">
                 <li>Passport size photograph – 3 No.</li>
                 <li>Copy of Aadhar Card.</li>
