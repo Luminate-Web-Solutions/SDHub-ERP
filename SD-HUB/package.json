@@ -34,6 +34,7 @@
     "rxjs": "~7.8.0",
     "swiper": "^11.2.5",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
@@ -45,6 +46,7 @@
     "@types/node": "^18.18.0",
     "@types/swiper": "^5.4.3",
     "@types/uuid": "^10.0.0",
+    "@types/xlsx": "^0.0.35",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

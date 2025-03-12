@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -8,13 +8,10 @@ import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { NewsService, NewsItem } from '../services/news.service';
 
-
-
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   newsList: NewsItem[] = [];
@@ -31,10 +28,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initSwiper();
+    this.initCountUp();
   }
 
   private initSwiper(): void {
-    // Initialize Swiper
     this.swiper = new Swiper('.swiper-container', {
       modules: [Navigation, Pagination, Autoplay],
       slidesPerView: 1,
@@ -69,15 +66,71 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  private initCountUp(): void {
+    const countUpElements = document.querySelectorAll('.count-up-value');
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const target = parseInt(element.getAttribute('data-count') || '0');
+          const suffix = element.getAttribute('data-suffix') || '';
+          
+          this.animateValue(element, 0, target, 2000, suffix);
+          observer.unobserve(element);
+        }
+      });
+    }, options);
+
+    countUpElements.forEach(element => {
+      observer.observe(element);
+    });
+  }
+
+  private animateValue(
+    element: Element,
+    start: number,
+    end: number,
+    duration: number,
+    suffix: string
+  ): void {
+    const range = end - start;
+    const startTime = performance.now();
+
+    const updateCount = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Easing function for smooth animation
+      const easeOutQuad = (t: number): number => {
+        return t * (2 - t);
+      };
+
+      const currentValue = Math.floor(start + (range * easeOutQuad(progress)));
+      element.textContent = `${currentValue}${suffix}`;
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCount);
+      } else {
+        element.textContent = `${end}${suffix}`;
+      }
+    };
+
+    requestAnimationFrame(updateCount);
+  }
+
   private fetchNews(): void {
     this.newsService.getNews().subscribe({
       next: (data) => {
         this.newsList = data;
-        // If no news is available, use default news items
         if (this.newsList.length === 0) {
           this.newsList = this.getDefaultNews();
         }
-        // Re-initialize swiper after data is loaded
         setTimeout(() => {
           if (this.swiper) {
             this.swiper.destroy();
@@ -87,7 +140,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       },
       error: (error) => {
         console.error('Error fetching news:', error);
-        // Use default news items if API fails
         this.newsList = this.getDefaultNews();
         setTimeout(() => this.initSwiper(), 0);
       }
