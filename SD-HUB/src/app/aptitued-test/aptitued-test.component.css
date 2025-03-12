@@ -125,6 +125,33 @@
     }
   } */
 
+
+
+
+/* aptitued-test.component.css */
+.timer {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2e53aa;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.floating-timer {
+  position: fixed;
+  top: 20%;
+  left: 30px;
+  background-color: #2e53aa; /* Red background */
+  color: white;
+  padding: 15px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+
   /* Add to your existing CSS */
 .loading-spinner {
   display: flex;

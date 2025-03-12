@@ -76,6 +76,18 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     this.userSelection.select(...this.userDataSource.data);
   }
 
+  updateStatus(row: UserData) {
+  this.studentsService.updateUser(row).subscribe({
+    next: (response) => {
+      this.snackBar.open('Status updated successfully!', 'Close', { duration: 3000 });
+    },
+    error: (error) => {
+      console.error('Error updating status:', error);
+      this.snackBar.open('Failed to update status', 'Close', { duration: 3000 });
+    }
+  });
+}
+
   // Selection methods for Students
   isAllStudentsSelected() {
     const numSelected = this.studentSelection.selected.length;

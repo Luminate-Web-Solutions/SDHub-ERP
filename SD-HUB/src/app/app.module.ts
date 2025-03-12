@@ -86,6 +86,7 @@ import { LoginComponent } from './login/login.component';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
+import { TimePipe } from './pipes/time.pipe';
 
 @NgModule({
   declarations: [
@@ -134,6 +135,7 @@ import { ExpenditureComponent } from './dashboard/expenditure/expenditure.compon
     TrainerDashComponent,
     TrainerProfileComponent,
     ExpenditureComponent,
+    TimePipe,
   ],
   imports: [
     BrowserModule,

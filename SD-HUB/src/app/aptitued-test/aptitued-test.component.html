@@ -1,3 +1,4 @@
+<!-- aptitued-test.component.html -->
 <div class="test-container">
   <!-- Header Images -->
   <div class="header-images">
@@ -60,116 +61,125 @@
           </mat-form-field>
         </div>
         <div class="button-row">
-          <button mat-button matStepperNext [disabled]="!personalInfoForm.valid">Next</button>
+          <button mat-button matStepperNext [disabled]="!personalInfoForm.valid" (click)="onNext()">Next</button>
         </div>
       </form>
     </mat-step>
 
-  <!-- Aptitude Test Step -->
-  <mat-step>
-    <ng-template matStepLabel>Aptitude Test</ng-template>
-    <div class="test-section">
-      <div *ngIf="isLoading" class="loading-spinner">
-        <mat-spinner diameter="40"></mat-spinner>
-        <p>Loading questions...</p>
-      </div>
-      
-      <ng-container *ngIf="!isLoading">
-        <ng-container *ngFor="let section of aptitudeQuestions">
-          <h3>{{section.section}}</h3>
-          <div class="questions-container">
-            <ng-container *ngFor="let question of section.questions; let i = index">
-              <div class="question-card">
-                <p class="question-text">{{i + 1}}. {{question.question}}</p>
-                <mat-radio-group 
-                  class="options-group"
-                  [(ngModel)]="answers['aptitude_' + i]"
-                  (change)="onAnswerSelect('aptitude_' + i, $event.value)">
-                  <mat-radio-button 
-                    *ngFor="let option of question.options" 
-                    [value]="option.value">
-                    {{option.text}}
-                  </mat-radio-button>
-                </mat-radio-group>
-              </div>
-            </ng-container>
+    <!-- Aptitude Test Step -->
+    <mat-step>
+      <ng-template matStepLabel>Aptitude Test</ng-template>
+      <div class="test-section">
+        <div *ngIf="isLoading" class="loading-spinner">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading questions...</p>
+        </div>
+        
+        <ng-container *ngIf="!isLoading">
+          <div class="floating-timer">
+            Time Left: {{ timeLeft | time }}
           </div>
+          <ng-container *ngFor="let section of aptitudeQuestions">
+            <h3>{{section.section}}</h3>
+            <div class="questions-container">
+              <ng-container *ngFor="let question of section.questions; let i = index">
+                <div class="question-card">
+                  <p class="question-text">{{i + 1}}. {{question.question}}</p>
+                  <mat-radio-group 
+                    class="options-group"
+                    [(ngModel)]="answers['aptitude_' + i]"
+                    (change)="onAnswerSelect('aptitude_' + i, $event.value)">
+                    <mat-radio-button 
+                      *ngFor="let option of question.options" 
+                      [value]="option.value">
+                      {{option.text}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
         </ng-container>
-      </ng-container>
-      
-      <div class="button-row">
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        
+        <div class="button-row">
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
       </div>
-    </div>
-  </mat-step>
+    </mat-step>
 
-  <!-- General Knowledge Test Step -->
-  <mat-step>
-    <ng-template matStepLabel>General Knowledge</ng-template>
-    <div class="test-section">
-      <ng-container *ngIf="!isLoading">
-        <ng-container *ngFor="let section of generalKnowledgeQuestions">
-          <h3>{{section.section}}</h3>
-          <div class="questions-container">
-            <ng-container *ngFor="let question of section.questions; let i = index">
-              <div class="question-card">
-                <p class="question-text">{{i + 1}}. {{question.question}}</p>
-                <mat-radio-group 
-                  class="options-group"
-                  [(ngModel)]="answers['generalKnowledge_' + i]"
-                  (change)="onAnswerSelect('generalKnowledge_' + i, $event.value)">
-                  <mat-radio-button 
-                    *ngFor="let option of question.options" 
-                    [value]="option.value">
-                    {{option.text}}
-                  </mat-radio-button>
-                </mat-radio-group>
-              </div>
-            </ng-container>
+    <!-- General Knowledge Test Step -->
+    <mat-step>
+      <ng-template matStepLabel>General Knowledge</ng-template>
+      <div class="test-section">
+        <ng-container *ngIf="!isLoading">
+          <div class="floating-timer">
+            Time Left: {{ timeLeft | time }}
           </div>
+          <ng-container *ngFor="let section of generalKnowledgeQuestions">
+            <h3>{{section.section}}</h3>
+            <div class="questions-container">
+              <ng-container *ngFor="let question of section.questions; let i = index">
+                <div class="question-card">
+                  <p class="question-text">{{i + 1}}. {{question.question}}</p>
+                  <mat-radio-group 
+                    class="options-group"
+                    [(ngModel)]="answers['generalKnowledge_' + i]"
+                    (change)="onAnswerSelect('generalKnowledge_' + i, $event.value)">
+                    <mat-radio-button 
+                      *ngFor="let option of question.options" 
+                      [value]="option.value">
+                      {{option.text}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
         </ng-container>
-      </ng-container>
-      
-      <div class="button-row">
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        
+        <div class="button-row">
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
       </div>
-    </div>
-  </mat-step>
+    </mat-step>
 
-  <!-- Critical Thinking Test Step -->
-  <mat-step>
-    <ng-template matStepLabel>Critical Thinking</ng-template>
-    <div class="test-section">
-      <ng-container *ngIf="!isLoading">
-        <ng-container *ngFor="let section of criticalThinkingQuestions">
-          <h3>{{section.section}}</h3>
-          <div class="questions-container">
-            <ng-container *ngFor="let question of section.questions; let i = index">
-              <div class="question-card">
-                <p class="question-text">{{i + 1}}. {{question.question}}</p>
-                <mat-radio-group 
-                  class="options-group"
-                  [(ngModel)]="answers['criticalThinking_' + i]"
-                  (change)="onAnswerSelect('criticalThinking_' + i, $event.value)">
-                  <mat-radio-button 
-                    *ngFor="let option of question.options" 
-                    [value]="option.value">
-                    {{option.text}}
-                  </mat-radio-button>
-                </mat-radio-group>
-              </div>
-            </ng-container>
+    <!-- Critical Thinking Test Step -->
+    <mat-step>
+      <ng-template matStepLabel>Critical Thinking</ng-template>
+      <div class="test-section">
+        <ng-container *ngIf="!isLoading">
+          <div class="floating-timer">
+            Time Left: {{ timeLeft | time }}
           </div>
+          <ng-container *ngFor="let section of criticalThinkingQuestions">
+            <h3>{{section.section}}</h3>
+            <div class="questions-container">
+              <ng-container *ngFor="let question of section.questions; let i = index">
+                <div class="question-card">
+                  <p class="question-text">{{i + 1}}. {{question.question}}</p>
+                  <mat-radio-group 
+                    class="options-group"
+                    [(ngModel)]="answers['criticalThinking_' + i]"
+                    (change)="onAnswerSelect('criticalThinking_' + i, $event.value)">
+                    <mat-radio-button 
+                      *ngFor="let option of question.options" 
+                      [value]="option.value">
+                      {{option.text}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
         </ng-container>
-      </ng-container>
-      
-      <div class="button-row">
-        <button mat-button matStepperPrevious>Back</button>
-        <button class="submit-btn" (click)="onSubmit()">Submit Test</button>
+        
+        <div class="button-row">
+          <button mat-button matStepperPrevious>Back</button>
+          <button class="submit-btn" (click)="onSubmit()">Submit Test</button>
+        </div>
       </div>
-    </div>
-  </mat-step>
-</mat-horizontal-stepper>
+    </mat-step>
+  </mat-horizontal-stepper>
 </div>
