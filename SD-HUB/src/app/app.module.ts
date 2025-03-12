@@ -39,6 +39,7 @@ import { MatMenuModule } from '@angular/material/menu';
 
 
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SigninComponent } from './signin/signin.component';
@@ -85,6 +86,7 @@ import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.c
 import { LoginComponent } from './login/login.component';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
+import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
 import { TimePipe } from './pipes/time.pipe';
 
@@ -134,6 +136,7 @@ import { TimePipe } from './pipes/time.pipe';
     LoginComponent,
     TrainerDashComponent,
     TrainerProfileComponent,
+    AddGalleryComponent,
     ExpenditureComponent,
     TimePipe,
   ],

@@ -1,73 +1,134 @@
 import express from 'express';
+import multer from 'multer';
 import cors from 'cors';
+import mysql from 'mysql2';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import bodyParser from 'body-parser';
 import { createConnection } from 'mysql2';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import util from 'util';
 
+// ✅ Fix __dirname for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// New code added here
 const app = express();
-const PORT = process.env.PORT || 3000;
-const SECRET_KEY = 'your_secret_key';
+app.use(cors());
+app.use(express.json());
 
-// Enhanced CORS Configuration
-app.use(cors({
-  origin: 'http://localhost:4200',
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type,Authorization'
-}));
-app.use(bodyParser.json());
-
-// Database connection
-const db = createConnection({
+// ✅ MySQL Database Connection
+const db = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'attendance_system'
+  user: 'root', // Change to your MySQL username
+  password: '', // Change to your MySQL password
+  database: 'attendance_system' // Change to your MySQL database name
 });
 
 db.connect(err => {
   if (err) {
-    console.error('Database connection failed:', err);
-  } else {
-    console.log('Connected to MySQL database');
+    console.error('❌ Database connection failed:', err);
+    process.exit(1);
+  }
+  console.log('✅ Connected to MySQL Database');
+});
+
+// ✅ Ensure 'uploads' folder exists
+const uploadPath = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath, { recursive: true });
+}
+
+// ✅ Configure Multer Storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
-// Promisify Query for Async/Await
-const query = util.promisify(db.query).bind(db);
+const upload = multer({ storage });
+
+// ✅ Upload Image API
+app.post('/upload', upload.single('image'), (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+    const category = req.body.category;
+    const imageUrl = `/uploads/${req.file.filename}`;
+
+    const sql = 'INSERT INTO gallery (category, image_url) VALUES (?, ?)';
+    db.query(sql, [category, imageUrl], (err, result) => {
+      if (err) {
+        console.error('❌ MySQL Insert Error:', err);
+        return res.status(500).json({ error: err.message });
+      }
+
+      res.json({ message: '✅ Image uploaded successfully', imageUrl });
+    });
+  } catch (error) {
+    console.error('❌ Upload Error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ✅ Fetch Images API (Ordered by Category)
+app.get('/images', (req, res) => {
+  const sql = 'SELECT * FROM gallery ORDER BY category';
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+// ✅ Fetch all images with category (Ordered by uploaded_at DESC)
+app.get('/images', (req, res) => {
+  const sql = 'SELECT * FROM gallery ORDER BY uploaded_at DESC';
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+// ✅ Serve uploaded images
+app.use('/uploads', express.static(uploadPath));
+
+// ✅ Configure MySQL Database Connection
+const dbConnection = createConnection({
+  host: 'localhost',
+  user: 'root', // Change this to your MySQL username
+  password: '', // Change this to your MySQL password
+  database: 'attendance_system' // Replace with your actual database name
+});
+
+dbConnection.connect(err => {
+  if (err) {
+    console.error('❌ Database connection failed:', err);
+    process.exit(1); // Stop server if DB connection fails
+  }
+  console.log('✅ Connected to MySQL Database');
+});
+
+const query = util.promisify(dbConnection.query).bind(dbConnection);
 
 // JWT Authentication Middleware
 const authenticateToken = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
-  jwt.verify(token, SECRET_KEY, (err, user) => {
+  jwt.verify(token, 'your_secret_key', (err, user) => {
     if (err) return res.status(403).json({ message: 'Forbidden' });
     req.user = user;
     next();
   });
 };
 
-// Login Route
-// app.post('/api/login', async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     const users = await query('SELECT * FROM users WHERE email = ?', [email]);
-//     if (users.length === 0) return res.status(400).json({ message: 'Invalid credentials' });
-
-//     const user = users[0];
-//     const isPasswordValid = await bcrypt.compare(password, user.password);
-//     if (!isPasswordValid) return res.status(400).json({ message: 'Invalid credentials' });
-
-//     const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
-//     res.json({ token });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
-// User Registration - Modified to handle trainers
+// User Registration
 app.post('/api/users', async (req, res) => {
   const { name, email, password, role, department, position, isActive } = req.body;
   if (!name || !email || !password || !role) {
@@ -98,69 +159,20 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
-// Fetch all users
-// app.get('/api/users', (req, res) => {
-//   db.query('SELECT * FROM users', (err, results) => {
-//     if (err) return res.status(500).json({ message: "Database error." });
-//     res.json(results);
-//   });
-// });
-
 // Fetch single user
 app.get('/api/users/:id', (req, res) => {
   const { id } = req.params;
-  db.query('SELECT * FROM users WHERE id = ?', [id], (err, results) => {
+  dbConnection.query('SELECT * FROM users WHERE id = ?', [id], (err, results) => {
     if (err) return res.status(500).json({ message: "Database error." });
     if (results.length === 0) return res.status(404).json({ message: "User not found." });
     res.json(results[0]);
   });
 });
 
-// Enhanced Update User with Dynamic Partial Updates
-app.put('/api/users/:id', (req, res) => {
-  const { id } = req.params;
-  const updates = req.body;
-  const fields = [];
-  const values = [];
-
-  // Build dynamic query
-  Object.entries(updates).forEach(([key, value]) => {
-    if (value !== undefined) {
-      fields.push(`${key} = ?`);
-      values.push(value);
-    }
-  });
-
-  if (fields.length === 0) {
-    return res.status(400).json({ message: "No valid fields to update." });
-  }
-
-  values.push(id);
-
-  const queryStr = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
-
-  db.query(queryStr, values, (err, results) => {
-    if (err) {
-      console.error('Database error:', err);
-      return res.status(500).json({ 
-        message: "Database operation failed",
-        error: err.message
-      });
-    }
-    if (results.affectedRows === 0) {
-      return res.status(404).json({ message: "User not found." });
-    }
-    res.json({ 
-      message: "User updated successfully.",
-      updatedFields: fields.map(f => f.split(' ')[0])
-    });
-  });
-});
-
 // Delete User
 app.delete('/api/users/:id', (req, res) => {
   const { id } = req.params;
-  db.query('DELETE FROM users WHERE id = ?', [id], (err, result) => {
+  dbConnection.query('DELETE FROM users WHERE id = ?', [id], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'User deleted successfully' });
   });
@@ -169,7 +181,7 @@ app.delete('/api/users/:id', (req, res) => {
 // Check-in
 app.post('/api/attendance/check-in', (req, res) => {
   const { userId } = req.body;
-  db.query('INSERT INTO attendance (userId, date, checkInTime, status) VALUES (?, CURDATE(), NOW(), "present")', [userId], (err, result) => {
+  dbConnection.query('INSERT INTO attendance (userId, date, checkInTime, status) VALUES (?, CURDATE(), NOW(), "present")', [userId], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Check-in successful' });
   });
@@ -178,7 +190,7 @@ app.post('/api/attendance/check-in', (req, res) => {
 // Check-out
 app.post('/api/attendance/check-out', (req, res) => {
   const { userId } = req.body;
-  db.query('UPDATE attendance SET checkOutTime = NOW() WHERE userId = ? AND date = CURDATE()', [userId], (err, result) => {
+  dbConnection.query('UPDATE attendance SET checkOutTime = NOW() WHERE userId = ? AND date = CURDATE()', [userId], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Check-out successful' });
   });
@@ -186,16 +198,7 @@ app.post('/api/attendance/check-out', (req, res) => {
 
 // Fetch Attendance Records
 app.get('/api/attendance', (req, res) => {
-  db.query('SELECT * FROM attendance', (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
-});
-
-// Fetch User Attendance
-app.get('/api/attendance/user/:userId', (req, res) => {
-  const { userId } = req.params;
-  db.query('SELECT * FROM attendance WHERE userId = ?', [userId], (err, results) => {
+  dbConnection.query('SELECT * FROM attendance', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
@@ -204,7 +207,7 @@ app.get('/api/attendance/user/:userId', (req, res) => {
 // Generate Attendance Report
 app.get('/api/attendance/report', (req, res) => {
   const { startDate, endDate } = req.query;
-  db.query('SELECT * FROM attendance WHERE date BETWEEN ? AND ?', [startDate, endDate], (err, results) => {
+  dbConnection.query('SELECT * FROM attendance WHERE date BETWEEN ? AND ?', [startDate, endDate], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
@@ -230,7 +233,56 @@ app.get('/dashboard-stats', authenticateToken, async (req, res) => {
   }
 });
 
+// Add Category
+app.post('/add-category', (req, res) => {
+  const { category } = req.body;
+
+  if (!category) return res.status(400).json({ error: 'Category name is required' });
+
+  const sql = 'INSERT INTO categories (name) VALUES (?)';
+  db.query(sql, [category], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    res.json({ message: 'Category added successfully!', category });
+  });
+});
+
+// Fetch all categories
+app.get('/categories', (req, res) => {
+  const sql = 'SELECT * FROM categories';
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    res.json(results.map(row => row.name)); // Return only category names
+  });
+});
+
+// Delete an image
+app.delete('/delete-image/:id', (req, res) => {
+  const imageId = req.params.id;
+  const sql = 'DELETE FROM gallery WHERE id = ?';
+  db.query(sql, [imageId], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    res.json({ message: 'Image deleted successfully!' });
+  });
+});
+
+// Edit Image Category
+app.put('/update-image/:id', (req, res) => {
+  const imageId = req.params.id;
+  const { category } = req.body;
+
+  const sql = 'UPDATE gallery SET category = ? WHERE id = ?';
+  db.query(sql, [category, imageId], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    res.json({ message: 'Image category updated successfully!' });
+  });
+});
+
 // Start Server
-const server = app.listen(PORT, () => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

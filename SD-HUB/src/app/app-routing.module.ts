@@ -34,6 +34,7 @@ import { LoginComponent } from './login/login.component';
 import { adminGuard } from './admin.guard';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
+import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
 
 
@@ -52,6 +53,8 @@ const routes: Routes = [
   { path: 'attw', component: AttendanceComponent },
   { path: 'hello', component: HelloComponent },
   { path: 'syllabus', component: SyllabusTrackerComponent },
+  { path: 'addphoto', component: AddGalleryComponent },
+  
   { path: 'expenditure', component: ExpenditureComponent },
 
   

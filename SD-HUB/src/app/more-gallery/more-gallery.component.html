@@ -2,75 +2,14 @@
 <app-navbar></app-navbar>
 
 <div class="gallery-container" id="gallery">
-    <h2>Graduation Day</h2>
-    <div class="gallery-grid">
-        <div class="gallery-item"><img src="graduation (1).jpg" alt="Graduation"></div>
-        <div class="gallery-item"><img src="graduation (2).jpg" alt="Graduation"></div>
-        <div class="gallery-item"><img src="graduation (3).jpg" alt="Graduation"></div>
-        <div class="gallery-item"><img src="graduation (4).jpg" alt="Graduation"></div>
-        <div class="gallery-item"><img src="graduation (5).jpg" alt="Graduation"></div>
-        <div class="gallery-item"><img src="graduation (6).jpg" alt="Graduation"></div>
-        <div class="gallery-item"><img src="graduation (7).jpg" alt="Graduation"></div>
-        <!-- <div class="gallery-item"><img src="graduation (8).jpg" alt="Graduation"></div>
-        <div class="gallery-item"><img src="graduation (9).jpg" alt="Graduation"></div>
-        <div class="gallery-item"><img src="graduation (10).jpg" alt="Graduation"></div> -->
+    <div *ngFor="let category of imagesByCategory | keyvalue">
+        <h2>{{ category.key }}</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item" *ngFor="let img of category.value">
+                <img [src]="'http://localhost:3000' + img" alt="Gallery Image">
+            </div>
+        </div>
     </div>
-    
-    <h2>Saturday Interview Clinic</h2>
-    <div class="gallery-grid" id="gallery-SIC">
-        <div class="gallery-item"><img src="interview (1).jpg" alt="Interview"></div>
-        <div class="gallery-item"><img src="interview (2).jpg" alt="Interview"></div>
-        <div class="gallery-item"><img src="interview (3).jpg" alt="Interview"></div>
-        <div class="gallery-item"><img src="interview (4).jpg" alt="Interview"></div>
-        <div class="gallery-item"><img src="interview (5).jpg" alt="Interview"></div>
-        <!-- <div class="gallery-item"><img src="interview (6).jpg" alt="Interview"></div>
-        <div class="gallery-item"><img src="interview (7).jpg" alt="Interview"></div>
-        <div class="gallery-item"><img src="interview (8).jpg" alt="Interview"></div>
-        <div class="gallery-item"><img src="interview (9).jpg" alt="Interview"></div>
-        <div class="gallery-item"><img src="interview (10).jpg" alt="Interview"></div> -->
-    </div>
-    
-    <h2>Special Lecture</h2>
-    <div class="gallery-grid" id="gallery-SL">
-        <div class="gallery-item"><img src="special (1).jpg" alt="special"></div>
-        <div class="gallery-item"><img src="special (2).jpg" alt="special"></div>
-        <div class="gallery-item"><img src="special (3).jpg" alt="special"></div>
-        <div class="gallery-item"><img src="special (4).jpg" alt="special"></div>
-        <div class="gallery-item"><img src="special (5).jpg" alt="special"></div>
-        <div class="gallery-item"><img src="special (6).jpg" alt="special"></div>
-        <div class="gallery-item"><img src="special (7).jpg" alt="special"></div>
-        <div class="gallery-item"><img src="special (8).jpg" alt="special"></div>
-        <!-- <div class="gallery-item"><img src="special (9).jpg" alt="special"></div>
-        <div class="gallery-item"><img src="special (10).jpg" alt="special"></div> -->
-    </div>
-    
-    <!-- <h2>Counseling</h2>
-    <div class="gallery-grid">
-        <div class="gallery-item"><img src="counseling (1).jpg" alt="Counseling"></div>
-        <div class="gallery-item"><img src="counseling (2).jpg" alt="Counseling"></div>
-        <div class="gallery-item"><img src="counseling (3).jpg" alt="Counseling"></div>
-        <div class="gallery-item"><img src="counseling (4).jpg" alt="Counseling"></div>
-        <div class="gallery-item"><img src="counseling (5).jpg" alt="Counseling"></div>
-        <div class="gallery-item"><img src="counseling (6).jpg" alt="Counseling"></div>
-        <div class="gallery-item"><img src="counseling (7).jpg" alt="Counseling"></div>
-        <div class="gallery-item"><img src="counseling (8).jpg" alt="Counseling"></div>
-        <div class="gallery-item"><img src="counseling (9).jpg" alt="Counseling"></div>
-        <div class="gallery-item"><img src="counseling (10).jpg" alt="Counseling"></div>
-    </div> -->
-    
-    <h2>Induction Class</h2>
-    <div class="gallery-grid">
-        <div class="gallery-item"><img src="induction (1).jpg" alt="Induction"></div>
-        <div class="gallery-item"><img src="induction (2).jpg" alt="Induction"></div>
-        <div class="gallery-item"><img src="induction (3).jpg" alt="Induction"></div>
-        <div class="gallery-item"><img src="induction (4).jpg" alt="Induction"></div>
-        <div class="gallery-item"><img src="induction (5).jpg" alt="Induction"></div>
-        <div class="gallery-item"><img src="induction (6).jpg" alt="Induction"></div>
-        <div class="gallery-item"><img src="induction (7).jpg" alt="Induction"></div>
-        <div class="gallery-item"><img src="induction (8).jpg" alt="Induction"></div>
-        <!-- <div class="gallery-item"><img src="induction (9).jpg" alt="Induction"></div>
-        <div class="gallery-item"><img src="induction (10).jpg" alt="Induction"></div> -->
-    </div> 
 </div>
 
 <app-footer></app-footer>
