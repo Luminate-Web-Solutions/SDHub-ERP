@@ -1,0 +1,51 @@
+<app-banner></app-banner>
+<app-navbar></app-navbar>
+
+<div>
+    <h3>Add a New Category</h3>
+    <input type="text" [(ngModel)]="newCategory" placeholder="Enter category name">
+    <button (click)="addCategory()">Add Category</button>
+  </div>
+  
+  <div>
+    <h3>Upload Image</h3>
+    <label for="category">Select Category:</label>
+    <select id="category" [(ngModel)]="selectedCategory">
+      <option value="" disabled selected>Select a category</option>
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+  
+    <input type="file" (change)="onFileSelected($event)" />
+    <button (click)="uploadImage()">Upload</button>
+  </div>
+  
+  <h3>Gallery Data</h3>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Category</th>
+        <th>Image</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let image of images">
+        <td>{{ image.id }}</td>
+        <td *ngIf="editingImageId !== image.id">{{ image.category }}</td>
+        <td *ngIf="editingImageId === image.id">
+          <input type="text" [(ngModel)]="updatedCategory">
+        </td>
+        <td><img [src]="'http://localhost:3000' + image.image_url" alt="Gallery Image" width="100"></td>
+        <td>
+          <button *ngIf="editingImageId !== image.id" (click)="editImage(image)">✏️ Edit</button>
+          <button *ngIf="editingImageId === image.id" (click)="updateImage()">✔️ Save</button>
+          <button (click)="deleteImage(image.id)">🗑️ Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+
+  <app-footer></app-footer>
+<app-chat-widget></app-chat-widget>
