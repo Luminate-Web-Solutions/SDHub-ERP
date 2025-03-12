@@ -19,22 +19,15 @@ export class LoginComponent implements OnInit {
   roles = ['director', 'stakeholder', 'adminstaff', 'trainer'];
   errorMessage: string = '';
   loading: boolean = false;
-  // Define dashboard routes for each role
-  private readonly dashboardRoutes = {
-    stakeholder: '/stakeholder-dashboard',
-    director: '/director-dashboard',
-    admin: '/admin-dashboard',
-    trainer: '/trainer-dashboard'
-  };
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private snackBar: MatSnackBar,
-    private studentsService: StudentsService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private http: HttpClient
+    private http: HttpClient,
+    private studentsService: StudentsService
   ) {
     this.signinForm = this.formBuilder.group({
       role: ['', Validators.required],

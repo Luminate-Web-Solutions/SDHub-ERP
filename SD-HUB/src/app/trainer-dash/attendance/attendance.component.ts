@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { AttendanceService } from '../../services/attendance.service';
-import { MainService } from '../../services/main.service';
+import { AuthService } from '../../services/auth.service';
 
 export interface AttendanceRecord {
   id: number;
@@ -37,7 +37,7 @@ export class AttendanceComponent implements OnInit {
 
   constructor(
     private attendanceService: AttendanceService,
-    private authService: MainService,
+    private authService: AuthService,
     private snackBar: MatSnackBar
   ) {
     this.dataSource = new MatTableDataSource<AttendanceRecord>();

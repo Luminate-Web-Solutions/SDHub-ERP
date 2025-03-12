@@ -5,15 +5,11 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  currentUser: any;
-  private user: any = null;
-  login(email: any, password: any) {
-    throw new Error('Method not implemented.');
-  }
   private readonly SESSION_EXPIRY_TIME = 3600000; // 1 hour in milliseconds
   private readonly TOKEN_KEY = 'auth_token';
   private readonly EXPIRY_KEY = 'auth_token_expiry';
   private readonly USER_ROLE_KEY = 'user_role';
+  private readonly USER_EMAIL_KEY = 'user_email';
 
   constructor(private router: Router) {}
 
@@ -27,6 +23,7 @@ export class AuthService {
       sessionStorage.setItem(this.TOKEN_KEY, token);
       sessionStorage.setItem(this.EXPIRY_KEY, expiryTime.toString());
       sessionStorage.setItem(this.USER_ROLE_KEY, creds.role);
+      sessionStorage.setItem(this.USER_EMAIL_KEY, creds.email);
     }
   }
 
@@ -35,6 +32,7 @@ export class AuthService {
       sessionStorage.removeItem(this.TOKEN_KEY);
       sessionStorage.removeItem(this.EXPIRY_KEY);
       sessionStorage.removeItem(this.USER_ROLE_KEY);
+      sessionStorage.removeItem(this.USER_EMAIL_KEY);
       this.router.navigate(['/signin']);
     }
   }
@@ -43,7 +41,7 @@ export class AuthService {
     if (!this.isBrowser()) {
       return false;
     }
-    
+
     const expiryTime = sessionStorage.getItem(this.EXPIRY_KEY);
     const token = sessionStorage.getItem(this.TOKEN_KEY);
 
@@ -68,5 +66,14 @@ export class AuthService {
 
   getUserRole(): string | null {
     return this.isBrowser() ? sessionStorage.getItem(this.USER_ROLE_KEY) : null;
+  }
+
+  getUser(): any {
+    if (this.isBrowser()) {
+      return {
+        email: sessionStorage.getItem(this.USER_EMAIL_KEY)
+      };
+    }
+    return null;
   }
 }

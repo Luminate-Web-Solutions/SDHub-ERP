@@ -29,7 +29,7 @@ export class adminGuard implements CanActivate {
         stakeholder: ['/stakeholder'],
         director: ['/admin'],
         admin: ['/admin-dashboard'],
-        trainer: ['/staff']
+        trainer: ['/trainer']
       };
 
       // Check if user has permission to access the route
@@ -45,7 +45,7 @@ export class adminGuard implements CanActivate {
     }
 
     // Not logged in, redirect to login page
-    this.router.navigate(['/signin'], { queryParams: { returnUrl: state.url } });
+    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
     return false;
   }
 }

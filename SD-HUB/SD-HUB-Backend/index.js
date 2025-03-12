@@ -704,8 +704,8 @@ app.post('/attendance/check-out', async (req, res) => {
        SET check_out_time = NOW(),
            hours_worked = TIMESTAMPDIFF(HOUR, check_in_time, NOW()),
            status = CASE 
-             WHEN TIMESTAMPDIFF(HOUR, check_in_time, NOW()) >= 8 THEN 'Present'
-             WHEN TIMESTAMPDIFF(HOUR, check_in_time, NOW()) >= 4 THEN 'Half Day'
+             WHEN TIMESTAMPDIFF(HOUR, check_in_time, NOW()) >= 2 THEN 'Present'
+             WHEN TIMESTAMPDIFF(HOUR, check_in_time, NOW()) >= 1 THEN 'Half Day'
              ELSE 'Absent'
            END
        WHERE trainer_email = ? AND DATE(date) = CURDATE()`,
