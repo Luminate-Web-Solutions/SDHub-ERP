@@ -1,4 +1,4 @@
-<h2>Admin Dashboard</h2>
+<h2> Dashboard</h2>
       <div class="summary-grid">
         <!-- Student Summary Card -->
         <mat-card class="summary-card student-card">
@@ -132,6 +132,70 @@
         [data]="staffChartData"
         [type]="'doughnut'"
         [options]="chartOptions">
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Completion & Dropout Trends Section -->
+<h3 class="section-title">Completion & Dropout Trends</h3>
+<div class="charts-grid">
+  <!-- Completion Rates by Course -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Completion Rates by Course</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas baseChart
+        [data]="completionRatesData"
+        [type]="'bar'"
+        [options]="completionChartOptions">
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Dropout Analysis -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Dropout Analysis</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas baseChart
+        [data]="dropoutData"
+        [type]="'line'"
+        [options]="dropoutChartOptions">
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Placement & Post-Course Outcomes Section -->
+<h3 class="section-title">Placement & Post-Course Outcomes</h3>
+<div class="charts-grid">
+  <!-- Placement Rate Chart -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Placement Rate</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas baseChart
+        [data]="placementRateData"
+        [type]="'doughnut'"
+        [options]="placementChartOptions">
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Average Salary by Role Chart -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Average Salary by Role</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas baseChart
+        [data]="averageSalaryData"
+        [type]="'bar'"
+        [options]="salaryChartOptions">
       </canvas>
     </mat-card-content>
   </mat-card>

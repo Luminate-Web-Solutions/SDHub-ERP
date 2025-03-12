@@ -26,7 +26,7 @@ export class adminGuard implements CanActivate {
       
       // Define allowed roles for each route
       const roleRoutes = {
-        stakeholder: ['/stakeholder-dashboard'],
+        stakeholder: ['/stakeholder'],
         director: ['/admin'],
         admin: ['/admin-dashboard'],
         trainer: ['/staff']

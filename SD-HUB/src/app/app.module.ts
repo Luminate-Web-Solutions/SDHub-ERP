@@ -40,6 +40,7 @@ import { MatMenuModule } from '@angular/material/menu';
 
 
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SigninComponent } from './signin/signin.component';
@@ -77,8 +78,6 @@ import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { TaskDialogComponent } from './staff/task-dialog/task-dialog.component';
 import { TaskCardComponent } from './staff/task-card/task-card.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
-import { AttendanceComponent } from './staff/attendance/attendance.component';
-import { HelloComponent } from './hello/hello.component';
 import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
 import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
@@ -86,6 +85,9 @@ import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.c
 import { LoginComponent } from './login/login.component';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
+import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
+import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
+import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
 import { TimePipe } from './pipes/time.pipe';
@@ -127,8 +129,6 @@ import { TimePipe } from './pipes/time.pipe';
     TaskDialogComponent,
     TaskCardComponent,
     KanbanBoardComponent,
-    AttendanceComponent,
-    HelloComponent,
     SyllabusTrackerComponent,
     ViewReportComponent,
     NewsDialogComponent,
@@ -136,6 +136,9 @@ import { TimePipe } from './pipes/time.pipe';
     LoginComponent,
     TrainerDashComponent,
     TrainerProfileComponent,
+    StakeholderDashComponent,
+    StakeholderProfileComponent,
+    AttendanceComponent,
     AddGalleryComponent,
     ExpenditureComponent,
     TimePipe,
@@ -173,12 +176,14 @@ import { TimePipe } from './pipes/time.pipe';
     FormsModule,
     DragDropModule,
     NgChartsModule,
-    MatMenuModule 
+    MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [
     provideAnimationsAsync(),
+    provideHttpClient(),
     DatePipe,
-    provideHttpClient()
   ],
   bootstrap: [AppComponent]
 })

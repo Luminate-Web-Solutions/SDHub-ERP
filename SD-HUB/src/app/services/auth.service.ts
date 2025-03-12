@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   currentUser: any;
+  private user: any = null;
   login(email: any, password: any) {
     throw new Error('Method not implemented.');
   }

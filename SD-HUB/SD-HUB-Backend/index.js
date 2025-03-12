@@ -651,6 +651,112 @@ app.post('/forgot-password', async (req, res) => {
   }
 });
 
+
+// Attendance API endpoints
+app.post('/attendance/check-in', async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // Check if already checked in today
+    const [existing] = await pool.query(
+      'SELECT * FROM attendance WHERE trainer_email = ? AND DATE(date) = CURDATE()',
+      [email]
+    );
+
+    if (existing.length > 0) {
+      return res.status(400).json({ message: 'Already checked in today' });
+    }
+
+    // Create new attendance record
+    const [result] = await pool.query(
+      'INSERT INTO attendance (trainer_email, date, check_in_time, status) VALUES (?, CURDATE(), NOW(), "Present")',
+      [email]
+    );
+
+    res.status(201).json({ message: 'Check-in successful' });
+  } catch (error) {
+    console.error('Check-in error:', error);
+    res.status(500).json({ message: 'Failed to check in' });
+  }
+});
+
+app.post('/attendance/check-out', async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // Get today's attendance record
+    const [existing] = await pool.query(
+      'SELECT * FROM attendance WHERE trainer_email = ? AND DATE(date) = CURDATE()',
+      [email]
+    );
+
+    if (existing.length === 0) {
+      return res.status(400).json({ message: 'No check-in record found for today' });
+    }
+
+    if (existing[0].check_out_time) {
+      return res.status(400).json({ message: 'Already checked out today' });
+    }
+
+    // Update check-out time and calculate hours worked
+    const [result] = await pool.query(
+      `UPDATE attendance 
+       SET check_out_time = NOW(),
+           hours_worked = TIMESTAMPDIFF(HOUR, check_in_time, NOW()),
+           status = CASE 
+             WHEN TIMESTAMPDIFF(HOUR, check_in_time, NOW()) >= 8 THEN 'Present'
+             WHEN TIMESTAMPDIFF(HOUR, check_in_time, NOW()) >= 4 THEN 'Half Day'
+             ELSE 'Absent'
+           END
+       WHERE trainer_email = ? AND DATE(date) = CURDATE()`,
+      [email]
+    );
+
+    res.status(200).json({ message: 'Check-out successful' });
+  } catch (error) {
+    console.error('Check-out error:', error);
+    res.status(500).json({ message: 'Failed to check out' });
+  }
+});
+
+app.get('/attendance/today/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    
+    const [records] = await pool.query(
+      'SELECT * FROM attendance WHERE trainer_email = ? AND DATE(date) = CURDATE()',
+      [email]
+    );
+
+    res.status(200).json(records[0] || null);
+  } catch (error) {
+    console.error('Error fetching today\'s attendance:', error);
+    res.status(500).json({ message: 'Failed to fetch attendance' });
+  }
+});
+
+app.get('/attendance/history', async (req, res) => {
+  try {
+    const { email, startDate, endDate } = req.query;
+    
+    let query = 'SELECT * FROM attendance WHERE trainer_email = ?';
+    const params = [email];
+
+    if (startDate && endDate) {
+      query += ' AND date BETWEEN ? AND ?';
+      params.push(startDate, endDate);
+    }
+
+    query += ' ORDER BY date DESC';
+
+    const [records] = await pool.query(query, params);
+    res.status(200).json(records);
+  } catch (error) {
+    console.error('Error fetching attendance history:', error);
+    res.status(500).json({ message: 'Failed to fetch attendance history' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

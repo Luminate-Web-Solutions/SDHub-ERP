@@ -17,11 +17,11 @@ export class TaskDialogComponent {
   task: Task;
   selectedTrainerId: string;
   trainers = [
-    { id: 't1', name: 'John Smith', initials: 'JS' },
-    { id: 't2', name: 'Emily Johnson', initials: 'EJ' },
-    { id: 't3', name: 'Michael Brown', initials: 'MB' },
-    { id: 't4', name: 'Sarah Wilson', initials: 'SW' },
-    { id: 't5', name: 'David Lee', initials: 'DL' }
+    { id: 't1', name: 'Fahad', initials: 'JS' },
+    { id: 't2', name: 'Yousuf', initials: 'EJ' },
+    { id: 't3', name: 'Sohail', initials: 'MB' },
+    { id: 't4', name: 'Shahriar', initials: 'SW' },
+    { id: 't5', name: 'Furqan', initials: 'DL' }
   ];
 
   constructor(

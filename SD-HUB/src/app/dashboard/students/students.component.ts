@@ -584,8 +584,8 @@ export class StudentsComponent implements OnInit, AfterViewInit {
         <!-- Header -->
         <div class="header">
             <div class="logo-container">
-                <img src="SD Hub Logo Q 2.png" alt="logo" class="logo">
-                <img src="SD Hub Logo sp.png" alt="logo" class="logo-2">
+                <img src="/SD Hub Logo Q 2.png" alt="logo" class="logo">
+                <img src="/SD Hub Logo sp.png" alt="logo" class="logo-2">
             </div>
             <div class="photo-box">
                 Paste your passport size<br>Photograph here

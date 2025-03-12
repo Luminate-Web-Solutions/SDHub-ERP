@@ -25,8 +25,8 @@ import { ContactComponent } from './contact/contact.component';
 import { TestResultComponent } from './test-result/test-result.component';
 import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
-import { AttendanceComponent } from './staff/attendance/attendance.component';
-import { HelloComponent } from './hello/hello.component';
+
+
 import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
 
 import { ViewReportComponent } from './view-report/view-report.component';
@@ -36,6 +36,10 @@ import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
+import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
+import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
+import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
+
 
 
 const routes: Routes = [
@@ -50,8 +54,6 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'more-gallery', component: MoreGalleryComponent },
   { path: 'KanbanBoard', component: KanbanBoardComponent },
-  { path: 'attw', component: AttendanceComponent },
-  { path: 'hello', component: HelloComponent },
   { path: 'syllabus', component: SyllabusTrackerComponent },
   { path: 'addphoto', component: AddGalleryComponent },
   
@@ -97,9 +99,20 @@ const routes: Routes = [
     // canActivate: [adminGuard],
     children: [
       { path: '', redirectTo: 'attendance', pathMatch: 'full' },
-      { path: 'attendance', component: StaffComponent },
+      { path: 'attendance', component: AttendanceComponent },
       { path: 'syllabus', component: SyllabusTrackerComponent },
       { path: 'profile', component: TrainerProfileComponent }
+    ]
+  },
+
+  { 
+    path: 'stakeholder', 
+    component: StakeholderDashComponent,
+    // canActivate: [adminGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'profile', component: StakeholderProfileComponent }
     ]
   },
 ];

@@ -34,8 +34,8 @@ export class DashboardComponent implements OnInit {
     completedCourses: 3
   };
 
-   // Chart Configurations
-   studentChartData: ChartConfiguration<'pie'>['data'] = {
+  // Chart Configurations
+  studentChartData: ChartConfiguration<'pie'>['data'] = {
     labels: ['Active', 'Completed', 'Pending'],
     datasets: [{
       data: [0, 0, 0],
@@ -61,6 +61,62 @@ export class DashboardComponent implements OnInit {
     }]
   };
 
+  // Completion Rates Chart
+  completionRatesData: ChartConfiguration<'bar'>['data'] = {
+    labels: ['Web Development', 'Data Analytics', 'Digital Marketing', 'Accounting', 'Office Admin', 'System Engineering'],
+    datasets: [{
+      label: 'Completion Rate (%)',
+      data: [85, 78, 92, 88, 95, 82],
+      backgroundColor: '#2e53aa',
+      borderColor: '#2e53aa',
+      borderWidth: 1
+    }]
+  };
+
+  // Dropout Analysis Chart
+  dropoutData: ChartConfiguration<'line'>['data'] = {
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+    datasets: [{
+      label: 'Dropouts',
+      data: [2, 1, 4, 3, 6, 2],
+      borderColor: '#ff4444',
+      backgroundColor: 'rgba(255, 68, 68, 0.1)',
+      fill: true,
+      tension: 0.4,
+      pointRadius: 6,
+      pointHoverRadius: 8
+    }]
+  };
+
+  // Placement Rate Chart
+  placementRateData: ChartConfiguration<'doughnut'>['data'] = {
+    labels: ['Placed', 'Not Placed'],
+    datasets: [{
+      data: [75, 25], // 75% placed, 25% not placed
+      backgroundColor: ['#4CAF50', '#ff9800'],
+      borderWidth: 0
+    }]
+  };
+
+  // Average Salary Chart
+  averageSalaryData: ChartConfiguration<'bar'>['data'] = {
+    labels: [
+      'Software Developer',
+      'Data Analyst',
+      'Digital Marketing',
+      'System Admin',
+      'Business Analyst',
+      'UI/UX Designer'
+    ],
+    datasets: [{
+      label: 'Average Salary (LPA)',
+      data: [8.5, 7.2, 6.8, 6.5, 7.8, 7.0],
+      backgroundColor: '#2e53aa',
+      borderColor: '#2e53aa',
+      borderWidth: 1
+    }]
+  };
+
   chartOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
@@ -82,6 +138,121 @@ export class DashboardComponent implements OnInit {
     scales: {
       y: {
         beginAtZero: true
+      }
+    }
+  };
+
+  completionChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const value = context.parsed.y;
+            const total = 100;
+            const completed = Math.round((value / 100) * total);
+            return `Completion Rate: ${value}% (${completed} students)`;
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 100,
+        title: {
+          display: true,
+          text: 'Completion Rate (%)'
+        }
+      }
+    }
+  };
+
+  dropoutChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom'
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const value = context.parsed.y;
+            return `Dropouts: ${value} students`;
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Number of Dropouts'
+        }
+      }
+    }
+  };
+
+  placementChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom'
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const value = context.parsed;
+            const total = context.dataset.data.reduce((a: any, b: any) => a + b, 0);
+            const percentage = Math.round((value / total) * 100);
+            const count = Math.round((value / 100) * total);
+            return `${context.label}: ${percentage}% (${count} students)`;
+          }
+        }
+      }
+    }
+  };
+
+  salaryChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const value = context.parsed.y;
+            const placedCount = [45, 38, 32, 28, 35, 30][context.dataIndex]; // Sample placed counts
+            return [
+              `Average Salary: ${value} LPA`,
+              `Placed Students: ${placedCount}`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Average Salary (LPA)'
+        }
+      },
+      x: {
+        ticks: {
+          maxRotation: 45,
+          minRotation: 45
+        }
       }
     }
   };
@@ -151,4 +322,3 @@ export class DashboardComponent implements OnInit {
     ];
   }
 }
-
