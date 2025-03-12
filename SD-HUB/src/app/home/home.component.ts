@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, AfterViewInit  } from '@angular/core';
+// import { HttpClient } from '@angular/common/http';
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -7,6 +7,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { NewsService, NewsItem } from '../services/news.service';
+import { isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID, Inject } from '@angular/core';
 
 
 
@@ -20,54 +22,62 @@ import { NewsService, NewsItem } from '../services/news.service';
 export class HomeComponent implements OnInit, AfterViewInit {
   newsList: NewsItem[] = [];
   private swiper: Swiper | undefined;
-
+  private isBrowser: boolean;
   constructor(
-    private http: HttpClient,
-    private newsService: NewsService
-  ) {}
+    // private http: HttpClient,
+    private newsService: NewsService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit(): void {
-    this.fetchNews();
+    if (this.isBrowser) {
+      this.fetchNews();
+    }
   }
 
   ngAfterViewInit(): void {
-    this.initSwiper();
+    if (this.isBrowser) {
+      this.initSwiper();
+    }
   }
 
   private initSwiper(): void {
-    // Initialize Swiper
-    this.swiper = new Swiper('.swiper-container', {
-      modules: [Navigation, Pagination, Autoplay],
-      slidesPerView: 1,
-      spaceBetween: 20,
-      loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      breakpoints: {
-        640: {
-          slidesPerView: 1,
-          spaceBetween: 20,
+    if (this.isBrowser) {
+      this.swiper = new Swiper('.swiper-container', {
+        modules: [Navigation, Pagination, Autoplay],
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
         },
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 30,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
         },
-        1024: {
-          slidesPerView: 3,
-          spaceBetween: 30,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
         },
-      },
-    });
+        breakpoints: {
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          },
+        },
+      });
+    }
   }
 
   private fetchNews(): void {
