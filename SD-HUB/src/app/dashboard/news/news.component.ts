@@ -5,9 +5,10 @@ import { NewsItem, NewsService } from '../../services/news.service';
 import { NewsDialogComponent } from './news-dialog/news-dialog.component';
 
 @Component({
-  selector: 'app-news',
-  templateUrl: './news.component.html',
-  styleUrls: ['./news.component.css']
+    selector: 'app-news',
+    templateUrl: './news.component.html',
+    styleUrls: ['./news.component.css'],
+    standalone: false
 })
 export class NewsComponent implements OnInit {
   newsList: NewsItem[] = [];

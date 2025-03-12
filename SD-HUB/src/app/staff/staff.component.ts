@@ -5,9 +5,10 @@ import * as userService from '../services/user.service';
 
 
 @Component({
-  selector: 'app-staff',
-  templateUrl: './staff.component.html',
-  styleUrl: './staff.component.css'
+    selector: 'app-staff',
+    templateUrl: './staff.component.html',
+    styleUrl: './staff.component.css',
+    standalone: false
 })
 export class StaffComponent {
   isCheckedIn = false;

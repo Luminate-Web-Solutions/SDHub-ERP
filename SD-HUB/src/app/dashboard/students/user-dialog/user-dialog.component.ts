@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-user-dialog',
-  templateUrl: './user-dialog.component.html',
-  styleUrl: './user-dialog.component.css'
+    selector: 'app-user-dialog',
+    templateUrl: './user-dialog.component.html',
+    styleUrl: './user-dialog.component.css',
+    standalone: false
 })
 export class UserDialogComponent {
   userForm: FormGroup;

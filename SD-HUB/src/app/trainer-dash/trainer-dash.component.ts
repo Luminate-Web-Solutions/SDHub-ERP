@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'app-trainer-dash',
-  templateUrl: './trainer-dash.component.html',
-  styleUrl: './trainer-dash.component.css'
+    selector: 'app-trainer-dash',
+    templateUrl: './trainer-dash.component.html',
+    styleUrl: './trainer-dash.component.css',
+    standalone: false
 })
 export class TrainerDashComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;

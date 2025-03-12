@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-trainer-profile',
-  templateUrl: './trainer-profile.component.html',
-  styleUrl: './trainer-profile.component.css'
+    selector: 'app-trainer-profile',
+    templateUrl: './trainer-profile.component.html',
+    styleUrl: './trainer-profile.component.css',
+    standalone: false
 })
 export class TrainerProfileComponent {
   adminProfile = {

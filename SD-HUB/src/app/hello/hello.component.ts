@@ -5,9 +5,10 @@ import { AuService } from '../services/au.service';
 import { User, UserService } from '../services/user.service';
 
 @Component({
-  selector: 'app-hello',
-  templateUrl: './hello.component.html',
-  styleUrls: ['./hello.component.css']
+    selector: 'app-hello',
+    templateUrl: './hello.component.html',
+    styleUrls: ['./hello.component.css'],
+    standalone: false
 })
 export class HelloComponent implements OnInit {
   attendanceRecords: Attendance[] = [];

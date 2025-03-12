@@ -7,9 +7,10 @@ import { AptitudeService } from '../services/aptitude.service';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 
 @Component({
-  selector: 'app-aptitued-test',
-  templateUrl: './aptitued-test.component.html',
-  styleUrls: ['./aptitued-test.component.css']
+    selector: 'app-aptitued-test',
+    templateUrl: './aptitued-test.component.html',
+    styleUrls: ['./aptitued-test.component.css'],
+    standalone: false
 })
 export class AptituedTestComponent implements OnInit {
   personalInfoForm: FormGroup;

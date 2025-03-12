@@ -29,9 +29,10 @@ export interface Task {
 
 
 @Component({
-  selector: 'app-kanban-board',
-  templateUrl: './kanban-board.component.html',
-  styleUrl: './kanban-board.component.css'
+    selector: 'app-kanban-board',
+    templateUrl: './kanban-board.component.html',
+    styleUrl: './kanban-board.component.css',
+    standalone: false
 })
 export class KanbanBoardComponent implements OnInit {
   columns: Column[] = [];

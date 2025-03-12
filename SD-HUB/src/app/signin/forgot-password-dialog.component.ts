@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-forgot-password-dialog',
-  template: `
+    selector: 'app-forgot-password-dialog',
+    template: `
     <h2 mat-dialog-title>Forgot Password</h2>
     <mat-dialog-content>
       <form [formGroup]="forgotPasswordForm">
@@ -29,11 +29,12 @@ import { MatDialogRef } from '@angular/material/dialog';
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
+    styles: [`
     .full-width {
       width: 100%;
     }
-  `]
+  `],
+    standalone: false
 })
 export class ForgotPasswordDialogComponent {
   forgotPasswordForm: FormGroup;

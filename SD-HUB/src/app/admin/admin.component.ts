@@ -4,9 +4,10 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService } from '../services/auth.service';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrl: './admin.component.css'
+    selector: 'app-admin',
+    templateUrl: './admin.component.html',
+    styleUrl: './admin.component.css',
+    standalone: false
 })
 export class AdminComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;

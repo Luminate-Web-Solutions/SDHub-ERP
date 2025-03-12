@@ -9,9 +9,10 @@ export interface Column {
 }
 
 @Component({
-  selector: 'app-task-dialog',
-  templateUrl: './task-dialog.component.html',
-  styleUrl: './task-dialog.component.css'
+    selector: 'app-task-dialog',
+    templateUrl: './task-dialog.component.html',
+    styleUrl: './task-dialog.component.css',
+    standalone: false
 })
 export class TaskDialogComponent {
   task: Task;

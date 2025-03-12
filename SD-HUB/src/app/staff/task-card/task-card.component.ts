@@ -8,9 +8,10 @@ export interface Column {
 }
 
 @Component({
-  selector: 'app-task-card',
-  templateUrl: './task-card.component.html',
-  styleUrl: './task-card.component.css'
+    selector: 'app-task-card',
+    templateUrl: './task-card.component.html',
+    styleUrl: './task-card.component.css',
+    standalone: false
 })
 export class TaskCardComponent {
   @Input() task!: Task;

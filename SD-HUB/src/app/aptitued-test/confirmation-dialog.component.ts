@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-confirmation-dialog',
-  template: `
+    selector: 'app-confirmation-dialog',
+    template: `
     <div class="dialog-container">
       <h2 mat-dialog-title class="dialog-title">Confirm Submission</h2>
       <div mat-dialog-content class="dialog-content">
@@ -15,7 +15,7 @@ import { MatDialogRef } from '@angular/material/dialog';
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .dialog-container {
       padding: 24px;
       min-width: 350px;
@@ -39,7 +39,8 @@ import { MatDialogRef } from '@angular/material/dialog';
     button {
       min-width: 100px;
     }
-  `]
+  `],
+    standalone: false
 })
 export class ConfirmationDialogComponent {
   constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>) {}

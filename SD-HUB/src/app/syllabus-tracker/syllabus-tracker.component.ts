@@ -3,9 +3,10 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { SyllabusService, SyllabusTopic } from '../syllabus.service';
 
 @Component({
-  selector: 'app-syllabus-tracker',
-  templateUrl: './syllabus-tracker.component.html',
-  styleUrl: './syllabus-tracker.component.css'
+    selector: 'app-syllabus-tracker',
+    templateUrl: './syllabus-tracker.component.html',
+    styleUrl: './syllabus-tracker.component.css',
+    standalone: false
 })
 export class SyllabusTrackerComponent  {
   weeksPerBlock = 4;

@@ -6,9 +6,10 @@ import { AuService } from '../../services/au.service';
 
 
 @Component({
-  selector: 'app-attendance',
-  templateUrl: './attendance.component.html',
-  styleUrl: './attendance.component.css'
+    selector: 'app-attendance',
+    templateUrl: './attendance.component.html',
+    styleUrl: './attendance.component.css',
+    standalone: false
 })
 export class AttendanceComponent implements OnInit {
   attendanceRecords: any[] = [];

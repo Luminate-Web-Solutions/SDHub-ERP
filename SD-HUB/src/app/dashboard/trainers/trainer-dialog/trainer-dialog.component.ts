@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-trainer-dialog',
-  templateUrl: './trainer-dialog.component.html',
-  styleUrl: './trainer-dialog.component.css'
+    selector: 'app-trainer-dialog',
+    templateUrl: './trainer-dialog.component.html',
+    styleUrl: './trainer-dialog.component.css',
+    standalone: false
 })
 export class TrainerDialogComponent {
   trainerForm: FormGroup;

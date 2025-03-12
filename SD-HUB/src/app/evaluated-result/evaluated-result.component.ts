@@ -4,18 +4,19 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-evaluated-result',
-  template: `
+    selector: 'app-evaluated-result',
+    template: `
     <div *ngIf="pdfPath">
       <pdf-viewer [src]="pdfPath" [render-text]="true"></pdf-viewer>
     </div>
   `,
-  styles: [`
+    styles: [`
     pdf-viewer {
       width: 100%;
       height: 100vh;
     }
-  `]
+  `],
+    standalone: false
 })
 export class EvaluatedResultComponent implements OnInit {
   pdfPath: string | null = null;
