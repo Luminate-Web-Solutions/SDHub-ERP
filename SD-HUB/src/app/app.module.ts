@@ -85,6 +85,8 @@ import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.c
 import { LoginComponent } from './login/login.component';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
+import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -132,6 +134,7 @@ import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-
     LoginComponent,
     TrainerDashComponent,
     TrainerProfileComponent,
+    EvaluatedResultComponent,
   ],
   imports: [
     BrowserModule,
@@ -166,7 +169,8 @@ import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-
     FormsModule,
     DragDropModule,
     NgChartsModule,
-    MatMenuModule 
+    MatMenuModule,
+    PdfViewerModule
   ],
   providers: [
     provideAnimationsAsync(),

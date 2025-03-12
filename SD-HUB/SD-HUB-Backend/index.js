@@ -6,12 +6,19 @@ import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import nodemailer from 'nodemailer';
+import { jsPDF } from 'jspdf';
+import fs from 'fs';
 
 const app = express();
 const PORT = 3000;
 const SECRET_KEY = 'your_secret_key';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// const fs = require('fs');
+// const { jsPDF } = require('jspdf');
+// const path = require('path');
+const pdfSavePath = process.env.NODE_ENV === 'production' ? '/pdf/unique_id.pdf' : '/unique_id.pdf';
+// const pdfPath = path.join(__dirname, pdfSavePath, `${uniqueId}.pdf`);
 
 app.use(cors());
 app.use(express.json());
@@ -100,9 +107,9 @@ app.post('/chat', async (req, res) => {
 });
 
 
-function generateUniqueId() {
-  return Math.floor(1000 + Math.random() * 9000).toString();
-}
+// function generateUniqueId() {
+//   return Math.floor(1000 + Math.random() * 9000).toString();
+// }
 
 app.get('/generate-unique-id', async (req, res) => {
   let uniqueId;
@@ -523,27 +530,61 @@ app.post('/contact', async (req, res) => {
 
 app.post('/submit-test', async (req, res) => {
   try {
-    const testData = req.body;
-    const [result] = await pool.query(
-      'INSERT INTO test_results (email, fullName, gender, courseApplied, marksScored) VALUES (?, ?, ?, ?, ?)',
-      [testData.email, testData.fullName, testData.gender, testData.courseApplied, testData.marksScored]
-    );
+    const { personalInfo, answers } = req.body;
+    const { email, fullName, gender, courseApplied } = personalInfo;
 
-    const testResultId = result.insertId;
-    const selectedAnswers = Object.values(testData.answers).join(',');
-    const states = testData.states.join(',');
+    // Calculate score and generate unique ID
+    const score = calculateScore(answers);
+    const uniqueId = generateUniqueId();
 
-    await pool.query(
-      'INSERT INTO stored_results (test_result_id, selected_answer, states) VALUES (?, ?, ?)',
-      [testResultId, selectedAnswers, states]
-    );
+    // Generate PDF
+    const doc = new jsPDF();
+    doc.text(`Test Results for ${fullName}`, 10, 10);
+    // Add more content to the PDF...
 
-    res.status(201).json({ message: 'Test submitted successfully' });
+    // Save PDF
+    const pdfPath = path.join(__dirname, pdfSavePath, `${uniqueId}.pdf`);
+    doc.save(pdfPath);
+
+    // Save test result to database
+    const [result] = await pool.query('INSERT INTO test_results (email, fullName, gender, courseApplied, marksScored, pdfPath) VALUES (?, ?, ?, ?, ?, ?)', [email, fullName, gender, courseApplied, `${score}/43`, pdfPath]);
+
+    res.status(201).json({ message: 'Test submitted successfully', pdfPath });
   } catch (error) {
     console.error('Error submitting test:', error);
     res.status(500).json({ error: 'Failed to submit test' });
   }
 });
+
+function calculateScore(answers) {
+  let score = 0;
+
+  // Define the sections
+  const sections = ['Aptitude Test', 'General Knowledge Test', 'Critical Thinking Test'];
+
+  // Iterate through each section
+  sections.forEach(section => {
+    // Get the questions for the current section
+    const sectionQuestions = questions.filter(q => q.section === section);
+
+    // Iterate through each question in the section
+    sectionQuestions.forEach((question, index) => {
+      const questionId = `${section.split(' ')[0].toLowerCase()}_${index}`;
+      const userAnswer = answers[questionId];
+
+      // Check if the user's answer is correct
+      if (userAnswer === question.correct_option) {
+        score++;
+      }
+    });
+  });
+
+  return score;
+}
+
+function generateUniqueId() {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+}
 
 // Get test results
 app.get('/test-results', async (req, res) => {

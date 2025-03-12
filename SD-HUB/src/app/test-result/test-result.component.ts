@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AptitudeService } from '../services/aptitude.service';
+import { Router } from '@angular/router';
 
 interface TestResult {
   email: string;
@@ -12,13 +13,13 @@ interface TestResult {
 @Component({
   selector: 'app-test-result',
   templateUrl: './test-result.component.html',
-  styleUrl: './test-result.component.css'
+  styleUrls: ['./test-result.component.css'],
 })
 export class TestResultComponent implements OnInit {
   results: TestResult[] = [];
-  displayedColumns: string[] = ['email', 'fullName', 'gender', 'courseApplied', 'marksScored'];
+  displayedColumns: string[] = ['email', 'fullName', 'gender', 'courseApplied', 'marksScored', 'evaluatedResult'];
 
-  constructor(private aptitudeService: AptitudeService) {}
+  constructor(private aptitudeService: AptitudeService, private router: Router) {}
 
   ngOnInit() {
     this.loadResults();
@@ -33,5 +34,9 @@ export class TestResultComponent implements OnInit {
         console.error('Error loading results:', error);
       }
     });
+  }
+
+  viewEvaluatedResult(id: number) {
+    this.router.navigate(['/evaluated-result', id]);
   }
 }

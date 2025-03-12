@@ -34,7 +34,7 @@ import { LoginComponent } from './login/login.component';
 import { adminGuard } from './admin.guard';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
-
+import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -51,6 +51,7 @@ const routes: Routes = [
   { path: 'attw', component: AttendanceComponent },
   { path: 'hello', component: HelloComponent },
   { path: 'syllabus', component: SyllabusTrackerComponent },
+  { path: 'evaluated-result/:id', component: EvaluatedResultComponent },
 
   
   // {path: 'dashboard', component:DashboardComponent},

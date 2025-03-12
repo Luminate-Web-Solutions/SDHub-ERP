@@ -70,7 +70,7 @@ export class AptituedTestComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if (this.personalInfoForm.valid) {
@@ -78,9 +78,9 @@ export class AptituedTestComponent implements OnInit {
             personalInfo: this.personalInfoForm.value,
             answers: this.answers
           };
-          
+  
           this.aptitudeService.submitTest(testData).subscribe({
-            next: () => {
+            next: (response) => {
               this.snackBar.open('Test submitted successfully!', 'Close', {
                 duration: 3000
               });
