@@ -757,6 +757,125 @@ app.get('/attendance/history', async (req, res) => {
   }
 });
 
+
+// Expenditure Routes
+app.get('/expenditures', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM expenditures');
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching expenditures:', error);
+    res.status(500).json({ error: 'Failed to fetch expenditures' });
+  }
+});
+
+app.post('/expenditures', async (req, res) => {
+  try {
+    const { date, category, description, amount, paymentMode, status } = req.body;
+    const [result] = await pool.query(
+      'INSERT INTO expenditures (date, category, description, amount, paymentMode, status) VALUES (?, ?, ?, ?, ?, ?)',
+      [date, category, description, amount, paymentMode, status]
+    );
+    res.status(201).json({ id: result.insertId, ...req.body });
+  } catch (error) {
+    console.error('Error adding expenditure:', error);
+    res.status(500).json({ error: 'Failed to add expenditure' });
+  }
+});
+
+app.put('/expenditures/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { date, category, description, amount, paymentMode, status } = req.body;
+    const [result] = await pool.query(
+      'UPDATE expenditures SET date = ?, category = ?, description = ?, amount = ?, paymentMode = ?, status = ? WHERE id = ?',
+      [date, category, description, amount, paymentMode, status, id]
+    );
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Expenditure not found' });
+    }
+    res.status(200).json({ id, ...req.body });
+  } catch (error) {
+    console.error('Error updating expenditure:', error);
+    res.status(500).json({ error: 'Failed to update expenditure' });
+  }
+});
+
+app.delete('/expenditures/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query('DELETE FROM expenditures WHERE id = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Expenditure not found' });
+    }
+    res.status(200).json({ message: 'Expenditure deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting expenditure:', error);
+    res.status(500).json({ error: 'Failed to delete expenditure' });
+  }
+});
+
+
+
+// Staff Payroll Routes
+app.get('/payroll', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM payroll');
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching payroll data:', error);
+    res.status(500).json({ error: 'Failed to fetch payroll data' });
+  }
+});
+
+app.post('/payroll', async (req, res) => {
+  try {
+    const { employeeName, designation, basicSalary, allowances, deductions, netSalary, paymentStatus, paymentDate } = req.body;
+    const [result] = await pool.query(
+      'INSERT INTO payroll (employeeName, designation, basicSalary, allowances, deductions, netSalary, paymentStatus, paymentDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [employeeName, designation, basicSalary, allowances, deductions, netSalary, paymentStatus, paymentDate]
+    );
+    res.status(201).json({ id: result.insertId, ...req.body });
+  } catch (error) {
+    console.error('Error adding payroll entry:', error);
+    res.status(500).json({ error: 'Failed to add payroll entry' });
+  }
+});
+
+app.put('/payroll/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { employeeName, designation, basicSalary, allowances, deductions, netSalary, paymentStatus, paymentDate } = req.body;
+    const [result] = await pool.query(
+      'UPDATE payroll SET employeeName = ?, designation = ?, basicSalary = ?, allowances = ?, deductions = ?, netSalary = ?, paymentStatus = ?, paymentDate = ? WHERE id = ?',
+      [employeeName, designation, basicSalary, allowances, deductions, netSalary, paymentStatus, paymentDate, id]
+    );
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Payroll entry not found' });
+    }
+    res.status(200).json({ id, ...req.body });
+  } catch (error) {
+    console.error('Error updating payroll entry:', error);
+    res.status(500).json({ error: 'Failed to update payroll entry' });
+  }
+});
+
+app.delete('/payroll/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query('DELETE FROM payroll WHERE id = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Payroll entry not found' });
+    }
+    res.status(200).json({ message: 'Payroll entry deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting payroll entry:', error);
+    res.status(500).json({ error: 'Failed to delete payroll entry' });
+  }
+});
+
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

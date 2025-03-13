@@ -91,6 +91,9 @@ import { AttendanceComponent } from './trainer-dash/attendance/attendance.compon
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
 import { TimePipe } from './pipes/time.pipe';
+import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
+import { ExpenditureDialogComponent } from './monthly-expenditure/expenditure-dialog/expenditure-dialog.component';
+import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/payroll-dialog.component';
 
 @NgModule({
   declarations: [
@@ -142,6 +145,9 @@ import { TimePipe } from './pipes/time.pipe';
     AddGalleryComponent,
     ExpenditureComponent,
     TimePipe,
+    MonthlyExpenditureComponent,
+    ExpenditureDialogComponent,
+    PayrollDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>{{dialogTitle}}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Employee Name</mat-label>
+      <input matInput formControlName="employeeName">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Designation</mat-label>
+      <mat-select formControlName="designation">
+        <mat-option *ngFor="let designation of designations" [value]="designation">
+          {{designation}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Basic Salary</mat-label>
+      <input matInput type="number" formControlName="basicSalary">
+      <span matPrefix>₹&nbsp;</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Allowances</mat-label>
+      <input matInput type="number" formControlName="allowances">
+      <span matPrefix>₹&nbsp;</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Deductions</mat-label>
+      <input matInput type="number" formControlName="deductions">
+      <span matPrefix>₹&nbsp;</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Payment Status</mat-label>
+      <mat-select formControlName="paymentStatus">
+        <mat-option *ngFor="let status of paymentStatuses" [value]="status">
+          {{status}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Payment Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="paymentDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">
+    {{dialogTitle}}
+  </button>
+</mat-dialog-actions>

@@ -39,6 +39,7 @@ import { ExpenditureComponent } from './dashboard/expenditure/expenditure.compon
 import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
 import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
 import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
+import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
 
 
 
@@ -57,7 +58,7 @@ const routes: Routes = [
   { path: 'syllabus', component: SyllabusTrackerComponent },
   { path: 'addphoto', component: AddGalleryComponent },
   
-  { path: 'expenditure', component: ExpenditureComponent },
+  
 
   
   // {path: 'dashboard', component:DashboardComponent},
@@ -77,7 +78,8 @@ const routes: Routes = [
       { path: 'courses', component: CoursesComponent },
       { path: 'syllabus', component: SyllabusComponent },
       { path: 'news', component: NewsComponent },
-      { path: 'profile', component: ProfileComponent }
+      { path: 'profile', component: ProfileComponent },
+      { path: 'expenditure', component: MonthlyExpenditureComponent },
     ]
   },
   

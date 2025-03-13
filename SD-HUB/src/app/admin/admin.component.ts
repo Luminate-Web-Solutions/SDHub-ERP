@@ -17,6 +17,7 @@ export class AdminComponent {
     { icon: 'groups', label: 'Students', link: '/admin/students' },
     { icon: 'book', label: 'Courses', link: '/admin/courses' },
     { icon: 'library_books', label: 'Syllabus', link: '/admin/syllabus' },
+    { icon: 'payments', label: 'Expenditure', link: '/admin/expenditure' },
     { icon: 'newspaper', label: 'News', link: '/admin/news' },
     { icon: 'account_circle', label: 'Profile', link: '/admin/profile' },
   ];

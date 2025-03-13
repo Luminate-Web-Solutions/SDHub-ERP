@@ -110,3 +110,19 @@
     max-width: 290px;
     margin-bottom: 50px;
   }
+
+  .designed-by {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.designed-by a {
+    color: #ffd700; /* Gold color for contrast */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.designed-by a:hover {
+    text-decoration: underline;
+}
