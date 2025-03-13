@@ -79,7 +79,6 @@ import { TaskCardComponent } from './staff/task-card/task-card.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
 
 import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
-import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
 import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.component';
 import { LoginComponent } from './login/login.component';
@@ -135,7 +134,6 @@ import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/pay
     TaskCardComponent,
     KanbanBoardComponent,
     SyllabusTrackerComponent,
-    ViewReportComponent,
     NewsDialogComponent,
     ForgotPasswordDialogComponent,
     LoginComponent,

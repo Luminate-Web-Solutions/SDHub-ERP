@@ -124,7 +124,5 @@ export class AptitudeService {
     return this.http.get<TestResult[]>(`${this.apiUrl}/test-results`);
   }
 
-  getTestResultsWithAnswers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/test-results-with-answers`);
-  }
+
 }

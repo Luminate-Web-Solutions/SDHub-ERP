@@ -29,7 +29,6 @@ import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.componen
 
 import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
 
-import { ViewReportComponent } from './view-report/view-report.component';
 import { LoginComponent } from './login/login.component';
 import { adminGuard } from './admin.guard';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';

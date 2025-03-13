@@ -596,21 +596,6 @@ app.delete('/students/:id', async (req, res) => {
   }
 });
 
-app.get('/test-results-with-answers', async (req, res) => {
-  try {
-    const [rows] = await pool.query(`
-      SELECT tr.*, sr.selected_answer, sr.states
-      FROM test_results tr
-      JOIN stored_results sr ON tr.id = sr.test_result_id
-    `);
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error('Error fetching test results with answers:', error);
-    res.status(500).json({ error: 'Failed to fetch test results with answers' });
-  }
-});
-
-
 // Add this new endpoint for forgot password
 app.post('/forgot-password', async (req, res) => {
   try {
