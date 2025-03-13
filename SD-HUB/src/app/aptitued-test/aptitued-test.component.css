@@ -190,6 +190,13 @@ mat-horizontal-stepper {
 .logo {
   height: 60px;
   margin-bottom: 20px;
+  margin-left: 125px;
+}
+
+.logo-2 {
+  height: 90px;
+  margin-bottom: 20px;
+  margin-left: 175px;
 }
 
 .partner-logos {
