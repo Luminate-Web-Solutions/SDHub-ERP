@@ -416,11 +416,11 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             font-size: 8px;
             text-align: center;
             line-height: 1.2;
-            margin-left: 30px;
+            margin-left: 90px;
         }
 
         .logo-2 {
-            width: 300px;
+            width: 470px;
             height: 80px;
             align-items: center;
             justify-content: center;
@@ -428,7 +428,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             font-size: 8px;
             text-align: center;
             line-height: 1.2;
-            margin-left: 60px;
+            margin-left: 55px;
         }
 
         .photo-box {
@@ -446,13 +446,16 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             padding: 5px;
         }
 
-        .section-header {
+              .section-header {
             background-color: #4b5563;
             color: white;
-            padding: 5px;
+            padding: 4px 0;
             margin: 15px 0 10px 0;
             font-size: 14px;
+            text-align: center;
+            font-weight: bold;
         }
+
 
         .form-group {
             margin-bottom: 10px;
@@ -584,8 +587,8 @@ export class StudentsComponent implements OnInit, AfterViewInit {
         <!-- Header -->
         <div class="header">
             <div class="logo-container">
-                <img src="/SD Hub Logo Q 2.png" alt="logo" class="logo">
-                <img src="/SD Hub Logo sp.png" alt="logo" class="logo-2">
+                <img src="/SD logo M Rectangle.png" alt="logo" class="logo">
+                <img src="/sponman-logo.png" alt="logo" class="logo-2">
             </div>
             <div class="photo-box">
                 Paste your passport size<br>Photograph here
@@ -595,7 +598,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
         <div style="margin-bottom: 15px; font-size: 12px;">
             <span style="float: left">Student ID: {{form.studentId}}</span>
             <span style="margin-left: 250px;">Admission Application Form</span>
-            <span style="float: right">Date: {{form.currentDate}}<input type="text" class="form-control" style="width: 80px"></span>
+            <span style="float: right">Date: {{form.currentDate}}</span>
             <div style="clear: both"></div>
         </div>
 
@@ -710,7 +713,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
                 </div>
             </div>
 
-            <div class="section-header">ENCLOSURES:</div>
+            <div class="section-header">ENCLOSURES</div>
             <!-- Enclosures in a 3x2 grid -->
             <ol class="enclosures">
                 <li>Passport size photograph – 3 No.</li>
