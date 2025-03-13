@@ -6,13 +6,18 @@ import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import nodemailer from 'nodemailer';
+import fileUpload from 'express-fileupload';
+import fs from 'fs';
 
 const app = express();
 const PORT = 3000;
 const SECRET_KEY = 'your_secret_key';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// Add static PDF directory
 
+app.use('/pdf', express.static(path.join(__dirname, 'pdf')));
+app.use(fileUpload());
 app.use(cors());
 app.use(express.json());
 
@@ -521,6 +526,7 @@ app.post('/contact', async (req, res) => {
   }
 });
 
+// Modified submit-test endpoint
 app.post('/submit-test', async (req, res) => {
   try {
     const testData = req.body;
@@ -530,15 +536,18 @@ app.post('/submit-test', async (req, res) => {
     );
 
     const testResultId = result.insertId;
-    const selectedAnswers = Object.values(testData.answers).join(',');
-    const states = testData.states.join(',');
+    const pdfFileName = `${testResultId}.pdf`;
 
-    await pool.query(
-      'INSERT INTO stored_results (test_result_id, selected_answer, states) VALUES (?, ?, ?)',
-      [testResultId, selectedAnswers, states]
-    );
+    // Generate PDF logic here (will be implemented in frontend)
+    // After generating PDF, send to backend for saving
+    
+    // Update test_results with PDF filename
+    await pool.query('UPDATE test_results SET pdfName = ? WHERE id = ?', [pdfFileName, testResultId]);
 
-    res.status(201).json({ message: 'Test submitted successfully' });
+    res.status(201).json({ 
+      message: 'Test submitted successfully',
+      pdfFileName 
+    });
   } catch (error) {
     console.error('Error submitting test:', error);
     res.status(500).json({ error: 'Failed to submit test' });
@@ -649,6 +658,28 @@ app.post('/forgot-password', async (req, res) => {
     console.error('Forgot password error:', error);
     res.status(500).json({ message: 'Failed to process password recovery request' });
   }
+});
+
+app.post('/upload-pdf', async (req, res) => {
+  if (!req.files || !req.files.pdf) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+
+  const pdf = req.files.pdf;
+  const uploadDir = path.join(__dirname, 'pdf');
+  const uploadPath = path.join(uploadDir, pdf.name);
+
+  // Ensure the directory exists
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+
+  pdf.mv(uploadPath, (err) => {
+    if (err) {
+      return res.status(500).json({ message: 'Failed to upload file', error: err });
+    }
+    res.status(200).json({ message: 'File uploaded successfully' });
+  });
 });
 
 app.listen(PORT, () => {

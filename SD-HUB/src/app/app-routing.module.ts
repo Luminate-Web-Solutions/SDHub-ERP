@@ -35,6 +35,7 @@ import { adminGuard } from './admin.guard';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
+import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
 
 
 const routes: Routes = [
@@ -53,6 +54,8 @@ const routes: Routes = [
   { path: 'hello', component: HelloComponent },
   { path: 'syllabus', component: SyllabusTrackerComponent },
   { path: 'expenditure', component: ExpenditureComponent },
+  { path: 'test-result', component: TestResultComponent },
+  { path: 'evaluated-result', component: EvaluatedResultComponent },
 
   
   // {path: 'dashboard', component:DashboardComponent},

@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AptitudeService } from '../services/aptitude.service';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
+import { PdfService } from '../services/pdf.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-aptitued-test',
@@ -19,13 +21,17 @@ export class AptituedTestComponent implements OnInit {
   criticalThinkingQuestions: any = [];
   answers: { [key: string]: string } = {};
   isLoading = true;
-  
+  apiUrl = 'http://localhost:3000'; // Define apiUrl here
+  questions: any[] = []; // Define questions as a class property
+
   constructor(
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private router: Router,
     private dialog: MatDialog,
-    private aptitudeService: AptitudeService
+    private aptitudeService: AptitudeService,
+    private pdfService: PdfService,
+    private http: HttpClient
   ) {
     this.personalInfoForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -49,6 +55,7 @@ export class AptituedTestComponent implements OnInit {
           this.aptitudeQuestions = data.aptitudeQuestions || [];
           this.generalKnowledgeQuestions = data.generalKnowledgeQuestions || [];
           this.criticalThinkingQuestions = data.criticalThinkingQuestions || [];
+          this.questions = response; // Initialize questions here
         }
         this.isLoading = false;
       },
@@ -78,13 +85,29 @@ export class AptituedTestComponent implements OnInit {
             personalInfo: this.personalInfoForm.value,
             answers: this.answers
           };
-          
+
           this.aptitudeService.submitTest(testData).subscribe({
-            next: () => {
-              this.snackBar.open('Test submitted successfully!', 'Close', {
-                duration: 3000
-              });
-              this.router.navigate(['/test-complete']);
+            next: (response) => {
+              this.pdfService.generateTestReport(testData, this.questions, response.pdfFileName) // Pass questions here
+                .then(pdfBlob => {
+                  const formData = new FormData();
+                  formData.append('pdf', pdfBlob, response.pdfFileName);
+
+                  this.http.post(`${this.apiUrl}/upload-pdf`, formData).subscribe({
+                    next: () => {
+                      this.snackBar.open('Test submitted successfully!', 'Close', {
+                        duration: 3000
+                      });
+                      this.router.navigate(['/test-complete']);
+                    },
+                    error: (error) => {
+                      console.error('Error submitting test:', error);
+                      this.snackBar.open('Error submitting test. Please try again.', 'Close', {
+                        duration: 3000
+                      });
+                    }
+                  });
+                });
             },
             error: (error) => {
               console.error('Error submitting test:', error);

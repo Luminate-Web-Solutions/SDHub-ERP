@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -86,6 +86,8 @@ import { LoginComponent } from './login/login.component';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
+import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
+// import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -134,6 +136,7 @@ import { ExpenditureComponent } from './dashboard/expenditure/expenditure.compon
     TrainerDashComponent,
     TrainerProfileComponent,
     ExpenditureComponent,
+    EvaluatedResultComponent,
   ],
   imports: [
     BrowserModule,
@@ -168,13 +171,15 @@ import { ExpenditureComponent } from './dashboard/expenditure/expenditure.compon
     FormsModule,
     DragDropModule,
     NgChartsModule,
-    MatMenuModule 
+    MatMenuModule,
+    // NgxExtendedPdfViewerModule,
   ],
   providers: [
     provideAnimationsAsync(),
     DatePipe,
     provideHttpClient()
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
