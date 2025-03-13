@@ -40,6 +40,7 @@ import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.co
 import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
 import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
 import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
+import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.component';
 
 
 
@@ -90,6 +91,8 @@ const routes: Routes = [
     // canActivate: [AuthGuard],
     children: [
       { path: 'aptitude', component: AptituedTestComponent },
+      { path: 'exam-submitted', component: ExamSubmittedComponent},
+      
       { path: 'registration', component: RegistrationComponent },
     ]
   },

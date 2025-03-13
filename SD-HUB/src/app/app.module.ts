@@ -40,7 +40,6 @@ import { MatMenuModule } from '@angular/material/menu';
 
 
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SigninComponent } from './signin/signin.component';
@@ -78,6 +77,7 @@ import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { TaskDialogComponent } from './staff/task-dialog/task-dialog.component';
 import { TaskCardComponent } from './staff/task-card/task-card.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
+
 import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
 import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
@@ -85,12 +85,14 @@ import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.c
 import { LoginComponent } from './login/login.component';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
-import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
-import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
-import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
 import { TimePipe } from './pipes/time.pipe';
+import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
+import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
+import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
+import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.component';
+
 import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
 import { ExpenditureDialogComponent } from './monthly-expenditure/expenditure-dialog/expenditure-dialog.component';
 import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/payroll-dialog.component';
@@ -139,12 +141,14 @@ import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/pay
     LoginComponent,
     TrainerDashComponent,
     TrainerProfileComponent,
-    StakeholderDashComponent,
-    StakeholderProfileComponent,
-    AttendanceComponent,
     AddGalleryComponent,
     ExpenditureComponent,
     TimePipe,
+    AttendanceComponent,
+    StakeholderProfileComponent,
+    StakeholderDashComponent,
+    ExamSubmittedComponent,
+   
     MonthlyExpenditureComponent,
     ExpenditureDialogComponent,
     PayrollDialogComponent,
@@ -182,14 +186,12 @@ import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/pay
     FormsModule,
     DragDropModule,
     NgChartsModule,
-    MatMenuModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
+    MatMenuModule 
   ],
   providers: [
     provideAnimationsAsync(),
-    provideHttpClient(),
     DatePipe,
+    provideHttpClient()
   ],
   bootstrap: [AppComponent]
 })
