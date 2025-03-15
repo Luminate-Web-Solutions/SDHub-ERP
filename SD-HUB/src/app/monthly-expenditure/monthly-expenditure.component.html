@@ -7,10 +7,23 @@
             <mat-label>Filter</mat-label>
             <input matInput (keyup)="applyExpenditureFilter($event)" placeholder="Search expenditures">
           </mat-form-field>
+          <mat-form-field>
+            <mat-label>Date Range</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate formControlName="startDate" placeholder="Start date">
+              <input matEndDate formControlName="endDate" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
           <div class="button-group">
             <button mat-raised-button color="primary" (click)="addExpenditure()">
               <mat-icon>add</mat-icon>
               Add Expenditure
+            </button>
+            <button mat-raised-button color="accent" (click)="uploadInvoice()">
+              <mat-icon>upload</mat-icon>
+              Upload Invoice
             </button>
             <button mat-raised-button color="accent" (click)="exportToExcel('expenditure')">
               <mat-icon>download</mat-icon>

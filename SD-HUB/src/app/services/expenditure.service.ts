@@ -39,4 +39,8 @@ export class ExpenditureService {
   deleteExpenditure(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  uploadInvoice(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/upload-invoice`, formData);
+  }
 }

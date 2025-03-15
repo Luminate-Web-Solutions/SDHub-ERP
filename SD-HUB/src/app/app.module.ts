@@ -80,7 +80,6 @@ import { TaskDialogComponent } from './staff/task-dialog/task-dialog.component';
 import { TaskCardComponent } from './staff/task-card/task-card.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
 
-import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
 import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
 import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.component';
@@ -103,6 +102,7 @@ import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.componen
 import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
 import { ExpenditureDialogComponent } from './monthly-expenditure/expenditure-dialog/expenditure-dialog.component';
 import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/payroll-dialog.component';
+import { UploadInvoiceDialogComponent } from './upload-invoice-dialog/upload-invoice-dialog.component';
 
 @NgModule({
   declarations: [
@@ -163,6 +163,7 @@ import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/pay
     MonthlyExpenditureComponent,
     ExpenditureDialogComponent,
     PayrollDialogComponent,
+    UploadInvoiceDialogComponent,
   ],
   imports: [
     BrowserModule,

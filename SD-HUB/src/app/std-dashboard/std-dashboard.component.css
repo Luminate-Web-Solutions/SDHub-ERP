@@ -20,6 +20,11 @@
   mat-icon{
     color: white;
   }
+
+  .logo{
+    width: auto;
+    height: 60px;
+  }
   
 .header {
   position: fixed;

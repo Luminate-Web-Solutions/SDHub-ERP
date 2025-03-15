@@ -9,6 +9,7 @@ import { ExpenditureDialogComponent } from './expenditure-dialog/expenditure-dia
 import { PayrollDialogComponent } from './payroll-dialog/payroll-dialog.component';
 import { ExpenditureService } from '../services/expenditure.service';
 import { PayrollService } from '../services/payroll.service';
+import { UploadInvoiceDialogComponent } from '../upload-invoice-dialog/upload-invoice-dialog.component';
 
 
 interface Expenditure {
@@ -265,5 +266,18 @@ deleteExpenditure(expenditure: Expenditure) {
   applyPayrollFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.payrollDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  uploadInvoice() {
+    const dialogRef = this.dialog.open(UploadInvoiceDialogComponent, {
+      width: '500px'
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Handle the result, e.g., refresh the data
+        this.loadExpenditureData();
+      }
+    });
   }
 }
