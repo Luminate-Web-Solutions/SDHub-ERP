@@ -657,15 +657,13 @@ app.post('/attendance/check-in', async (req, res) => {
   try {
     const { email } = req.body;
     
-    // Check if already checked in today
-    const [existing] = await pool.query(
-      'SELECT * FROM attendance WHERE trainer_email = ? AND DATE(date) = CURDATE()',
-      [email]
-    );
-
-    if (existing.length > 0) {
-      return res.status(400).json({ message: 'Already checked in today' });
+    // Check if it's Sunday
+    const today = new Date();
+    if (today.getDay() === 0) {
+      return res.status(400).json({ message: 'Cannot check in on Sundays' });
     }
+
+   
 
     // Create new attendance record
     const [result] = await pool.query(
@@ -719,6 +717,35 @@ app.post('/attendance/check-out', async (req, res) => {
   }
 });
 
+app.post('/attendance/leave', async (req, res) => {
+  try {
+    const { email, reason } = req.body;
+    
+    // Check if already marked attendance today
+    const [existing] = await pool.query(
+      'SELECT * FROM attendance WHERE trainer_email = ? AND DATE(date) = CURDATE()',
+      [email]
+    );
+
+    if (existing.length > 0) {
+      return res.status(400).json({ message: 'Already marked attendance today' });
+    }
+
+    // Create attendance record with leave status
+    const [result] = await pool.query(
+      `INSERT INTO attendance 
+       (trainer_email, date, status, leave_reason) 
+       VALUES (?, CURDATE(), 'Leave', ?)`,
+      [email, reason]
+    );
+
+    res.status(201).json({ message: 'Leave recorded successfully' });
+  } catch (error) {
+    console.error('Leave request error:', error);
+    res.status(500).json({ message: 'Failed to record leave' });
+  }
+});
+
 app.get('/attendance/today/:email', async (req, res) => {
   try {
     const { email } = req.params;
@@ -739,7 +766,17 @@ app.get('/attendance/history', async (req, res) => {
   try {
     const { email, startDate, endDate } = req.query;
     
-    let query = 'SELECT * FROM attendance WHERE trainer_email = ?';
+    let query = `
+      SELECT 
+        a.*,
+        CASE 
+          WHEN DAYOFWEEK(a.date) = 1 THEN 'Holiday'
+          ELSE a.status 
+        END as status
+      FROM attendance a
+      WHERE trainer_email = ?
+    `;
+    
     const params = [email];
 
     if (startDate && endDate) {
@@ -754,6 +791,255 @@ app.get('/attendance/history', async (req, res) => {
   } catch (error) {
     console.error('Error fetching attendance history:', error);
     res.status(500).json({ message: 'Failed to fetch attendance history' });
+  }
+});
+
+// Syllabus API endpoints
+app.post('/syllabus', async (req, res) => {
+  try {
+    const { trainer_email, date, content, completion_status } = req.body;
+    
+    if (!trainer_email || !date || !content) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const [result] = await pool.query(
+      'INSERT INTO syllabus (trainer_email, date, content, completion_status) VALUES (?, ?, ?, ?)',
+      [trainer_email, date, content, completion_status]
+    );
+    
+    res.status(201).json({ 
+      id: result.insertId,
+      trainer_email,
+      date,
+      content,
+      completion_status
+    });
+  } catch (error) {
+    console.error('Error adding syllabus entry:', error);
+    res.status(500).json({ error: 'Failed to add syllabus entry' });
+  }
+});
+
+app.get('/syllabus', async (req, res) => {
+  try {
+    const { email, startDate, endDate } = req.query;
+    
+    let query = 'SELECT * FROM syllabus WHERE trainer_email = ?';
+    const params = [email];
+
+    if (startDate && endDate) {
+      query += ' AND date BETWEEN ? AND ?';
+      params.push(startDate, endDate);
+    }
+
+    query += ' ORDER BY date DESC';
+
+    const [rows] = await pool.query(query, params);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching syllabus entries:', error);
+    res.status(500).json({ error: 'Failed to fetch syllabus entries' });
+  }
+});
+
+app.put('/syllabus/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content, completion_status } = req.body;
+    
+    const [result] = await pool.query(
+      'UPDATE syllabus SET content = ?, completion_status = ? WHERE id = ?',
+      [content, completion_status, id]
+    );
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Syllabus entry not found' });
+    }
+    
+    res.status(200).json({ id, ...req.body });
+  } catch (error) {
+    console.error('Error updating syllabus entry:', error);
+    res.status(500).json({ error: 'Failed to update syllabus entry' });
+  }
+});
+
+app.delete('/syllabus/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const [result] = await pool.query('DELETE FROM syllabus WHERE id = ?', [id]);
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Syllabus entry not found' });
+    }
+    
+    res.status(200).json({ message: 'Syllabus entry deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting syllabus entry:', error);
+    res.status(500).json({ error: 'Failed to delete syllabus entry' });
+  }
+});
+
+app.get('/syllabus/completion', async (req, res) => {
+  try {
+    const { email, weekStart } = req.query;
+    
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 5); // Monday to Friday
+
+    const [rows] = await pool.query(
+      'SELECT COUNT(*) as total FROM syllabus WHERE trainer_email = ? AND date BETWEEN ? AND ? AND completion_status = true',
+      [email, weekStart, weekEnd]
+    );
+
+    const completionPercentage = (rows[0].total / 5) * 100;
+    res.status(200).json(completionPercentage);
+  } catch (error) {
+    console.error('Error calculating weekly completion:', error);
+    res.status(500).json({ error: 'Failed to calculate weekly completion' });
+  }
+});
+
+
+// Trainer Stats Endpoint
+app.get('/trainers/stats', async (req, res) => {
+  try {
+    // Get total trainers from user table
+    const [total] = await pool.query(
+      `SELECT COUNT(*) as total FROM user WHERE role = 'trainer'`
+    );
+
+    // Get today's attendance stats
+    const [attendance] = await pool.query(`
+      SELECT 
+        u.email,
+        SUM(CASE WHEN a.status = 'Present' THEN 1 ELSE 0 END) as present,
+        SUM(CASE WHEN a.status = 'Absent' THEN 1 ELSE 0 END) as absent
+      FROM user u
+      LEFT JOIN attendance a ON u.email = a.trainer_email 
+        AND DATE(a.date) = CURDATE()
+      WHERE u.role = 'trainer'
+      GROUP BY u.email
+    `);
+
+    // Calculate totals
+    const stats = {
+      total: total[0].total,
+      present: attendance.reduce((sum, item) => sum + item.present, 0),
+      absent: attendance.reduce((sum, item) => sum + item.absent, 0)
+    };
+
+    res.json(stats);
+  } catch (error) {
+    console.error('Stats error:', error);
+    res.status(500).json({ error: 'Failed to load stats' });
+  }
+});
+
+
+// Trainer Syllabus Progress
+app.get('/syllabus/progress', async (req, res) => {
+  try {
+    const { trainerId, range } = req.query;
+    let dateCondition = '';
+
+    if (range === 'week') {
+      dateCondition = 'AND date BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()';
+    } else if (range === 'month') {
+      dateCondition = 'AND date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()';
+    }
+
+    const [progress] = await pool.query(`
+      SELECT 
+        t.name as trainer_name,
+        (COUNT(CASE WHEN s.completion_status = 1 THEN 1 END) / COUNT(*)) * 100 as percentage
+      FROM syllabus s
+      JOIN trainers t ON s.trainer_email = t.email
+      WHERE t.id = ? ${dateCondition}
+      GROUP BY t.id
+    `, [trainerId]);
+
+    res.json(progress);
+  } catch (error) {
+    console.error('Progress error:', error);
+    res.status(500).json({ error: 'Failed to load progress' });
+  }
+});
+
+
+app.get('/user/trainers', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT id, name, email, course, contactNumber, currentBatch FROM user WHERE role = 'trainer'`
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error('Trainers error:', error);
+    res.status(500).json({ error: 'Failed to load trainers' });
+  }
+});
+
+// New endpoints for trainer CRUD operations
+app.post('/trainers', async (req, res) => {
+  try {
+    const { name, email, course, contactNumber, password, currentBatch, role, status } = req.body;
+
+    if (!name || !email || !course || !contactNumber || !password || !currentBatch) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const [result] = await pool.query(
+      'INSERT INTO user (name, email, course, contactNumber, password, currentBatch, role, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [name, email, course, contactNumber, password, currentBatch, role || 'trainer', status || 'active']
+    );
+
+    res.status(201).json({ id: result.insertId, ...req.body });
+  } catch (error) {
+    console.error('Error adding trainer:', error);
+    res.status(500).json({ error: 'Failed to add trainer' });
+  }
+});
+
+app.put('/trainers/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, course, contactNumber, password, currentBatch, role, status } = req.body;
+
+    if (!name || !email || !course || !contactNumber || !password || !currentBatch) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const [result] = await pool.query(
+      'UPDATE user SET name = ?, email = ?, course = ?, contactNumber = ?, password = ?, currentBatch = ?, role = ?, status = ? WHERE id = ?',
+      [name, email, course, contactNumber, password, currentBatch, role || 'trainer', status || 'active', id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Trainer not found' });
+    }
+
+    res.status(200).json({ id, ...req.body });
+  } catch (error) {
+    console.error('Error updating trainer:', error);
+    res.status(500).json({ error: 'Failed to update trainer' });
+  }
+});
+
+app.delete('/trainers/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [result] = await pool.query('DELETE FROM user WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Trainer not found' });
+    }
+
+    res.status(200).json({ message: 'Trainer deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting trainer:', error);
+    res.status(500).json({ error: 'Failed to delete trainer' });
   }
 });
 

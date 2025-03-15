@@ -3,17 +3,19 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-import { StudentsService } from '../../students.service';
-import { TrainerDialogComponent } from './trainer-dialog/trainer-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TrainerService } from '../../services/trainer.service';
+import { AddTrainerDialogComponent } from './add-trainer-dialog';
 
-export interface UserData {
-  id?: number;
-  contactNumber: number;
+export interface Trainer {
+  id: number;
   name: string;
-  currentBatch: string;
   email: string;
   course: string;
+  contactNumber: string;
+  currentBatch: string;
+  role: string;
+  status: string;
 }
 
 @Component({
@@ -23,7 +25,8 @@ export interface UserData {
 })
 export class TrainersComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'course', 'contactNumber', 'email', 'currentBatch', 'actions'];
-  dataSource: MatTableDataSource<UserData>;
+  dataSource: MatTableDataSource<Trainer>;
+  trainers: Trainer[] = [];
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
@@ -31,42 +34,45 @@ export class TrainersComponent implements AfterViewInit {
   sort!: MatSort;
 
   constructor(
-    private studentsService: StudentsService,
+    private trainerService: TrainerService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource<UserData>();
-  }
-
-  ngOnInit() {
-    this.getTrainers(); // Fetch trainers when the component initializes
+    this.dataSource = new MatTableDataSource<Trainer>();
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.loadTrainers();
   }
 
-  getTrainers() {
-    this.studentsService.getTrainers().subscribe(trainers => {
-      console.log('Fetched trainers:', trainers);
-      this.dataSource.data = trainers;
+  private loadTrainers() {
+    this.trainerService.getAllTrainers().subscribe({
+      next: (trainers) => {
+        this.trainers = trainers;
+        this.dataSource.data = trainers;
+      },
+      error: (error) => {
+        console.error('Error loading trainers:', error);
+        this.snackBar.open('Failed to load trainers', 'Close', {
+          duration: 3000
+        });
+      }
     });
   }
 
-  openAddDialog() {
-    const dialogRef = this.dialog.open(TrainerDialogComponent, {
-      width: '400px',
-      data: { mode: 'add' }
+  openAddTrainerDialog(): void {
+    const dialogRef = this.dialog.open(AddTrainerDialogComponent, {
+      width: '500px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.studentsService.addTrainer(result).subscribe({
-          next: (response) => {
-            this.snackBar.open('Trainer added successfully!', 'Close', { duration: 3000 });
-            this.getTrainers(); // Refresh the list
+        this.trainerService.addTrainer(result).subscribe({
+          next: () => {
+            this.loadTrainers();
+            this.snackBar.open('Trainer added successfully', 'Close', { duration: 3000 });
           },
           error: (error) => {
             console.error('Error adding trainer:', error);
@@ -77,18 +83,18 @@ export class TrainersComponent implements AfterViewInit {
     });
   }
 
-  openEditDialog(trainer: UserData) {
-    const dialogRef = this.dialog.open(TrainerDialogComponent, {
+  openEditDialog(trainer: Trainer): void {
+    const dialogRef = this.dialog.open(AddTrainerDialogComponent, {
       width: '400px',
       data: { mode: 'edit', trainer: trainer }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.studentsService.updateTrainer(result).subscribe({
-          next: (response) => {
-            this.snackBar.open('Trainer updated successfully!', 'Close', { duration: 3000 });
-            this.getTrainers(); // Refresh the list
+        this.trainerService.updateTrainer(trainer.id, result).subscribe({
+          next: () => {
+            this.loadTrainers();
+            this.snackBar.open('Trainer updated successfully', 'Close', { duration: 3000 });
           },
           error: (error) => {
             console.error('Error updating trainer:', error);
@@ -99,19 +105,17 @@ export class TrainersComponent implements AfterViewInit {
     });
   }
 
-  deleteTrainer(trainer: UserData) {
-    if (confirm(`Are you sure you want to delete ${trainer.name}?`)) {
-      this.studentsService.deleteTrainer(trainer.id!).subscribe({
-        next: (response) => {
-          this.snackBar.open('Trainer deleted successfully!', 'Close', { duration: 3000 });
-          this.getTrainers(); // Refresh the list
-        },
-        error: (error) => {
-          console.error('Error deleting trainer:', error);
-          this.snackBar.open('Failed to delete trainer', 'Close', { duration: 3000 });
-        }
-      });
-    }
+  deleteTrainer(trainer: Trainer): void {
+    this.trainerService.deleteTrainer(trainer.id).subscribe({
+      next: () => {
+        this.loadTrainers();
+        this.snackBar.open('Trainer deleted successfully', 'Close', { duration: 3000 });
+      },
+      error: (error) => {
+        console.error('Error deleting trainer:', error);
+        this.snackBar.open('Failed to delete trainer', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   applyFilter(event: Event) {
@@ -123,5 +127,3 @@ export class TrainersComponent implements AfterViewInit {
     }
   }
 }
-
-

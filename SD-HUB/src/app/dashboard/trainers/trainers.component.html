@@ -5,7 +5,7 @@
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. id" #input>
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="openAddDialog()">
+  <button mat-raised-button color="primary" (click)="openAddTrainerDialog()">
     <mat-icon>add</mat-icon>
     Add Trainers
   </button>
@@ -70,6 +70,6 @@
 </div>
 </mat-tab>
 <mat-tab label="trainers management">
-  
+   <app-trainer-management></app-trainer-management>
 </mat-tab>
 </mat-tab-group>

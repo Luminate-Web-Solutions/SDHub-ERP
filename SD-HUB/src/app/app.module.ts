@@ -33,6 +33,8 @@ import { NgChartsModule } from 'ng2-charts';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DatePipe } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 
@@ -88,6 +90,11 @@ import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 import { ExpenditureComponent } from './dashboard/expenditure/expenditure.component';
 import { TimePipe } from './pipes/time.pipe';
+import { WeeklySyllabusComponent } from './trainer-dash/weekly-syllabus/weekly-syllabus.component';
+import { SyllabusDetailsDialogComponent } from './trainer-dash/syllabus/syllabus-details-dialog/syllabus-details-dialog.component';
+import { TrainerManagementComponent } from './dashboard/trainers/trainer-management/trainer-management.component';
+import { LeaveRequestDialogComponent } from './trainer-dash/attendance/leave-request-dialog';
+import { AddTrainerDialogComponent } from './dashboard/trainers/add-trainer-dialog';
 import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
 import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
 import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
@@ -134,7 +141,6 @@ import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/pay
     TaskDialogComponent,
     TaskCardComponent,
     KanbanBoardComponent,
-    SyllabusTrackerComponent,
     ViewReportComponent,
     NewsDialogComponent,
     ForgotPasswordDialogComponent,
@@ -144,6 +150,11 @@ import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/pay
     AddGalleryComponent,
     ExpenditureComponent,
     TimePipe,
+    WeeklySyllabusComponent,
+    SyllabusDetailsDialogComponent,
+    TrainerManagementComponent,
+    LeaveRequestDialogComponent,
+    AddTrainerDialogComponent,
     AttendanceComponent,
     StakeholderProfileComponent,
     StakeholderDashComponent,
@@ -186,6 +197,11 @@ import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/pay
     FormsModule,
     DragDropModule,
     NgChartsModule,
+    MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FullCalendarModule,
+    MatProgressBarModule,
     MatMenuModule 
   ],
   providers: [

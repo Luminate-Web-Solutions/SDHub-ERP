@@ -1,0 +1,144 @@
+.trainer-management-container {
+  padding: 24px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.stat-card .stat-value {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.stat-card .stat-label {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.stat-card.total {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.stat-card.present {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.stat-card.absent {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.stat-card.on-leave {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.section {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-date {
+  min-width: 100px;
+}
+
+.mat-column-check_in_time,
+.mat-column-check_out_time {
+  min-width: 90px;
+}
+
+.mat-column-hours_worked {
+  min-width: 70px;
+}
+
+.mat-column-status {
+  min-width: 90px;
+}
+
+.mat-column-leave_reason {
+  min-width: 150px;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.present {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.absent {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.status-badge.leave {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.status-badge.holiday {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+@media (max-width: 768px) {
+  .trainer-management-container {
+    padding: 16px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+}

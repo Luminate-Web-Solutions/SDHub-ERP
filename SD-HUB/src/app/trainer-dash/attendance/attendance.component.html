@@ -8,17 +8,23 @@
   
     <div class="attendance-actions">
       <button mat-raised-button color="primary" 
-              [disabled]="isCheckedIn" 
-              (click)="checkIn()">
-        <mat-icon>login</mat-icon>
-        Check In
-      </button>
-      <button mat-raised-button color="accent" 
-              [disabled]="!isCheckedIn || (todayAttendance?.check_out_time)" 
-              (click)="checkOut()">
-        <mat-icon>logout</mat-icon>
-        Check Out
-      </button>
+            [disabled]="isCheckedIn || isSunday(today)" 
+            (click)="checkIn()">
+      <mat-icon>login</mat-icon>
+      Check In
+    </button>
+    <button mat-raised-button color="accent" 
+            [disabled]="!isCheckedIn || (todayAttendance?.check_out_time)" 
+            (click)="checkOut()">
+      <mat-icon>logout</mat-icon>
+      Check Out
+    </button>
+    <button mat-raised-button color="warn"
+            [disabled]="isCheckedIn || isSunday(today)"
+            (click)="requestLeave()">
+      <mat-icon>event_busy</mat-icon>
+      Request Leave
+    </button>
     </div>
   
     <div class="attendance-status" *ngIf="todayAttendance">

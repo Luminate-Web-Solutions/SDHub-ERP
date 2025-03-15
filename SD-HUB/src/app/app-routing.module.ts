@@ -25,10 +25,6 @@ import { ContactComponent } from './contact/contact.component';
 import { TestResultComponent } from './test-result/test-result.component';
 import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
-
-
-import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
-
 import { ViewReportComponent } from './view-report/view-report.component';
 import { LoginComponent } from './login/login.component';
 import { adminGuard } from './admin.guard';
@@ -39,6 +35,8 @@ import { ExpenditureComponent } from './dashboard/expenditure/expenditure.compon
 import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
 import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
 import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
+import { WeeklySyllabusComponent } from './trainer-dash/weekly-syllabus/weekly-syllabus.component';
+import { TrainerManagementComponent } from './dashboard/trainers/trainer-management/trainer-management.component';
 import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
 import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.component';
 
@@ -56,9 +54,10 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'more-gallery', component: MoreGalleryComponent },
   { path: 'KanbanBoard', component: KanbanBoardComponent },
-  { path: 'syllabus', component: SyllabusTrackerComponent },
   { path: 'addphoto', component: AddGalleryComponent },
   
+  { path: 'expenditure', component: ExpenditureComponent },
+  // { path: 'man', component: TrainerManagementComponent },
   
 
   
@@ -105,7 +104,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'attendance', pathMatch: 'full' },
       { path: 'attendance', component: AttendanceComponent },
-      { path: 'syllabus', component: SyllabusTrackerComponent },
+      { path: 'syllabus', component: WeeklySyllabusComponent },
       { path: 'profile', component: TrainerProfileComponent }
     ]
   },

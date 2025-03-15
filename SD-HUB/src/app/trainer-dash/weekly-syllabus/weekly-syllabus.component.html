@@ -1,0 +1,101 @@
+<div class="syllabus-container">
+    <div class="syllabus-header">
+      <h2>Weekly Syllabus Management</h2>
+      <div class="completion-indicator">
+        <div class="progress-circle" [style.background]="'conic-gradient(#4CAF50 ' + weeklyCompletion + '%, #f0f0f0 0)'">
+          <span>{{ weeklyCompletion }}%</span>
+        </div>
+        <p>Weekly Completion</p>
+      </div>
+    </div>
+  
+    <form [formGroup]="syllabusForm" (ngSubmit)="onSubmit()" class="syllabus-form">
+      <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill" class="content-field">
+        <mat-label>Syllabus Content</mat-label>
+        <textarea matInput formControlName="content" rows="4"></textarea>
+      </mat-form-field>
+  
+      <mat-checkbox formControlName="completion_status">Mark as Completed</mat-checkbox>
+  
+      <button mat-raised-button color="primary" type="submit" [disabled]="!syllabusForm.valid">
+        Add Syllabus Entry
+      </button>
+    </form>
+  
+    <div class="calendar-container">
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  
+    <div class="syllabus-list">
+      <h3>Syllabus Entries</h3>
+  
+      <div class="filters">
+        <mat-form-field appearance="fill">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Search entries">
+        </mat-form-field>
+  
+        <div class="date-range">
+          <mat-form-field appearance="fill">
+            <mat-label>Start date</mat-label>
+            <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate" (dateChange)="onDateRangeChange()">
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>End date</mat-label>
+            <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate" (dateChange)="onDateRangeChange()">
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+  
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+            <td mat-cell *matCellDef="let row"> {{row.date | date}} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="content">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Content </th>
+            <td mat-cell *matCellDef="let row"> {{row.content}} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="completion_status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox
+                [checked]="row.completion_status"
+                (change)="toggleCompletion(row)"
+                color="primary">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button color="warn" (click)="deleteEntry(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+  
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" aria-label="Select page"></mat-paginator>
+      </div>
+    </div>
+  </div>

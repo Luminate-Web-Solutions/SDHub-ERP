@@ -6,6 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { AttendanceService } from '../../services/attendance.service';
 import { AuthService } from '../../services/auth.service';
+import { LeaveRequestDialogComponent } from './leave-request-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface AttendanceRecord {
   id: number;
@@ -15,6 +17,7 @@ export interface AttendanceRecord {
   check_out_time: string | null;
   status: string;
   hours_worked: number | null;
+  leave_reason?: string;
 }
 
 @Component({
@@ -38,7 +41,8 @@ export class AttendanceComponent implements OnInit {
   constructor(
     private attendanceService: AttendanceService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
     this.dataSource = new MatTableDataSource<AttendanceRecord>();
   }
@@ -51,6 +55,39 @@ export class AttendanceComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  requestLeave() {
+    const dialogRef = this.dialog.open(LeaveRequestDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const email = this.authService.getUser()?.email;
+        if (!email) return;
+
+        this.attendanceService.requestLeave(email, result.reason).subscribe({
+          next: () => {
+            this.snackBar.open('Leave request submitted successfully', 'Close', {
+              duration: 3000
+            });
+            this.checkTodayAttendance();
+            this.loadAttendanceHistory();
+          },
+          error: (error) => {
+            console.error('Leave request error:', error);
+            this.snackBar.open('Failed to submit leave request', 'Close', {
+              duration: 3000
+            });
+          }
+        });
+      }
+    });
+  }
+
+  isSunday(date: Date): boolean {
+    return date.getDay() === 0;
   }
 
   loadAttendanceHistory() {

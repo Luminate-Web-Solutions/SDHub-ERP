@@ -1,0 +1,38 @@
+<div class="dialog-container">
+    <h2 mat-dialog-title>Syllabus Details</h2>
+    
+    <mat-dialog-content>
+      <div class="details-grid">
+        <div class="detail-row">
+          <span class="label">Date:</span>
+          <span class="value">{{data.date | date:'fullDate'}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="label">Status:</span>
+          <span class="value status-badge" [class.completed]="data.completion_status">
+            {{data.completion_status ? 'Completed' : 'Pending'}}
+          </span>
+        </div>
+        
+        <div class="detail-row content">
+          <span class="label">Content:</span>
+          <div class="value content-text">{{data.content}}</div>
+        </div>
+        
+        <div class="detail-row">
+          <span class="label">Created:</span>
+          <span class="value">{{data.created_at | date:'medium'}}</span>
+        </div>
+        
+        <div class="detail-row" *ngIf="data.updated_at">
+          <span class="label">Last Updated:</span>
+          <span class="value">{{data.updated_at | date:'medium'}}</span>
+        </div>
+      </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions align="end">
+      <button mat-button color="primary" (click)="onClose()">Close</button>
+    </mat-dialog-actions>
+  </div>
