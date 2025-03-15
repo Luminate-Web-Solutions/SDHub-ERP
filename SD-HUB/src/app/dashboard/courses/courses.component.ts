@@ -1,41 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CourseService } from '../../services/course.service';
 
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.css']
 })
-export class CoursesComponent {
-  courses = [
-    {
-      title: 'Web Development',
-      instructor: 'Mohammed Tajjamul Ali',
-      category: 'Programming',
-      description: 'Learn front-end, back-end, database, and deployment.',
-      features: ['React.js','Express.js','MySQL / MongoDB','Node.js','Real-Time Projects','Basic Linux Commands','Testing, Trouboleshooting & Deployment','Learn Interview skills, Telugu & English language'],
-      duration: '3 months',
-      startDate: '2024-03-01',
-      endDate: '2024-06-01',
-      status: 'ongoing'
-    },
-    {
-      title: 'Accounting + Tally ERP',
-      instructor: 'Syed Shaida Hussain',
-      category: '-------',
-      description: 'Complete accounting with Tally ERP software.',
-       features: ['Introduction on how Digital Marketing works','SEO & Google Ranking Strategies','Social Media Marketing','Google Ads & PPC Campaigns','Email & Content Marketing','Analytics & Performance Tracking','Hands-on Training with Live Projects','Learn Interview Skills, English & Telugu Language'
-      ],
-      duration: '3 months',
-      startDate: '2024-03-01',
-      endDate: '2024-06-01',
-      status: 'ongoing'
-    }
-  ];
-
+export class CoursesComponent implements OnInit {
+  courses: any[] = [];
   isDialogOpen = false;
   isEditing = false;
   newCourse: any = {};
   featuresInput: string = '';
+
+  constructor(private courseService: CourseService) { }
+
+  ngOnInit(): void {
+    this.loadCourses();
+  }
+
+  loadCourses() {
+    this.courseService.getCourses().subscribe({
+      next: (data) => {
+        this.courses = data.map((course: any) => ({
+          ...course,
+          features: course.features ? JSON.parse(course.features) : []
+        }));
+      },
+      error: (err) => console.error('Error loading courses:', err)
+    });
+  }
 
   openAddCourseDialog() {
     this.newCourse = {};
@@ -46,28 +40,35 @@ export class CoursesComponent {
 
   editCourse(index: number) {
     this.newCourse = { ...this.courses[index] };
-    this.featuresInput = this.newCourse.features ? this.newCourse.features.join(', ') : '';
+    this.featuresInput = this.newCourse.features.join(', ');
     this.isEditing = true;
     this.isDialogOpen = true;
   }
 
   deleteCourse(index: number) {
-    this.courses.splice(index, 1);
+    const courseId = this.courses[index].id;
+    this.courseService.deleteCourse(courseId).subscribe({
+      next: () => {
+        this.courses.splice(index, 1);
+      },
+      error: (err) => console.error('Error deleting course:', err)
+    });
   }
 
   saveCourse() {
-    this.newCourse.features = this.featuresInput ? this.featuresInput.split(',').map(f => f.trim()) : [];
+    this.newCourse.features = this.featuresInput.split(',').map((f: string) => f.trim());
+    
+    const operation = this.isEditing 
+      ? this.courseService.updateCourse(this.newCourse.id, this.newCourse)
+      : this.courseService.addCourse(this.newCourse);
 
-    if (this.isEditing) {
-      const index = this.courses.findIndex(course => course.title === this.newCourse.title);
-      if (index !== -1) {
-        this.courses[index] = { ...this.newCourse };
-      }
-    } else {
-      this.courses.push({ ...this.newCourse });
-    }
-
-    this.closeDialog();
+    operation.subscribe({
+      next: (savedCourse) => {
+        this.loadCourses();
+        this.closeDialog();
+      },
+      error: (err) => console.error('Error saving course:', err)
+    });
   }
 
   closeDialog() {
@@ -75,6 +76,6 @@ export class CoursesComponent {
   }
 
   updateFeatures() {
-    this.newCourse.features = this.featuresInput ? this.featuresInput.split(',').map(f => f.trim()) : [];
+    this.newCourse.features = this.featuresInput.split(',').map((f: string) => f.trim());
   }
 }

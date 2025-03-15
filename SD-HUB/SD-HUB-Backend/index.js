@@ -391,9 +391,70 @@ app.get('/deans', async (req, res) => {
   res.status(200).json(rows);
 });
 
+// Get all courses
 app.get('/courses', async (req, res) => {
-  const [rows] = await pool.query('SELECT * FROM courses');
-  res.status(200).json(rows);
+  try {
+    const [rows] = await pool.query('SELECT * FROM courses');
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
+});
+
+// Add new course
+app.post('/courses', async (req, res) => {
+  try {
+    const courseData = {
+      ...req.body,
+      features: JSON.stringify(req.body.features) // Convert array to JSON string
+    };
+    
+    const [result] = await pool.query('INSERT INTO courses SET ?', [courseData]);
+    res.status(201).json({ id: result.insertId, ...req.body });
+  } catch (error) {
+    console.error('Error adding course:', error);
+    res.status(500).json({ error: 'Failed to add course' });
+  }
+});
+
+// Update course
+app.put('/courses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const courseData = {
+      ...req.body,
+      features: JSON.stringify(req.body.features)
+    };
+
+    const [result] = await pool.query('UPDATE courses SET ? WHERE id = ?', [courseData, id]);
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+    
+    res.status(200).json({ id, ...req.body });
+  } catch (error) {
+    console.error('Error updating course:', error);
+    res.status(500).json({ error: 'Failed to update course' });
+  }
+});
+
+// Delete course
+app.delete('/courses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query('DELETE FROM courses WHERE id = ?', [id]);
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+    
+    res.status(200).json({ message: 'Course deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting course:', error);
+    res.status(500).json({ error: 'Failed to delete course' });
+  }
 });
 
 app.get('/aptitude', async (req, res) => {
