@@ -1,0 +1,80 @@
+<div class="job-section">
+    <div class="header">
+      <button class="add-btn" (click)="openAddJobDialog()">Add New Student</button>
+    </div>
+  
+    <div class="filters">
+      <div class="search-container">
+        <select [(ngModel)]="searchCategory" class="search-category">
+          <option *ngFor="let category of categories" [value]="category">
+            {{category}}
+          </option>
+        </select>
+        <input 
+          type="text" 
+          [(ngModel)]="searchText" 
+          (input)="onSearch()"
+          placeholder="Search..." 
+          class="search-input"
+        >
+      </div>
+      
+      <div class="items-per-page">
+        <span>Show</span>
+        <select [(ngModel)]="itemsPerPage">
+          <option *ngFor="let option of rowsPerPageOptions" [value]="option">
+            {{option}}
+          </option>
+        </select>
+        <span>entries</span>
+      </div>
+    </div>
+  
+    <div class="bulk-actions" *ngIf="selectedJobs.length > 0">
+      <select (change)="onBulkAction($event)">
+        <option value="">Bulk Actions</option>
+        <option value="delete">Delete Selected</option>
+      </select>
+    </div>
+  
+    <table class="jobs-table">
+      <thead>
+        <tr>
+          <th>
+            <input 
+              type="checkbox" 
+              (change)="toggleAllSelection($event)"
+            >
+          </th>
+          <th>Student Name</th>
+          <th>Courses Enrolled</th>
+          <th>Job Type</th>
+          <th>Designation</th>
+          <th>Salary</th>
+          <th>Date Added</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let job of filteredJobs | slice:0:itemsPerPage">
+          <td>
+            <input 
+              type="checkbox" 
+              [checked]="selectedJobs.includes(job.id)"
+              (change)="toggleSelection(job.id)"
+            >
+          </td>
+          <td>{{job.student_name}}</td>
+          <td>{{job.courses_enrolled}}</td>
+          <td>{{job.job_type}}</td>
+          <td>{{job.designation}}</td>
+          <td>{{job.salary}}</td>
+          <td>{{job.date_added | date}}</td>
+          <td class="actions">
+            <button (click)="onUpdate(job)" class="edit-btn">Edit</button>
+            <button (click)="onDelete(job.id)" class="delete-btn">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

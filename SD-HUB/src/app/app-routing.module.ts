@@ -41,6 +41,7 @@ import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-prof
 import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
 import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
 import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.component';
+import { JobSectionComponent } from './dashboard/job-section/job-section.component';
 
 
 
@@ -58,6 +59,7 @@ const routes: Routes = [
   { path: 'KanbanBoard', component: KanbanBoardComponent },
   { path: 'syllabus', component: SyllabusTrackerComponent },
   { path: 'addphoto', component: AddGalleryComponent },
+  { path: 'job-section', component: JobSectionComponent },
   
   
 

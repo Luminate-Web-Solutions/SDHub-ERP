@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Inject } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,19 +27,11 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgChartsModule } from 'ng2-charts';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
-
-
-
-
-
-
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SigninComponent } from './signin/signin.component';
@@ -77,7 +69,6 @@ import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { TaskDialogComponent } from './staff/task-dialog/task-dialog.component';
 import { TaskCardComponent } from './staff/task-card/task-card.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
-
 import { SyllabusTrackerComponent } from './syllabus-tracker/syllabus-tracker.component';
 import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
@@ -92,10 +83,11 @@ import { AttendanceComponent } from './trainer-dash/attendance/attendance.compon
 import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
 import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
 import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.component';
-
 import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
 import { ExpenditureDialogComponent } from './monthly-expenditure/expenditure-dialog/expenditure-dialog.component';
 import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/payroll-dialog.component';
+import { JobSectionComponent } from './dashboard/job-section/job-section.component';
+import { AddJobDialogComponent } from './dashboard/job-section/add-job-dialog/add-job-dialog.component';
 
 @NgModule({
   declarations: [
@@ -148,10 +140,11 @@ import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/pay
     StakeholderProfileComponent,
     StakeholderDashComponent,
     ExamSubmittedComponent,
-   
     MonthlyExpenditureComponent,
     ExpenditureDialogComponent,
     PayrollDialogComponent,
+    AddJobDialogComponent,
+    JobSectionComponent
   ],
   imports: [
     BrowserModule,
@@ -186,7 +179,8 @@ import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/pay
     FormsModule,
     DragDropModule,
     NgChartsModule,
-    MatMenuModule 
+    MatMenuModule,
+    CommonModule,
   ],
   providers: [
     provideAnimationsAsync(),
