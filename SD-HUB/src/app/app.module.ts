@@ -88,6 +88,7 @@ import { ExpenditureDialogComponent } from './monthly-expenditure/expenditure-di
 import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/payroll-dialog.component';
 import { JobSectionComponent } from './dashboard/job-section/job-section.component';
 import { AddJobDialogComponent } from './dashboard/job-section/add-job-dialog/add-job-dialog.component';
+import { ProfileDialogComponent } from './dashboard/profile/profile-dialog/profile-dialog.component';
 
 @NgModule({
   declarations: [
@@ -144,7 +145,8 @@ import { AddJobDialogComponent } from './dashboard/job-section/add-job-dialog/ad
     ExpenditureDialogComponent,
     PayrollDialogComponent,
     AddJobDialogComponent,
-    JobSectionComponent
+    JobSectionComponent,
+    ProfileDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>{{ isEditMode ? 'Edit Profile' : 'Create Profile' }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="profileForm">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Role</mat-label>
+      <input matInput formControlName="role">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Login ID</mat-label>
+      <input matInput formControlName="login_id">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Registered Date</mat-label>
+      <input matInput formControlName="registered_date" type="date">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Date of Birth</mat-label>
+      <input matInput formControlName="date_of_birth" type="date">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phone_number">
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()">{{ isEditMode ? 'Save Changes' : 'Add Profile' }}</button>
+</div>

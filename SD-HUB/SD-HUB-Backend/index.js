@@ -992,6 +992,92 @@ app.delete('/jobs/:id', async (req, res) => {
   }
 });
 
+// Profile endpoints
+// Get all profiles
+app.get('/profiles', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM profiles');
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching profiles:', error);
+    res.status(500).json({ error: 'Failed to fetch profiles' });
+  }
+});
+
+// Get profile by ID
+app.get('/profiles/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query('SELECT * FROM profiles WHERE id = ?', [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).json({ error: 'Failed to fetch profile' });
+  }
+});
+
+// Create a new profile
+app.post('/profiles', async (req, res) => {
+  try {
+    const { name, role, email, login_id, registered_date, date_of_birth, phone_number } = req.body;
+    const [result] = await pool.query('INSERT INTO profiles SET ?', {
+      name,
+      role,
+      email,
+      login_id,
+      registered_date,
+      date_of_birth,
+      phone_number
+    });
+    res.status(201).json({ id: result.insertId, ...req.body });
+  } catch (error) {
+    console.error('Error creating profile:', error);
+    res.status(500).json({ error: 'Failed to create profile' });
+  }
+});
+
+// Update a profile
+app.put('/profiles/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, role, email, login_id, registered_date, date_of_birth, phone_number } = req.body;
+    const [result] = await pool.query('UPDATE profiles SET ? WHERE id = ?', [
+      { name, role, email, login_id, registered_date, date_of_birth, phone_number },
+      id
+    ]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+
+    res.status(200).json({ id, ...req.body });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
+
+// Delete a profile
+app.delete('/profiles/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query('DELETE FROM profiles WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+
+    res.status(200).json({ message: 'Profile deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting profile:', error);
+    res.status(500).json({ error: 'Failed to delete profile' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -1,47 +1,54 @@
-<div class="profile-container">
+<div class="profiles-container" *ngIf="hasProfiles()">
+  <div *ngFor="let profile of profiles" class="profile-container">
     <mat-card class="profile-card">
       <div class="profile-header">
         <div class="avatar-container">
           <mat-icon class="avatar-icon">account_circle</mat-icon>
         </div>
         <div class="profile-title">
-          <h2>{{adminProfile.name}}</h2>
-          <p class="role">{{adminProfile.role}}</p>
+          <h2>{{ profile.name }}</h2>
+          <p class="role">{{ profile.role }}</p>
         </div>
       </div>
-  
+
       <mat-divider></mat-divider>
-  
+
       <mat-list>
         <mat-list-item>
           <mat-icon matListItemIcon>email</mat-icon>
           <div matListItemTitle>Email</div>
-          <div matListItemLine>{{adminProfile.email}}</div>
+          <div matListItemLine>{{ profile.email }}</div>
         </mat-list-item>
-  
+
         <mat-list-item>
           <mat-icon matListItemIcon>fingerprint</mat-icon>
           <div matListItemTitle>Login</div>
-          <div matListItemLine>{{adminProfile.loginId}}</div>
+          <div matListItemLine>{{ profile.login_id }}</div>
         </mat-list-item>
-  
+
         <mat-list-item>
           <mat-icon matListItemIcon>event</mat-icon>
           <div matListItemTitle>Registered</div>
-          <div matListItemLine>{{adminProfile.registered}}</div>
+          <div matListItemLine>{{ profile.registered_date | date }}</div>
         </mat-list-item>
-  
+
         <mat-list-item>
           <mat-icon matListItemIcon>cake</mat-icon>
           <div matListItemTitle>Date of birth</div>
-          <div matListItemLine>{{adminProfile.dateOfBirth}}</div>
+          <div matListItemLine>{{ profile.date_of_birth | date }}</div>
         </mat-list-item>
-  
+
         <mat-list-item>
           <mat-icon matListItemIcon>phone</mat-icon>
           <div matListItemTitle>Phone number</div>
-          <div matListItemLine>{{adminProfile.phoneNumber}}</div>
+          <div matListItemLine>{{ profile.phone_number }}</div>
         </mat-list-item>
       </mat-list>
+      
+      <button mat-raised-button color="primary" (click)="openEditDialog(profile)">Edit</button>
+      <button mat-raised-button color="warn" (click)="deleteProfile(profile.id)">Delete</button>
     </mat-card>
   </div>
+</div>
+
+<button mat-raised-button color="primary" class="create-profile-button" (click)="openCreateDialog()">Create Profile</button>
