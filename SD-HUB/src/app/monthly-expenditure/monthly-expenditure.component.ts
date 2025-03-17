@@ -267,17 +267,4 @@ deleteExpenditure(expenditure: Expenditure) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.payrollDataSource.filter = filterValue.trim().toLowerCase();
   }
-
-  uploadInvoice() {
-    const dialogRef = this.dialog.open(UploadInvoiceDialogComponent, {
-      width: '500px'
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Handle the result, e.g., refresh the data
-        this.loadExpenditureData();
-      }
-    });
-  }
 }
