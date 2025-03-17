@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CourseDialogComponent } from './course-dialog/course-dialog.component';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-courses',
@@ -12,11 +16,26 @@ export class CoursesComponent implements OnInit {
   isEditing = false;
   newCourse: any = {};
   featuresInput: string = '';
+  isAdminView = false;
+  private routerSub!: Subscription; // Add subscription variable
 
-  constructor(private courseService: CourseService) { }
+  constructor(private courseService: CourseService, private dialog: MatDialog, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
+    // Added to set admin view on initial load
+    this.isAdminView = this.router.url.includes('/admin');  // <<-- new line
     this.loadCourses();
+    this.routerSub = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.isAdminView = event.url.includes('/admin');
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
   }
 
   loadCourses() {
@@ -32,17 +51,45 @@ export class CoursesComponent implements OnInit {
   }
 
   openAddCourseDialog() {
-    this.newCourse = {};
-    this.featuresInput = '';
-    this.isEditing = false;
-    this.isDialogOpen = true;
+    const dialogRef = this.dialog.open(CourseDialogComponent, {
+      width: '400px',
+      data: { isEditing: false, course: {} }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.saveCourse(result);
+      }
+    });
   }
 
   editCourse(index: number) {
-    this.newCourse = { ...this.courses[index] };
-    this.featuresInput = this.newCourse.features.join(', ');
-    this.isEditing = true;
-    this.isDialogOpen = true;
+    const dialogRef = this.dialog.open(CourseDialogComponent, {
+      width: '400px',
+      data: { isEditing: true, course: this.courses[index] }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.saveCourse(result);
+      }
+    });
+  }
+
+  saveCourse(course: any) {
+    course.features = this.featuresInput.split(',').map((f: string) => f.trim());
+    
+    const operation = this.isEditing 
+      ? this.courseService.updateCourse(course.id, course)
+      : this.courseService.addCourse(course);
+
+    operation.subscribe({
+      next: (savedCourse) => {
+        this.loadCourses();
+        this.closeDialog();
+      },
+      error: (err) => console.error('Error saving course:', err)
+    });
   }
 
   deleteCourse(index: number) {
@@ -52,22 +99,6 @@ export class CoursesComponent implements OnInit {
         this.courses.splice(index, 1);
       },
       error: (err) => console.error('Error deleting course:', err)
-    });
-  }
-
-  saveCourse() {
-    this.newCourse.features = this.featuresInput.split(',').map((f: string) => f.trim());
-    
-    const operation = this.isEditing 
-      ? this.courseService.updateCourse(this.newCourse.id, this.newCourse)
-      : this.courseService.addCourse(this.newCourse);
-
-    operation.subscribe({
-      next: (savedCourse) => {
-        this.loadCourses();
-        this.closeDialog();
-      },
-      error: (err) => console.error('Error saving course:', err)
     });
   }
 
