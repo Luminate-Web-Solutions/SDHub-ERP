@@ -11,7 +11,7 @@ export class PayrollDialogComponent {
   form: FormGroup;
   dialogTitle: string;
 
-  designations = ['Teacher', 'Administrator', 'Support Staff', 'Coordinator'];
+  designations = ['Trainer', 'Administrator', 'Support Staff', 'Coordinator'];
   paymentStatuses = ['Pending', 'Paid', 'Processing'];
 
   constructor(

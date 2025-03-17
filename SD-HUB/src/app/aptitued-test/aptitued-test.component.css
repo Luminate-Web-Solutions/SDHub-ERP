@@ -187,17 +187,20 @@ mat-horizontal-stepper {
   margin-bottom: 30px;
 }
 
-.logo {
-  height: 60px;
-  margin-bottom: 20px;
-  margin-left: 125px;
+.logos-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  text-align: center;
 }
 
-.logo-2 {
-  height: 90px;
-  margin-bottom: 20px;
-  margin-left: 175px;
+.logos-container img {
+  max-width: 800px;
+  height: auto;
 }
+
 
 .partner-logos {
   display: flex;
@@ -207,7 +210,7 @@ mat-horizontal-stepper {
 }
 
 .partner-logo {
-  height: 30px;
+  height: 60px;
 }
 
 .about-section {
