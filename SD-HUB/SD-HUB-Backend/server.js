@@ -6,16 +6,11 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import bodyParser from 'body-parser';
-import { createConnection } from 'mysql2';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import util from 'util';
 
 // ✅ Fix __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// New code added here
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -77,15 +72,6 @@ app.post('/upload', upload.single('image'), (req, res) => {
   }
 });
 
-// ✅ Fetch Images API (Ordered by Category)
-app.get('/images', (req, res) => {
-  const sql = 'SELECT * FROM gallery ORDER BY category';
-  db.query(sql, (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
-});
-
 // ✅ Fetch all images with category (Ordered by uploaded_at DESC)
 app.get('/images', (req, res) => {
   const sql = 'SELECT * FROM gallery ORDER BY uploaded_at DESC';
@@ -97,141 +83,6 @@ app.get('/images', (req, res) => {
 
 // ✅ Serve uploaded images
 app.use('/uploads', express.static(uploadPath));
-
-// ✅ Configure MySQL Database Connection
-const dbConnection = createConnection({
-  host: 'localhost',
-  user: 'root', // Change this to your MySQL username
-  password: '', // Change this to your MySQL password
-  database: 'attendance_system' // Replace with your actual database name
-});
-
-dbConnection.connect(err => {
-  if (err) {
-    console.error('❌ Database connection failed:', err);
-    process.exit(1); // Stop server if DB connection fails
-  }
-  console.log('✅ Connected to MySQL Database');
-});
-
-const query = util.promisify(dbConnection.query).bind(dbConnection);
-
-// JWT Authentication Middleware
-const authenticateToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'Unauthorized' });
-
-  jwt.verify(token, 'your_secret_key', (err, user) => {
-    if (err) return res.status(403).json({ message: 'Forbidden' });
-    req.user = user;
-    next();
-  });
-};
-
-// User Registration
-app.post('/api/users', async (req, res) => {
-  const { name, email, password, role, department, position, isActive } = req.body;
-  if (!name || !email || !password || !role) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    
-    // Insert into users
-    const result = await query(
-      'INSERT INTO users (name, email, password, role, department, position, isActive) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [name, email, hashedPassword, role, department, position, isActive]
-    );
-    const userId = result.insertId;
-
-    // Add to trainers table if role is trainer
-    if (role === 'trainer') {
-      await query(
-        'INSERT INTO trainers (name, email, password) VALUES (?, ?, ?)',
-        [name, email, hashedPassword]
-      );
-    }
-
-    res.status(201).json({ message: "User created successfully." });
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: "Server error." });
-  }
-});
-
-// Fetch single user
-app.get('/api/users/:id', (req, res) => {
-  const { id } = req.params;
-  dbConnection.query('SELECT * FROM users WHERE id = ?', [id], (err, results) => {
-    if (err) return res.status(500).json({ message: "Database error." });
-    if (results.length === 0) return res.status(404).json({ message: "User not found." });
-    res.json(results[0]);
-  });
-});
-
-// Delete User
-app.delete('/api/users/:id', (req, res) => {
-  const { id } = req.params;
-  dbConnection.query('DELETE FROM users WHERE id = ?', [id], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'User deleted successfully' });
-  });
-});
-
-// Check-in
-app.post('/api/attendance/check-in', (req, res) => {
-  const { userId } = req.body;
-  dbConnection.query('INSERT INTO attendance (userId, date, checkInTime, status) VALUES (?, CURDATE(), NOW(), "present")', [userId], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'Check-in successful' });
-  });
-});
-
-// Check-out
-app.post('/api/attendance/check-out', (req, res) => {
-  const { userId } = req.body;
-  dbConnection.query('UPDATE attendance SET checkOutTime = NOW() WHERE userId = ? AND date = CURDATE()', [userId], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'Check-out successful' });
-  });
-});
-
-// Fetch Attendance Records
-app.get('/api/attendance', (req, res) => {
-  dbConnection.query('SELECT * FROM attendance', (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
-});
-
-// Generate Attendance Report
-app.get('/api/attendance/report', (req, res) => {
-  const { startDate, endDate } = req.query;
-  dbConnection.query('SELECT * FROM attendance WHERE date BETWEEN ? AND ?', [startDate, endDate], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
-});
-
-// Dashboard Stats Route
-app.get('/dashboard-stats', authenticateToken, async (req, res) => {
-  try {
-    const [totalStaff] = await query('SELECT COUNT(*) AS count FROM users WHERE role = "staff"');
-    const [totalTrainers] = await query('SELECT COUNT(*) AS count FROM users WHERE role = "trainer"');
-    const [presentToday] = await query('SELECT COUNT(*) AS count FROM attendance WHERE date = CURDATE() AND status = "present"');
-    const [absentToday] = await query('SELECT COUNT(*) AS count FROM attendance WHERE date = CURDATE() AND status = "absent"');
-
-    res.json({
-      totalStaff: totalStaff.count,
-      totalTrainers: totalTrainers.count,
-      presentToday: presentToday.count,
-      absentToday: absentToday.count
-    });
-  } catch (error) {
-    console.error("Error fetching dashboard stats:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
 
 // Add Category
 app.post('/add-category', (req, res) => {

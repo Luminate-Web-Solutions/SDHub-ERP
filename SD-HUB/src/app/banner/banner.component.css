@@ -1,45 +1,138 @@
-.sub-nav{
-    height: 50px;
-    background-color: #2e53aa;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sub-nav {
+  height: 50px;
+  background-color: #2e53aa;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.phone-mail {
+  display: flex;
+  align-items: center;
+  width: 30%;
+  margin-left: 50px;
+}
+
+.phone,
+.mail {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.phone p,
+.mail p {
+  margin: 0;
+  margin-left: 5px;
+}
+
+.phone p a,
+.mail p a {
+  text-decoration: none;
+  color: #fff;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.nav-icon {
+  width: 30%;
+  text-align: end;
+  margin-right: 50px;
+}
+
+.nav-icon a img {
+  width: 20px;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 767px) {
+  .sub-nav {
+    height: auto;
+    min-height: 40px;
+    flex-direction: column;
+    padding: 10px 20px;
+    gap: 8px;
   }
+
   .phone-mail {
-    display: flex;
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .phone,
+  .mail {
+    margin-right: 0;
+    width: auto;
+    min-width: max-content;
+  }
+
+  .nav-icon {
+    width: 100%;
+    margin-right: 0;
+    text-align: center;
+  }
+}
+
+/* Small Mobile Devices (under 480px) */
+@media (max-width: 480px) {
+  .phone-mail {
+    flex-direction: column;
+    gap: 6px;
     align-items: center;
-    width: 30%;
-    margin-left: 50px;
   }
-  
-  .phone, .mail {
-    display: flex;
-    align-items: center;
-    margin-right: 15px;
+
+  .phone,
+  .mail {
+    justify-content: center;
+    width: auto;
+    padding: 0 10px;
   }
-  
-  .phone p, .mail p {
-    margin: 0;
-    margin-left: 5px;
+
+  .phone p,
+  .mail p {
+    text-align: center;
+    width: auto;
   }
-  
-  .phone p a, .mail p a {
-    text-decoration: none;
-    color: #fff;
+
+  .nav-icon {
+    padding-top: 3px;
   }
-  
-  .nav-icon{
-    width: 30%;
-    text-align: end;
-    margin-right: 50px;
-    
-    
+
+  .nav-icon a img {
+    margin: 0 8px;
   }
-  .nav-icon a img{
-    width: 20px;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
+}
+
+/* Extra Small Mobile Devices (under 360px) */
+@media (max-width: 360px) {
+  .sub-nav {
+    padding: 8px 15px;
   }
+
+  .phone p,
+  .mail p {
+    font-size: 14px;
+  }
+
+  .phone p a,
+  .mail p a {
+    padding: 0 5px;
+  }
+
+  .nav-icon a img {
+    width: 18px;
+    margin: 0 6px;
+  }
+}
