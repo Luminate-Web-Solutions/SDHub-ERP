@@ -24,7 +24,7 @@ import { MainCourseComponent } from './main-course/main-course.component';
 import { ContactComponent } from './contact/contact.component';
 import { TestResultComponent } from './test-result/test-result.component';
 import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
-
+import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -41,6 +41,7 @@ const routes: Routes = [
   { path: 'more-gallery', component: MoreGalleryComponent },
   // {path: 'dashboard', component:DashboardComponent},
   // { path: 'profile', component: ProfileComponent },
+  { path: 'evaluated-result/:id', component: EvaluatedResultComponent },
   
   {
     path: '',

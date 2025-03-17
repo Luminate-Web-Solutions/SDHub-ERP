@@ -440,11 +440,22 @@ app.post('/contact', async (req, res) => {
 
 app.post('/submit-test', async (req, res) => {
   try {
-    const testData = req.body;
+    const { personalInfo, selected_answers, states, marksScored } = req.body;
+
+    // Insert into test_results
     const [result] = await pool.query(
       'INSERT INTO test_results (email, fullName, gender, courseApplied, marksScored) VALUES (?, ?, ?, ?, ?)',
-      [testData.email, testData.fullName, testData.gender, testData.courseApplied, testData.marksScored]
+      [personalInfo.email, personalInfo.fullName, personalInfo.gender, personalInfo.courseApplied, marksScored]
     );
+
+    const testResultId = result.insertId;
+
+    // Insert into stored_results
+    await pool.query(
+      'INSERT INTO stored_results (test_result_id, selected_answers, states) VALUES (?, ?, ?)',
+      [testResultId, selected_answers, states]
+    );
+
     res.status(201).json({ message: 'Test submitted successfully' });
   } catch (error) {
     console.error('Error submitting test:', error);
@@ -452,14 +463,34 @@ app.post('/submit-test', async (req, res) => {
   }
 });
 
-// Get test results
 app.get('/test-results', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT email, fullName, gender, courseApplied, marksScored FROM test_results');
+    const [rows] = await pool.query('SELECT id, email, fullName, gender, courseApplied, marksScored FROM test_results');
     res.status(200).json(rows);
   } catch (error) {
     console.error('Error fetching test results:', error);
     res.status(500).json({ error: 'Failed to fetch test results' });
+  }
+});
+
+app.get('/evaluated-result/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query(`
+      SELECT tr.*, sr.selected_answers, sr.states
+      FROM test_results tr
+      JOIN stored_results sr ON tr.id = sr.test_result_id
+      WHERE tr.id = ?
+    `, [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Result not found' });
+    }
+
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching evaluated result:', error);
+    res.status(500).json({ error: 'Failed to fetch evaluated result' });
   }
 });
 

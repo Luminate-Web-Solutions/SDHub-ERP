@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, switchMap } from 'rxjs';
+import { TestResult } from '../models/test-result';
 
 interface Question {
   id: number;
@@ -12,13 +13,13 @@ interface Question {
   correct_option: string;
 }
 
-interface TestResult {
-  email: string;
-  fullName: string;
-  gender: string;
-  courseApplied: string;
-  marksScored: string;
-}
+// interface TestResult {
+//   email: string;
+//   fullName: string;
+//   gender: string;
+//   courseApplied: string;
+//   marksScored: string;
+// }
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ interface TestResult {
 export class AptitudeService {
   private apiUrl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getQuestions(): Observable<any> {
     return this.http.get<Question[]>(`${this.apiUrl}/aptitude`).pipe(
@@ -76,7 +77,7 @@ export class AptitudeService {
   calculateScore(answers: { [key: string]: string }, questions: any[]): number {
     let score = 0;
     let totalQuestions = 0;
-  
+
     // Calculate score for each section
     ['aptitudeQuestions', 'generalKnowledgeQuestions', 'criticalThinkingQuestions'].forEach(section => {
       questions[0][section][0].questions.forEach((q: any, index: number) => {
@@ -88,7 +89,7 @@ export class AptitudeService {
         totalQuestions++;
       });
     });
-  
+
     console.log(`Total Questions: ${totalQuestions}, Score: ${score}`);
     return score;
   }
@@ -96,12 +97,35 @@ export class AptitudeService {
   submitTest(testData: any): Observable<any> {
     return this.getQuestions().pipe(
       switchMap(questions => {
-        const score = this.calculateScore(testData.answers, questions);
+        let score = 0;
+        let selected_answers: string[] = [];
+        let states: string[] = [];
+
+        ['aptitudeQuestions', 'generalKnowledgeQuestions', 'criticalThinkingQuestions'].forEach(section => {
+          questions[0][section][0].questions.forEach((q: any, index: number) => {
+            const questionId = section.split('Questions')[0] + '_' + index;
+            const selectedAnswer = testData.answers[questionId];
+            selected_answers.push(selectedAnswer || '');
+            if (selectedAnswer === undefined) {
+              states.push('unanswered');
+            } else {
+              const isCorrect = selectedAnswer === q.correctAnswer;
+              states.push(isCorrect ? 'correct' : 'incorrect');
+              if (isCorrect) score++;
+            }
+          });
+        });
+
+        const selected_answers_csv = selected_answers.join(',');
+        const states_csv = states.join(',');
+
         const submission = {
-          ...testData.personalInfo,
-          marksScored: `${score}/${43}`, // Assuming 40 total questions
-          answers: testData.answers
+          personalInfo: testData.personalInfo,
+          selected_answers: selected_answers_csv,
+          states: states_csv,
+          marksScored: `${score}/43`
         };
+
         return this.http.post(`${this.apiUrl}/submit-test`, submission);
       })
     );
@@ -109,5 +133,9 @@ export class AptitudeService {
 
   getTestResults(): Observable<TestResult[]> {
     return this.http.get<TestResult[]>(`${this.apiUrl}/test-results`);
+  }
+
+  getEvaluatedResult(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/evaluated-result/${id}`);
   }
 }

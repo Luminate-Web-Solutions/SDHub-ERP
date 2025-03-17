@@ -1,0 +1,40 @@
+<div class="evaluated-result">
+    <h2>Test Result for {{personalInfo?.fullName}}</h2>
+    <div class="personal-info">
+      <p><strong>Email:</strong> {{personalInfo?.email}}</p>
+      <p><strong>Gender:</strong> {{personalInfo?.gender}}</p>
+      <p><strong>Course Applied:</strong> {{personalInfo?.courseApplied}}</p>
+      <p><strong>Marks Scored:</strong> {{personalInfo?.marksScored}}</p>
+    </div>
+  
+    <h3>Detailed Answers</h3>
+    <div *ngFor="let item of detailedResults; let i = index" class="question-block">
+      <p><strong>Question {{i + 1}}:</strong> {{item.question}}</p>
+      <div class="options">
+        <p *ngFor="let option of item.options">
+          {{option.text}}
+          <span *ngIf="option.value === item.selectedAnswer" [ngClass]="{
+            'correct': item.state === 'correct',
+            'incorrect': item.state === 'incorrect' || item.state === 'unanswered'
+          }">
+            (Selected)
+          </span>
+          <span *ngIf="option.value === item.correctAnswer" class="correct-answer">
+            (Correct Answer)
+          </span>
+        </p>
+      </div>
+      <p class="status" [ngClass]="{
+        'correct': item.state === 'correct',
+        'incorrect': item.state === 'incorrect',
+        'unanswered': item.state === 'unanswered'
+      }">
+        {{item.state === 'unanswered' ? 'Unanswered' : (item.state === 'correct' ? 'Correct' : 'Incorrect')}}
+        <span *ngIf="item.state === 'incorrect' && item.selectedAnswer">
+          - Correct answer: {{item.correctAnswer}}
+        </span>
+      </p>
+    </div>
+  
+    <button mat-raised-button color="primary" (click)="print()">Print</button>
+  </div>
