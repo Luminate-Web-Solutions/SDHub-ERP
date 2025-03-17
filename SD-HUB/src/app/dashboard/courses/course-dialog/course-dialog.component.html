@@ -1,59 +1,68 @@
 <div class="dialog-box">
-    <h2>{{ isEditing ? 'Edit Course' : 'Add New Course' }}</h2>
-    <form (ngSubmit)="saveCourse()">
-      <mat-form-field appearance="outline">
-        <mat-label>Title</mat-label>
-        <input matInput [(ngModel)]="newCourse.title" name="title" required>
-      </mat-form-field>
+  <h2>{{ isEditing ? 'Edit Course' : 'Add New Course' }}</h2>
+  <form (ngSubmit)="saveCourse()">
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput [(ngModel)]="newCourse.title" name="title" required>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Instructor</mat-label>
-        <input matInput [(ngModel)]="newCourse.instructor" name="instructor" required>
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Instructor</mat-label>
+      <input matInput [(ngModel)]="newCourse.instructor" name="instructor" required>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Category</mat-label>
-        <input matInput [(ngModel)]="newCourse.category" name="category" required>
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Category</mat-label>
+      <input matInput [(ngModel)]="newCourse.category" name="category" required>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
-        <textarea matInput [(ngModel)]="newCourse.description" name="description" required></textarea>
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput [(ngModel)]="newCourse.description" name="description" required></textarea>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Duration</mat-label>
-        <input matInput [(ngModel)]="newCourse.duration" name="duration" required>
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Duration</mat-label>
+      <input matInput [(ngModel)]="newCourse.duration" name="duration" required>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Start Date</mat-label>
-        <input matInput type="date" [(ngModel)]="newCourse.startDate" name="startDate" required>
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Start Date</mat-label>
+      <input matInput type="date" [(ngModel)]="newCourse.startDate" name="startDate" required>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>End Date</mat-label>
-        <input matInput type="date" [(ngModel)]="newCourse.endDate" name="endDate" required>
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>End Date</mat-label>
+      <input matInput type="date" [(ngModel)]="newCourse.endDate" name="endDate" required>
+    </mat-form-field>
 
-      <!-- Features Input -->
-      <mat-form-field appearance="outline">
-        <mat-label>Features (comma separated)</mat-label>
-        <input matInput [(ngModel)]="featuresInput" (blur)="updateFeatures()" name="features">
-      </mat-form-field>
+    <!-- Features Input -->
+    <mat-form-field appearance="outline">
+      <mat-label>Features (comma separated)</mat-label>
+      <input matInput [(ngModel)]="featuresInput" (blur)="updateFeatures()" name="features">
+    </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
-        <mat-select [(ngModel)]="newCourse.status" name="status" required>
-          <mat-option value="ongoing">Ongoing</mat-option>
-          <mat-option value="upcoming">Upcoming</mat-option>
-          <mat-option value="completed">Completed</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="newCourse.status" name="status" required>
+        <mat-option value="ongoing">Ongoing</mat-option>
+        <mat-option value="upcoming">Upcoming</mat-option>
+        <mat-option value="completed">Completed</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <div class="dialog-buttons">
-        <button mat-button (click)="closeDialog()">Cancel</button>
-        <button mat-raised-button color="primary" type="submit">{{ isEditing ? 'Update' : 'Add' }} Course</button>
-      </div>
-    </form>
-  </div>
+    <!-- Image Preview and Upload -->
+    <div *ngIf="newCourse.image">
+      <img [src]="newCourse.image" alt="Course Image" style="max-width: 100%; height: auto; margin-bottom: 16px;">
+    </div>
+    <div>
+      <label>Course Image</label>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*">
+    </div>
+
+    <div class="dialog-buttons">
+      <button mat-button (click)="closeDialog()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit">{{ isEditing ? 'Update' : 'Add' }} Course</button>
+    </div>
+  </form>
+</div>

@@ -20,6 +20,18 @@ export class CourseDialogComponent {
     this.featuresInput = this.newCourse.features ? this.newCourse.features.join(', ') : '';
   }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.newCourse.image = e.target.result; // Store full base64 data URL
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   saveCourse() {
     this.newCourse.features = this.featuresInput.split(',').map((f: string) => f.trim());
     this.dialogRef.close(this.newCourse);

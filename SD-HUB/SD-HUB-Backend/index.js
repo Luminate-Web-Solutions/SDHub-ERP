@@ -12,6 +12,8 @@ const PORT = 3000;
 const SECRET_KEY = 'your_secret_key';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// Use express.json() instead of body-parser
+app.use(express.json({ limit: '10mb' }));
 
 app.use(cors());
 app.use(express.json());

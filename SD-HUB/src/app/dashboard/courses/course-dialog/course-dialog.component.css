@@ -3,14 +3,14 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-  }
-  
-  form {
+}
+
+form {
     overflow-y: auto;
     flex: 1;
-  }
-  
-  .dialog-buttons {
+}
+
+.dialog-buttons {
     margin-top: auto;
     padding: 16px;
     background: white;
@@ -18,4 +18,11 @@
     display: flex;
     gap: 10px;
     justify-content: flex-end;
+}
+
+img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    margin-bottom: 16px;
   }

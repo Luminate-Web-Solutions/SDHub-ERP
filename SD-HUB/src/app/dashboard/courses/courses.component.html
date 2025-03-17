@@ -6,7 +6,7 @@
     </button>
   </div>
 
-  <div class="courses-grid">
+  <div class="courses-grid courses-flex-start">
     <mat-card *ngFor="let course of courses; let i = index" class="course-card">
       <mat-card-header>
         <mat-card-title>{{ course.title }}</mat-card-title>
@@ -16,6 +16,8 @@
       </mat-card-header>
   
       <mat-card-content>
+        <!-- Display Course Image -->
+        <img *ngIf="course.image" [src]="course.image" alt="{{ course.title }}" style="max-width: 100%; height: auto; margin-bottom: 16px;">
         <p><strong>Instructor:</strong> {{ course.instructor }}</p>
         <p><strong>Category:</strong> {{ course.category }}</p>
         <p><strong>Description:</strong> {{ course.description }}</p>
