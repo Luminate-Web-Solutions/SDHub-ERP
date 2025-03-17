@@ -364,8 +364,6 @@ mat-form-field {
 }
 
 
-
-/* Add to aptitued-test.component.css */
 ::ng-deep .warning-snackbar {
   background-color: #ffd740 !important;
   color: #000 !important;

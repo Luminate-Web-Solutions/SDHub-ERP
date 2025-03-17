@@ -6,7 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AptitudeService } from '../services/aptitude.service';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { TimerService } from '../services/timer.service';
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -107,7 +108,9 @@ export class AptituedTestComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.submitTestData();
+        this.submitTestData().subscribe(() => {
+          this.router.navigate(['/test-complete']);
+        });
       }
     });
   }
@@ -119,32 +122,33 @@ export class AptituedTestComponent implements OnInit, OnDestroy {
         answers: this.answers
       };
 
-      this.aptitudeService.submitTest(testData).subscribe({
-        next: () => {
+      return this.aptitudeService.submitTest(testData).pipe(
+        tap(() => {
           this.snackBar.open('Test submitted successfully!', 'Close', { duration: 3000 });
-          this.router.navigate(['/test-complete']);
-        },
-        error: (error) => {
+        }),
+        catchError(error => {
           console.error('Error submitting test:', error);
           this.snackBar.open('Error submitting test. Please try again.', 'Close', { duration: 3000 });
-        }
-      });
+          return of(null);
+        })
+      );
     }
+    return of(null);
   }
 
   private handleAutoSubmit() {
     this.isTestActive = false;
-    this.submitTestData();
-    this.router.navigate(['/test-complete']);
+    this.submitTestData().subscribe(() => {
+      this.router.navigate(['/exam-submitted']);
+    });
   }
 
   handleTabSwitch(): void {
     if (this.isTestActive && document.visibilityState === 'hidden') {
       this.tabSwitchCount++;
       
-      // Show warning message
       this.snackBar.open(
-        `Warning: You have switched tabs ${this.tabSwitchCount} time(s). Maximum allowed is ${this.maxTabSwitches}.`,
+        `Warning: Tab switch detected (${this.tabSwitchCount}/${this.maxTabSwitches}).`,
         'Close',
         { duration: 5000, panelClass: ['warning-snackbar'] }
       );
@@ -156,9 +160,10 @@ export class AptituedTestComponent implements OnInit, OnDestroy {
   }
 
   autoSubmitTest(): void {
-    this.snackBar.open('Maximum tab switches exceeded! Submitting test...', 'Close', { duration: 3000 });
-    this.submitTestData();
-    this.router.navigate(['/exam-submitted']);
+    this.snackBar.open('Test auto-submitted due to rule violations!', 'Close', { duration: 3000 });
+    this.submitTestData().subscribe(() => {
+      this.router.navigate(['/exam-submitted']);
+    });
   }
 
   onNext() {
@@ -184,6 +189,6 @@ export class AptituedTestComponent implements OnInit, OnDestroy {
     this.testStarted = true;
     this.tabSwitchCount = 0;
     this.timerService.startTimer(40 * 60);
-    this.snackBar.open('Test started! Do not switch tabs during the exam.', 'Close', { duration: 5000 });
+    this.snackBar.open('Test started! Browser monitoring activated.', 'Close', { duration: 5000 });
   }
 }

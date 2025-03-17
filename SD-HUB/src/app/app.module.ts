@@ -102,6 +102,7 @@ import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.componen
 import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
 import { ExpenditureDialogComponent } from './monthly-expenditure/expenditure-dialog/expenditure-dialog.component';
 import { PayrollDialogComponent } from './monthly-expenditure/payroll-dialog/payroll-dialog.component';
+
 import { UploadInvoiceDialogComponent } from './upload-invoice-dialog/upload-invoice-dialog.component';
 
 @NgModule({
@@ -163,6 +164,7 @@ import { UploadInvoiceDialogComponent } from './upload-invoice-dialog/upload-inv
     MonthlyExpenditureComponent,
     ExpenditureDialogComponent,
     PayrollDialogComponent,
+   
     UploadInvoiceDialogComponent,
   ],
   imports: [
