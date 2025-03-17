@@ -73,9 +73,9 @@ export class StudentsService {
     return this.http.get<any>(`${this.apiUrl}/studentsStatus`);
   }
 
-  get_tStatus(): Observable<any>{
-    return this.http.get<any>(`${this.apiUrl}/tStatus`);
-  }
+  // get_tStatus(): Observable<any>{
+  //   return this.http.get<any>(`${this.apiUrl}/tStatus`);
+  // }
 
   getStudents(): Observable<any>{
     return this.http.get<any>(`${this.apiUrl}/students`);

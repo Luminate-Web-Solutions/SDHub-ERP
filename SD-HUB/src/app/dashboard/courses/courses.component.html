@@ -14,7 +14,7 @@
           <mat-chip [ngClass]="course.status">{{ course.status }}</mat-chip>
         </mat-chip-listbox>
       </mat-card-header>
-
+  
       <mat-card-content>
         <p><strong>Instructor:</strong> {{ course.instructor }}</p>
         <p><strong>Category:</strong> {{ course.category }}</p>
@@ -25,10 +25,11 @@
             <li *ngFor="let feature of course.features">{{ feature }}</li>
           </ul>
         </div>
+        <p><strong>Duration:</strong> {{ course.duration }}</p>
         <p><strong>Start Date:</strong> {{ course.startDate }}</p>
         <p><strong>End Date:</strong> {{ course.endDate }}</p>
       </mat-card-content>
-
+  
       <mat-card-actions *ngIf="isAdminView">
         <button mat-button color="accent" (click)="editCourse(i)">
           <mat-icon>edit</mat-icon> Edit

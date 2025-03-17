@@ -261,7 +261,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStatus();
-    this.get_tStatus();
+    // this.get_tStatus();
     this.gettech();
     this.loadUsers();
     this.updateCharts();
@@ -287,17 +287,17 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  get_tStatus(): void {
-    this.studentsService.get_tStatus().subscribe(t_status => {
-      const active = t_status.find((each: any) => each._id === 'active');
-      const completed = t_status.find((each: any) => each._id === 'completed');
+  // get_tStatus(): void {
+  //   this.studentsService.get_tStatus().subscribe(t_status => {
+  //     const active = t_status.find((each: any) => each._id === 'active');
+  //     const completed = t_status.find((each: any) => each._id === 'completed');
       
-      this.teachingStaffSummary.activeStaff = active ? active.count : 0;
-      this.teachingStaffSummary.guestStaff = completed ? completed.count : 0;
+  //     this.teachingStaffSummary.activeStaff = active ? active.count : 0;
+  //     this.teachingStaffSummary.guestStaff = completed ? completed.count : 0;
       
-      this.updateCharts();
-    });
-  }
+  //     this.updateCharts();
+  //   });
+  // }
 
   gettech(): void {
     this.studentsService.gettech().subscribe(gettech => {

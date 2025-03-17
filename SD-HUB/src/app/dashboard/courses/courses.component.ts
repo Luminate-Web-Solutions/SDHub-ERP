@@ -41,10 +41,7 @@ export class CoursesComponent implements OnInit {
   loadCourses() {
     this.courseService.getCourses().subscribe({
       next: (data) => {
-        this.courses = data.map((course: any) => ({
-          ...course,
-          features: course.features ? JSON.parse(course.features) : []
-        }));
+        this.courses = data;
       },
       error: (err) => console.error('Error loading courses:', err)
     });
@@ -77,12 +74,10 @@ export class CoursesComponent implements OnInit {
   }
 
   saveCourse(course: any) {
-    course.features = this.featuresInput.split(',').map((f: string) => f.trim());
-    
-    const operation = this.isEditing 
+    const operation = course.id 
       ? this.courseService.updateCourse(course.id, course)
       : this.courseService.addCourse(course);
-
+  
     operation.subscribe({
       next: (savedCourse) => {
         this.loadCourses();
@@ -107,6 +102,6 @@ export class CoursesComponent implements OnInit {
   }
 
   updateFeatures() {
-    this.newCourse.features = this.featuresInput.split(',').map((f: string) => f.trim());
+    this.newCourse.features = this.featuresInput.split(',').map(feature => feature.trim());
   }
 }

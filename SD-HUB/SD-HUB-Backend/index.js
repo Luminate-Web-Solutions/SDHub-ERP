@@ -324,14 +324,14 @@ app.get('/studentsStatus', async (req, res) => {
   }
 });
 
-app.get('/tStatus', async (req, res) => {
-  const [rows] = await pool.query('SELECT status, COUNT(*) as count FROM trainers GROUP BY status');
-  if (rows.length > 0) {
-    res.status(201).json(rows);
-  } else {
-    res.status(401).json({ message: 'No Data' });
-  }
-});
+// app.get('/tStatus', async (req, res) => {
+//   const [rows] = await pool.query('SELECT status, COUNT(*) as count FROM trainers GROUP BY status');
+//   if (rows.length > 0) {
+//     res.status(201).json(rows);
+//   } else {
+//     res.status(401).json({ message: 'No Data' });
+//   }
+// });
 
 app.get('/students', async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM students');
@@ -407,9 +407,9 @@ app.post('/courses', async (req, res) => {
   try {
     const courseData = {
       ...req.body,
-      features: JSON.stringify(req.body.features) // Convert array to JSON string
+      features: JSON.stringify(req.body.features) // Convert features array to JSON string
     };
-    
+
     const [result] = await pool.query('INSERT INTO courses SET ?', [courseData]);
     res.status(201).json({ id: result.insertId, ...req.body });
   } catch (error) {
@@ -428,11 +428,11 @@ app.put('/courses/:id', async (req, res) => {
     };
 
     const [result] = await pool.query('UPDATE courses SET ? WHERE id = ?', [courseData, id]);
-    
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Course not found' });
     }
-    
+
     res.status(200).json({ id, ...req.body });
   } catch (error) {
     console.error('Error updating course:', error);
