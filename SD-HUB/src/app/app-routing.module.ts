@@ -27,7 +27,7 @@ import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
 
 import { LoginComponent } from './login/login.component';
-import { adminGuard } from './admin.guard';
+
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
@@ -44,6 +44,7 @@ import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.compon
 
 
 import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
+import { DataComponent } from './data/data.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -62,6 +63,7 @@ const routes: Routes = [
   
   { path: 'expenditure', component: ExpenditureComponent },
   { path: 'test-result', component: TestResultComponent },
+  { path: 'data', component: DataComponent },
   // { path: 'man', component: TrainerManagementComponent },
   
 
@@ -106,7 +108,7 @@ const routes: Routes = [
   { 
     path: 'trainer', 
     component: TrainerDashComponent,
-    canActivate: [adminGuard],
+    // canActivate: [adminGuard],
     children: [
       { path: '', redirectTo: 'attendance', pathMatch: 'full' },
       { path: 'attendance', component: AttendanceComponent },
