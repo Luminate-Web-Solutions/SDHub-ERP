@@ -1,0 +1,50 @@
+.evaluated-result {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  h2 {
+    color: #2e53aa;
+  }
+  
+  .personal-info p {
+    margin: 5px 0;
+  }
+  
+  .question-block {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  .options p {
+    margin: 5px 0;
+  }
+  
+  .correct {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .incorrect {
+    color: red;
+  }
+  
+  .unanswered {
+    color: orange;
+  }
+  
+  .correct-answer {
+    color: blue;
+    margin-left: 10px;
+  }
+  
+  .status {
+    margin-top: 10px;
+  }
+  
+  button {
+    margin-top: 20px;
+  }

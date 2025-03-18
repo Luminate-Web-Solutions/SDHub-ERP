@@ -25,7 +25,7 @@ import { ContactComponent } from './contact/contact.component';
 import { TestResultComponent } from './test-result/test-result.component';
 import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
-import { ViewReportComponent } from './view-report/view-report.component';
+
 import { LoginComponent } from './login/login.component';
 import { adminGuard } from './admin.guard';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
@@ -42,6 +42,7 @@ import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.componen
 import { JobSectionComponent } from './dashboard/job-section/job-section.component';
 
 
+import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -59,12 +60,14 @@ const routes: Routes = [
   { path: 'job-section', component: JobSectionComponent },
   
   { path: 'expenditure', component: ExpenditureComponent },
+  { path: 'test-result', component: TestResultComponent },
   // { path: 'man', component: TrainerManagementComponent },
   
 
   
   // {path: 'dashboard', component:DashboardComponent},
   // { path: 'profile', component: ProfileComponent },
+  { path: 'evaluated-result/:id', component: EvaluatedResultComponent },
   
   
   { path: 'portal', component: LoginComponent },

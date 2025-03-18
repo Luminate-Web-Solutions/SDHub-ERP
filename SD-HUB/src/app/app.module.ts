@@ -80,8 +80,9 @@ import { TaskCardComponent } from './staff/task-card/task-card.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
 
 
-import { ViewReportComponent } from './view-report/view-report.component';
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
+import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
+
 import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
@@ -141,10 +142,11 @@ import { UploadInvoiceDialogComponent } from './upload-invoice-dialog/upload-inv
     UserDialogComponent,
     StudentDialogComponent,
     MoreGalleryComponent,
+    NewsDialogComponent,
+    EvaluatedResultComponent,
     TaskDialogComponent,
     TaskCardComponent,
     KanbanBoardComponent,
-    ViewReportComponent,
     NewsDialogComponent,
     ForgotPasswordDialogComponent,
     LoginComponent,

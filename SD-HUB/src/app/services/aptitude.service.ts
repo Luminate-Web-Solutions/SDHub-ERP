@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, switchMap } from 'rxjs';
+import { TestResult } from '../models/test-result';
 
 interface Question {
   id: number;
@@ -12,13 +13,13 @@ interface Question {
   correct_option: string;
 }
 
-interface TestResult {
-  email: string;
-  fullName: string;
-  gender: string;
-  courseApplied: string;
-  marksScored: string;
-}
+// interface TestResult {
+//   email: string;
+//   fullName: string;
+//   gender: string;
+//   courseApplied: string;
+//   marksScored: string;
+// }
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ interface TestResult {
 export class AptitudeService {
   private apiUrl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getQuestions(): Observable<any> {
     return this.http.get<Question[]>(`${this.apiUrl}/aptitude`).pipe(
@@ -37,11 +38,11 @@ export class AptitudeService {
             questions: questions.filter(q => q.section === 'Aptitude Test').map(q => ({
               question: q.question,
               options: [
-                { text: q.option_a, value: q.option_a }, // Line 26: Updated value to actual string
-                { text: q.option_b, value: q.option_b }, // Line 27: Updated value to actual string
-                ...(q.option_c ? [{ text: q.option_c, value: q.option_c }] : []) // Line 28: Updated value to actual string
+                { text: q.option_a, value: q.option_a }, // Updated value to actual string
+                { text: q.option_b, value: q.option_b }, // Updated value to actual string
+                ...(q.option_c ? [{ text: q.option_c, value: q.option_c }] : []) // Updated value to actual string
               ],
-              correctAnswer: q.correct_option // Line 29: Updated to match actual string value
+              correctAnswer: q.correct_option // Updated to match actual string value
             }))
           }],
           generalKnowledgeQuestions: [{
@@ -49,11 +50,11 @@ export class AptitudeService {
             questions: questions.filter(q => q.section === 'General Knowledge Test').map(q => ({
               question: q.question,
               options: [
-                { text: q.option_a, value: q.option_a }, // Line 34: Updated value to actual string
-                { text: q.option_b, value: q.option_b }, // Line 35: Updated value to actual string
-                ...(q.option_c ? [{ text: q.option_c, value: q.option_c }] : []) // Line 36: Updated value to actual string
+                { text: q.option_a, value: q.option_a }, // Updated value to actual string
+                { text: q.option_b, value: q.option_b }, // Updated value to actual string
+                ...(q.option_c ? [{ text: q.option_c, value: q.option_c }] : []) // Updated value to actual string
               ],
-              correctAnswer: q.correct_option // Line 37: Updated to match actual string value
+              correctAnswer: q.correct_option // Updated to match actual string value
             }))
           }],
           criticalThinkingQuestions: [{
@@ -61,11 +62,11 @@ export class AptitudeService {
             questions: questions.filter(q => q.section === 'Critical Thinking Test').map(q => ({
               question: q.question,
               options: [
-                { text: q.option_a, value: q.option_a }, // Line 42: Updated value to actual string
-                { text: q.option_b, value: q.option_b }, // Line 43: Updated value to actual string
-                ...(q.option_c ? [{ text: q.option_c, value: q.option_c }] : []) // Line 44: Updated value to actual string
+                { text: q.option_a, value: q.option_a }, // Updated value to actual string
+                { text: q.option_b, value: q.option_b }, // Updated value to actual string
+                ...(q.option_c ? [{ text: q.option_c, value: q.option_c }] : []) // Updated value to actual string
               ],
-              correctAnswer: q.correct_option // Line 45: Updated to match actual string value
+              correctAnswer: q.correct_option // Updated to match actual string value
             }))
           }]
         };
@@ -76,7 +77,7 @@ export class AptitudeService {
   calculateScore(answers: { [key: string]: string }, questions: any[]): number {
     let score = 0;
     let totalQuestions = 0;
-  
+
     // Calculate score for each section
     ['aptitudeQuestions', 'generalKnowledgeQuestions', 'criticalThinkingQuestions'].forEach(section => {
       questions[0][section][0].questions.forEach((q: any, index: number) => {
@@ -88,7 +89,7 @@ export class AptitudeService {
         totalQuestions++;
       });
     });
-  
+
     console.log(`Total Questions: ${totalQuestions}, Score: ${score}`);
     return score;
   }
@@ -96,14 +97,37 @@ export class AptitudeService {
   submitTest(testData: any): Observable<any> {
     return this.getQuestions().pipe(
       switchMap(questions => {
-        const score = this.calculateScore(testData.answers, questions);
-        const states = this.calculateStates(testData.answers, questions);
+        let score = 0;
+        let totalQuestions = 0; // Add counter
+        const selected_answers: string[] = [];
+        const states: string[] = [];
+  
+        ['aptitudeQuestions', 'generalKnowledgeQuestions', 'criticalThinkingQuestions'].forEach(section => {
+          questions[0][section][0].questions.forEach((q: any, index: number) => {
+            totalQuestions++; // Increment for each question
+            const questionId = section.split('Questions')[0] + '_' + index;
+            const selectedAnswer = testData.answers[questionId];
+            selected_answers.push(selectedAnswer || '');
+            if (selectedAnswer === undefined) {
+              states.push('unanswered');
+            } else {
+              const isCorrect = selectedAnswer === q.correctAnswer;
+              states.push(isCorrect ? 'correct' : 'incorrect');
+              if (isCorrect) score++;
+            }
+          });
+        });
+  
+        const selected_answers_json = JSON.stringify(selected_answers);
+        const states_json = JSON.stringify(states);
+  
         const submission = {
-          ...testData.personalInfo,
-          marksScored: `${score}/${43}`, // Assuming 43 total questions
-          answers: testData.answers,
-          states: states
+          personalInfo: testData.personalInfo,
+          selected_answers: selected_answers_json,
+          states: states_json,
+          marksScored: `${score}/${totalQuestions}` // Use dynamic total
         };
+  
         return this.http.post(`${this.apiUrl}/submit-test`, submission);
       })
     );
@@ -124,7 +148,7 @@ export class AptitudeService {
     return this.http.get<TestResult[]>(`${this.apiUrl}/test-results`);
   }
 
-  getTestResultsWithAnswers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/test-results-with-answers`);
+  getEvaluatedResult(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/evaluated-result/${id}`);
   }
 }
