@@ -84,7 +84,7 @@ export class AptituedTestComponent implements OnInit {
               this.snackBar.open('Test submitted successfully!', 'Close', {
                 duration: 3000
               });
-              this.router.navigate(['/test-complete']);
+              this.router.navigate(['/registration']);
             },
             error: (error) => {
               console.error('Error submitting test:', error);

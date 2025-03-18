@@ -314,7 +314,8 @@ app.get('/courses', async (req, res) => {
 });
 
 app.get('/aptitude', async (req, res) => {
-  const [rows] = await pool.query('SELECT * FROM questions');
+  // Add ORDER BY to ensure consistent question order
+  const [rows] = await pool.query('SELECT * FROM questions ORDER BY section, id');
   res.status(200).json(rows);
 });
 

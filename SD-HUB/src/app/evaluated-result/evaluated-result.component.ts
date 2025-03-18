@@ -43,8 +43,10 @@ export class EvaluatedResultComponent implements OnInit {
       marksScored: result.marksScored
     };
 
-    const selectedAnswers = result.selected_answers.split(',');
-    const states = result.states.split(',');
+
+  // Replace split(',') with JSON.parse()
+  const selectedAnswers = JSON.parse(result.selected_answers); // Deserialize JSON
+  const states = JSON.parse(result.states); // Deserialize JSON
     const allQuestions = [
       ...questions[0].aptitudeQuestions[0].questions,
       ...questions[0].generalKnowledgeQuestions[0].questions,
