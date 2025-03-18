@@ -16,7 +16,7 @@ import { HttpClient } from '@angular/common/http';
 export class LoginComponent implements OnInit {
   signinForm: FormGroup;
   hidePassword = true;
-  roles = ['director', 'stakeholder', 'adminstaff', 'trainer'];
+  roles = ['director', 'stakeholder', 'admin', 'trainer'];
   errorMessage: string = '';
   loading: boolean = false;
 
@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/admin']);
         break;
       case 'admin':
-        this.router.navigate(['/admin-dashboard']);
+        this.router.navigate(['/admin-staff']);
         break;
       case 'stakeholder':
         this.router.navigate(['/stakeholder']);

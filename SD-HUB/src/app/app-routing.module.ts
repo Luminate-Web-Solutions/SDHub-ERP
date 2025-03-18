@@ -40,6 +40,7 @@ import { TrainerManagementComponent } from './dashboard/trainers/trainer-managem
 import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
 import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.component';
 import { JobSectionComponent } from './dashboard/job-section/job-section.component';
+import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.component';
 
 
 import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
@@ -121,6 +122,17 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'profile', component: StakeholderProfileComponent }
+    ]
+  },
+
+  { 
+    path: 'admin-staff', 
+    component: AdminStaffStdComponent,
+    // canActivate: [adminGuard],
+    children: [
+      { path: '', redirectTo: 'gallery', pathMatch: 'full' },
+      { path: 'gallery', component: AddGalleryComponent },
       { path: 'profile', component: StakeholderProfileComponent }
     ]
   },

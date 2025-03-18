@@ -207,7 +207,7 @@ app.post('/login', async (req, res) => {
   const { email, password, role } = req.body;
   try {
     // Validate role
-    const validRoles = ['stakeholder', 'director', 'adminstaff', 'trainer'];
+    const validRoles = ['stakeholder', 'director', 'admin', 'trainer'];
     if (!validRoles.includes(role)) {
       return res.status(400).json({ message: 'Invalid role' });
     }
