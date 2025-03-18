@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
+export interface LeaveRequest {
+  type: string;
+  reason: string;
+}
+
 @Component({
   selector: 'app-leave-request-dialog',
   template: `
@@ -9,6 +14,19 @@ import { MatDialogRef } from '@angular/material/dialog';
       <h2 mat-dialog-title>Request Leave</h2>
       <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()">
         <mat-dialog-content>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Leave Type</mat-label>
+            <mat-select formControlName="type" required>
+              <mat-option value="paid">Paid Leave</mat-option>
+              <mat-option value="unpaid">Unpaid Leave</mat-option>
+              <mat-option value="sick">Sick Leave</mat-option>
+              <mat-option value="casual">Casual Leave</mat-option>
+            </mat-select>
+            <mat-error *ngIf="leaveForm.get('type')?.hasError('required')">
+              Leave type is required
+            </mat-error>
+          </mat-form-field>
+
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Reason for Leave</mat-label>
             <textarea 
@@ -42,6 +60,7 @@ import { MatDialogRef } from '@angular/material/dialog';
     }
     .full-width {
       width: 100%;
+      margin-bottom: 16px;
     }
     mat-dialog-actions {
       margin-top: 20px;
@@ -56,6 +75,7 @@ export class LeaveRequestDialogComponent {
     private dialogRef: MatDialogRef<LeaveRequestDialogComponent>
   ) {
     this.leaveForm = this.fb.group({
+      type: ['', Validators.required],
       reason: ['', Validators.required]
     });
   }

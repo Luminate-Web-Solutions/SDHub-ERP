@@ -27,6 +27,6 @@ export class TrainerDashComponent {
 
   logout() {
     // this.AuthService.logout();
-    this.router.navigate(['/signin']);
+    this.router.navigate(['/portal']);
   }
 }

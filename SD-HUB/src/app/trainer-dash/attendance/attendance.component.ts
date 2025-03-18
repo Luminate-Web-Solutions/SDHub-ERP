@@ -18,6 +18,7 @@ export interface AttendanceRecord {
   status: string;
   hours_worked: number | null;
   leave_reason?: string;
+  leave_type?: string;
 }
 
 @Component({
@@ -67,7 +68,7 @@ export class AttendanceComponent implements OnInit {
         const email = this.authService.getUser()?.email;
         if (!email) return;
 
-        this.attendanceService.requestLeave(email, result.reason).subscribe({
+        this.attendanceService.requestLeave(email, result.type, result.reason).subscribe({
           next: () => {
             this.snackBar.open('Leave request submitted successfully', 'Close', {
               duration: 3000

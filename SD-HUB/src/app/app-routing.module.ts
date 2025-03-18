@@ -65,7 +65,7 @@ const routes: Routes = [
   // { path: 'profile', component: ProfileComponent },
   
   
-  { path: 'login', component: LoginComponent },
+  { path: 'portal', component: LoginComponent },
   { 
     path: 'admin', 
     component: AdminComponent,

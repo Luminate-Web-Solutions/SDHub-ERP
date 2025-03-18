@@ -5,7 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TrainerService } from '../../services/trainer.service';
-import { AddTrainerDialogComponent } from './add-trainer-dialog';
+import { TrainerDialogComponent } from './trainer-dialog/trainer-dialog.component';
 
 export interface Trainer {
   id: number;
@@ -16,6 +16,7 @@ export interface Trainer {
   currentBatch: string;
   role: string;
   status: string;
+  password: string;
 }
 
 @Component({
@@ -63,7 +64,7 @@ export class TrainersComponent implements AfterViewInit {
   }
 
   openAddTrainerDialog(): void {
-    const dialogRef = this.dialog.open(AddTrainerDialogComponent, {
+    const dialogRef = this.dialog.open(TrainerDialogComponent, {
       width: '500px'
     });
 
@@ -84,7 +85,7 @@ export class TrainersComponent implements AfterViewInit {
   }
 
   openEditDialog(trainer: Trainer): void {
-    const dialogRef = this.dialog.open(AddTrainerDialogComponent, {
+    const dialogRef = this.dialog.open(TrainerDialogComponent, {
       width: '400px',
       data: { mode: 'edit', trainer: trainer }
     });

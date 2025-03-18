@@ -93,7 +93,6 @@ import { WeeklySyllabusComponent } from './trainer-dash/weekly-syllabus/weekly-s
 import { SyllabusDetailsDialogComponent } from './trainer-dash/syllabus/syllabus-details-dialog/syllabus-details-dialog.component';
 import { TrainerManagementComponent } from './dashboard/trainers/trainer-management/trainer-management.component';
 import { LeaveRequestDialogComponent } from './trainer-dash/attendance/leave-request-dialog';
-import { AddTrainerDialogComponent } from './dashboard/trainers/add-trainer-dialog';
 import { AttendanceComponent } from './trainer-dash/attendance/attendance.component';
 import { StakeholderProfileComponent } from './stakeholder-dash/stakeholder-profile/stakeholder-profile.component';
 import { StakeholderDashComponent } from './stakeholder-dash/stakeholder-dash.component';
@@ -155,7 +154,6 @@ import { UploadInvoiceDialogComponent } from './upload-invoice-dialog/upload-inv
     SyllabusDetailsDialogComponent,
     TrainerManagementComponent,
     LeaveRequestDialogComponent,
-    AddTrainerDialogComponent,
     AttendanceComponent,
     StakeholderProfileComponent,
     StakeholderDashComponent,

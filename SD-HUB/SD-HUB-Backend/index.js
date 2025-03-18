@@ -338,53 +338,53 @@ app.get('/students', async (req, res) => {
   res.status(200).json(rows);
 });
 
-app.get('/trainers', async (req, res) => {
-  const [rows] = await pool.query('SELECT * FROM trainers');
-  res.status(200).json(rows);
-});
+// app.get('/trainers', async (req, res) => {
+//   const [rows] = await pool.query('SELECT * FROM trainers');
+//   res.status(200).json(rows);
+// });
 
 // New endpoints for trainer CRUD operations
-app.post('/trainers', async (req, res) => {
-  try {
-    const [result] = await pool.query('INSERT INTO trainers SET ?', req.body);
-    res.status(201).json({ id: result.insertId, ...req.body });
-  } catch (error) {
-    console.error('Error adding trainer:', error);
-    res.status(500).json({ error: 'Failed to add trainer' });
-  }
-});
+// app.post('/trainers', async (req, res) => {
+//   try {
+//     const [result] = await pool.query('INSERT INTO trainers SET ?', req.body);
+//     res.status(201).json({ id: result.insertId, ...req.body });
+//   } catch (error) {
+//     console.error('Error adding trainer:', error);
+//     res.status(500).json({ error: 'Failed to add trainer' });
+//   }
+// });
 
-app.put('/trainers/:id', async (req, res) => {
-  try {
-    const id = req.params.id;
-    const [result] = await pool.query('UPDATE trainers SET ? WHERE id = ?', [req.body, id]);
+// app.put('/trainers/:id', async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const [result] = await pool.query('UPDATE trainers SET ? WHERE id = ?', [req.body, id]);
     
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Trainer not found' });
-    }
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ error: 'Trainer not found' });
+//     }
     
-    res.status(200).json({ id, ...req.body });
-  } catch (error) {
-    console.error('Error updating trainer:', error);
-    res.status(500).json({ error: 'Failed to update trainer' });
-  }
-});
+//     res.status(200).json({ id, ...req.body });
+//   } catch (error) {
+//     console.error('Error updating trainer:', error);
+//     res.status(500).json({ error: 'Failed to update trainer' });
+//   }
+// });
 
-app.delete('/trainers/:id', async (req, res) => {
-  try {
-    const id = req.params.id;
-    const [result] = await pool.query('DELETE FROM trainers WHERE id = ?', [id]);
+// app.delete('/trainers/:id', async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const [result] = await pool.query('DELETE FROM trainers WHERE id = ?', [id]);
     
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Trainer not found' });
-    }
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ error: 'Trainer not found' });
+//     }
     
-    res.status(200).json({ message: 'Trainer deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting trainer:', error);
-    res.status(500).json({ error: 'Failed to delete trainer' });
-  }
-});
+//     res.status(200).json({ message: 'Trainer deleted successfully' });
+//   } catch (error) {
+//     console.error('Error deleting trainer:', error);
+//     res.status(500).json({ error: 'Failed to delete trainer' });
+//   }
+// });
 
 app.get('/deans', async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM deans');

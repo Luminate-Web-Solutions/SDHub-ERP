@@ -18,6 +18,7 @@ export interface Trainer {
   currentBatch: string;
   role: string;
   status: string;
+  password: string;
 }
 
 @Injectable({
@@ -37,20 +38,15 @@ export class TrainerService {
   }
 
   addTrainer(trainer: Partial<Trainer>): Observable<Trainer> {
-    const trainerData = {
-      ...trainer,
-      role: 'trainer',
-      status: 'active'
-    };
-    return this.http.post<Trainer>(`${this.apiUrl}/user`, trainerData);
+    return this.http.post<Trainer>(`${this.apiUrl}/trainers`, trainer);
   }
 
   updateTrainer(id: number, trainer: Partial<Trainer>): Observable<Trainer> {
-    return this.http.put<Trainer>(`${this.apiUrl}/user/${id}`, trainer);
+    return this.http.put<Trainer>(`${this.apiUrl}/trainers/${id}`, trainer);
   }
 
   deleteTrainer(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/user/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/trainers/${id}`);
   }
 
   getTrainerAttendance(email: string, startDate: Date, endDate: Date): Observable<any[]> {

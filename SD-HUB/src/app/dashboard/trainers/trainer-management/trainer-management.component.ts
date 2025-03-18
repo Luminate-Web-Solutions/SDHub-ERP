@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { TrainerService, TrainerStats, Trainer } from '../../../services/trainer.service';
-import { AddTrainerDialogComponent } from '../add-trainer-dialog';
+
 
 interface AttendanceRecord {
   date: string;
@@ -14,6 +14,7 @@ interface AttendanceRecord {
   hours_worked: number;
   status: 'Present' | 'Absent' | 'Leave' | 'Holiday';
   leave_reason?: string;
+  leave_type?: string;
 }
 
 @Component({
@@ -40,6 +41,7 @@ export class TrainerManagementComponent implements OnInit {
     'check_out_time',
     'hours_worked',
     'status',
+    'leave_type',
     'leave_reason'
   ];
   
@@ -71,27 +73,7 @@ export class TrainerManagementComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  openAddTrainerDialog(): void {
-    const dialogRef = this.dialog.open(AddTrainerDialogComponent, {
-      width: '500px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.trainerService.addTrainer(result).subscribe({
-          next: () => {
-            this.loadTrainers();
-            this.loadTrainerStats();
-            this.snackBar.open('Trainer added successfully', 'Close', { duration: 3000 });
-          },
-          error: (error) => {
-            console.error('Error adding trainer:', error);
-            this.snackBar.open('Failed to add trainer', 'Close', { duration: 3000 });
-          }
-        });
-      }
-    });
-  }
+ 
 
   private loadTrainerStats() {
     this.trainerService.getTrainerStats().subscribe({
@@ -153,6 +135,9 @@ export class TrainerManagementComponent implements OnInit {
     });
   }
 
+
+  
+
   exportAttendance() {
     if (!this.selectedTrainer) {
       this.snackBar.open('Please select a trainer first', 'Close', {
@@ -161,26 +146,32 @@ export class TrainerManagementComponent implements OnInit {
       return;
     }
 
-    this.trainerService.exportAttendanceReport(
-      this.selectedTrainer.email,
-      this.startDate,
-      this.endDate
-    ).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `attendance_${this.selectedTrainer?.name}_${this.startDate.toISOString().split('T')[0]}_${this.endDate.toISOString().split('T')[0]}.csv`;
-        link.click();
-        window.URL.revokeObjectURL(url);
-      },
-      error: (error) => {
-        console.error('Error exporting attendance:', error);
-        this.snackBar.open('Failed to export attendance report', 'Close', {
-          duration: 3000
-        });
-      }
-    });
+    const csvData = this.convertToCSV(this.dataSource.data);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `attendance_${this.selectedTrainer.name}_${this.startDate.toISOString().split('T')[0]}_${this.endDate.toISOString().split('T')[0]}.csv`;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  private convertToCSV(data: AttendanceRecord[]): string {
+    const headers = ['Date', 'Check In', 'Check Out', 'Hours Worked', 'Status', 'Leave Type', 'Leave Reason'];
+    const rows = data.map(record => [
+      record.date,
+      record.check_in_time || 'N/A',
+      record.check_out_time || 'N/A',
+      record.hours_worked || 0,
+      record.status,
+      record.leave_type || 'N/A',
+      record.leave_reason || 'N/A'
+    ]);
+
+    return [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
   }
 
   applyFilter(event: Event) {

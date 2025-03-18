@@ -33,6 +33,6 @@ export class AdminComponent {
 
   logout() {
     this.AuthService.logout();
-    this.router.navigate(['/signin']);
+    this.router.navigate(['/portal']);
   }
 }

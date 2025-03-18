@@ -111,6 +111,17 @@
           </td>
         </ng-container>
 
+         <!-- Leave Type Column -->
+         <ng-container matColumnDef="leave_type">
+          <th mat-header-cell *matHeaderCellDef>Leave Type</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="row.status === 'Leave'" class="leave-type-badge" [class]="row.leave_type">
+              {{row.leave_type | titlecase}}
+            </span>
+            <span *ngIf="row.status !== 'Leave'">N/A</span>
+          </td>
+        </ng-container>
+
         <!-- Leave Reason Column -->
         <ng-container matColumnDef="leave_reason">
           <th mat-header-cell *matHeaderCellDef>Leave Reason</th>

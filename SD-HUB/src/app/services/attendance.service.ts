@@ -10,7 +10,14 @@ export interface AttendanceRecord {
   check_out_time: string | null;
   status: string;
   hours_worked: number | null;
+  leave_type?: string;
   leave_reason?: string;
+}
+
+export interface LeaveRequest {
+  email: string;
+  type: string;
+  reason: string;
 }
 
 @Injectable({
@@ -21,8 +28,8 @@ export class AttendanceService {
 
   constructor(private http: HttpClient) { }
 
-  requestLeave(email: string, reason: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/attendance/leave`, { email, reason });
+  requestLeave(email: string, type: string, reason: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/attendance/leave`, { email, type, reason });
   }
 
   checkIn(email: string): Observable<any> {
