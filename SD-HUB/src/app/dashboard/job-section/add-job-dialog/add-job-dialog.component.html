@@ -1,0 +1,35 @@
+<div class="dialog-container">
+    <h2>Add New Student</h2>
+    <form [formGroup]="jobForm" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label for="student_name">Student Name</label>
+        <input id="student_name" type="text" formControlName="student_name">
+      </div>
+  
+      <div class="form-field">
+        <label for="courses_enrolled">Courses Enrolled</label>
+        <input id="courses_enrolled" type="text" formControlName="courses_enrolled">
+      </div>
+  
+      <div class="form-field">
+        <label for="job_type">Job Type</label>
+        <input id="job_type" type="text" formControlName="job_type">
+      </div>
+  
+      <div class="form-field">
+        <label for="designation">Designation</label>
+        <input id="designation" type="text" formControlName="designation">
+      </div>
+  
+      <div class="form-field">
+        <label for="salary">Salary</label>
+        <input id="salary" type="text" formControlName="salary">
+      </div>
+  
+      <div class="dialog-actions">
+        <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="submit-btn" [disabled]="!jobForm.valid">Add</button>
+      </div>
+      <input type="hidden" formControlName="id" />
+    </form>
+  </div>

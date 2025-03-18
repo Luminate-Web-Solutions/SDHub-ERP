@@ -1,90 +1,4 @@
-/* .sub-nav{
-    height: 50px;
-    background-color: #2e53aa;
-    color: #fff;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    
-  }
-  .phone-mail{
-    display: flex;
-    width: 30%;
-    margin-left: 50px;
-    
-  }
-  .phone{
-    display: flex;
-    align-items: center;
-  }
-  .phone p{
-    margin: auto;
-    margin-left: 5px;
-  }
-  .mail{
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-    
-  }
-  .mail p{
-    margin: auto;
-    margin-left: 5px;
-  }
-  .nav-icon{
-    width: 30%;
-    text-align: end;
-    margin-right: 50px;
-    
-    
-  }
-  .nav-icon a img{
-    width: 20px;
-    margin-top: 5px;
-    margin-left: 10px;
-  }
 
-
-  .main-coures-main{
-    padding: 50px 100px;
-  }
-  .main-coures-main h1{
-    text-align: center;
-    color: #2e53aa;
-    font-weight: bold;
-  }
-  .course{
-    border: 1px solid;
-    width: 80%;
-    height: fit-content;
-    padding: 20px;
-    margin: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    
-    
-  }
-  .courses{
-    width: 25%;
-    height: 550px;
-    border: 1px solid;
-    padding: 15px;
-  }
-  .courses-img{
-    height: 250px;
-  }
-  .courses-img img{
-    height: 250px;
-    width: 100%;
-  }
-  .courses-description h5{
-    margin: 10px;
-    margin-left: 0;
-    color: #2e53aa;
-  } */
-  
-  
   .main-courses-main {
     padding: 20px;
     max-width: 1200px;
@@ -149,18 +63,6 @@
   }
   
   @media (max-width: 768px) {
-    .sub-nav {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .phone-mail {
-      margin-bottom: 10px;
-    }
-  
-    .nav-icon {
-      align-self: flex-end;
-    }
   
     .course-h1 h1 {
       font-size: 2rem;

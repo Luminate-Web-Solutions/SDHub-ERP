@@ -39,6 +39,7 @@ import { WeeklySyllabusComponent } from './trainer-dash/weekly-syllabus/weekly-s
 import { TrainerManagementComponent } from './dashboard/trainers/trainer-management/trainer-management.component';
 import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expenditure.component';
 import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.component';
+import { JobSectionComponent } from './dashboard/job-section/job-section.component';
 
 
 
@@ -55,6 +56,7 @@ const routes: Routes = [
   { path: 'more-gallery', component: MoreGalleryComponent },
   { path: 'KanbanBoard', component: KanbanBoardComponent },
   { path: 'addphoto', component: AddGalleryComponent },
+  { path: 'job-section', component: JobSectionComponent },
   
   { path: 'expenditure', component: ExpenditureComponent },
   // { path: 'man', component: TrainerManagementComponent },

@@ -1,12 +1,12 @@
 <div class="courses-container">
   <div class="courses-header">
     <h2>Available Courses</h2>
-    <button mat-raised-button color="primary" (click)="openAddCourseDialog()">
+    <button *ngIf="isAdminView" mat-raised-button color="primary" (click)="openAddCourseDialog()">
       <mat-icon>add</mat-icon> Add New Course
     </button>
   </div>
 
-  <div class="courses-grid">
+  <div class="courses-grid courses-flex-start">
     <mat-card *ngFor="let course of courses; let i = index" class="course-card">
       <mat-card-header>
         <mat-card-title>{{ course.title }}</mat-card-title>
@@ -14,8 +14,10 @@
           <mat-chip [ngClass]="course.status">{{ course.status }}</mat-chip>
         </mat-chip-listbox>
       </mat-card-header>
-
+  
       <mat-card-content>
+        <!-- Display Course Image -->
+        <img *ngIf="course.image" [src]="course.image" alt="{{ course.title }}" style="max-width: 100%; height: auto; margin-bottom: 16px;">
         <p><strong>Instructor:</strong> {{ course.instructor }}</p>
         <p><strong>Category:</strong> {{ course.category }}</p>
         <p><strong>Description:</strong> {{ course.description }}</p>
@@ -25,16 +27,12 @@
             <li *ngFor="let feature of course.features">{{ feature }}</li>
           </ul>
         </div>
-        <!-- <p><strong>Duration:</strong> <mat-icon>schedule</mat-icon> {{ course.duration }}</p> -->
+        <p><strong>Duration:</strong> {{ course.duration }}</p>
         <p><strong>Start Date:</strong> {{ course.startDate }}</p>
         <p><strong>End Date:</strong> {{ course.endDate }}</p>
-
-        <!-- Features Section -->
-       
-
       </mat-card-content>
-
-      <mat-card-actions>
+  
+      <mat-card-actions *ngIf="isAdminView">
         <button mat-button color="accent" (click)="editCourse(i)">
           <mat-icon>edit</mat-icon> Edit
         </button>
@@ -43,68 +41,5 @@
         </button>
       </mat-card-actions>
     </mat-card>
-  </div>
-</div>
-
-<!-- Popup Dialog for Adding/Editing Course -->
-<div class="dialog-overlay" *ngIf="isDialogOpen">
-  <div class="dialog-box">
-    <h2>{{ isEditing ? 'Edit Course' : 'Add New Course' }}</h2>
-    <form (ngSubmit)="saveCourse()">
-      <mat-form-field appearance="outline">
-        <mat-label>Title</mat-label>
-        <input matInput [(ngModel)]="newCourse.title" name="title" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Instructor</mat-label>
-        <input matInput [(ngModel)]="newCourse.instructor" name="instructor" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Category</mat-label>
-        <input matInput [(ngModel)]="newCourse.category" name="category" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
-        <textarea matInput [(ngModel)]="newCourse.description" name="description" required></textarea>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Duration</mat-label>
-        <input matInput [(ngModel)]="newCourse.duration" name="duration" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Start Date</mat-label>
-        <input matInput type="date" [(ngModel)]="newCourse.startDate" name="startDate" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>End Date</mat-label>
-        <input matInput type="date" [(ngModel)]="newCourse.endDate" name="endDate" required>
-      </mat-form-field>
-
-      <!-- Features Input -->
-      <mat-form-field appearance="outline">
-        <mat-label>Features (comma separated)</mat-label>
-        <input matInput [(ngModel)]="featuresInput" (blur)="updateFeatures()" name="features">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
-        <mat-select [(ngModel)]="newCourse.status" name="status" required>
-          <mat-option value="ongoing">Ongoing</mat-option>
-          <mat-option value="upcoming">Upcoming</mat-option>
-          <mat-option value="completed">Completed</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <div class="dialog-buttons">
-        <button mat-button (click)="closeDialog()">Cancel</button>
-        <button mat-raised-button color="primary" type="submit">{{ isEditing ? 'Update' : 'Add' }} Course</button>
-      </div>
-    </form>
   </div>
 </div>

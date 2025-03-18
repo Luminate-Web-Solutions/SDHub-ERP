@@ -12,6 +12,8 @@ const PORT = 3000;
 const SECRET_KEY = 'your_secret_key';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// Use express.json() instead of body-parser
+app.use(express.json({ limit: '10mb' }));
 
 app.use(cors());
 app.use(express.json());
@@ -324,14 +326,14 @@ app.get('/studentsStatus', async (req, res) => {
   }
 });
 
-app.get('/tStatus', async (req, res) => {
-  const [rows] = await pool.query('SELECT status, COUNT(*) as count FROM trainers GROUP BY status');
-  if (rows.length > 0) {
-    res.status(201).json(rows);
-  } else {
-    res.status(401).json({ message: 'No Data' });
-  }
-});
+// app.get('/tStatus', async (req, res) => {
+//   const [rows] = await pool.query('SELECT status, COUNT(*) as count FROM trainers GROUP BY status');
+//   if (rows.length > 0) {
+//     res.status(201).json(rows);
+//   } else {
+//     res.status(401).json({ message: 'No Data' });
+//   }
+// });
 
 app.get('/students', async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM students');
@@ -391,9 +393,70 @@ app.get('/deans', async (req, res) => {
   res.status(200).json(rows);
 });
 
+// Get all courses
 app.get('/courses', async (req, res) => {
-  const [rows] = await pool.query('SELECT * FROM courses');
-  res.status(200).json(rows);
+  try {
+    const [rows] = await pool.query('SELECT * FROM courses');
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
+});
+
+// Add new course
+app.post('/courses', async (req, res) => {
+  try {
+    const courseData = {
+      ...req.body,
+      features: JSON.stringify(req.body.features) // Convert features array to JSON string
+    };
+
+    const [result] = await pool.query('INSERT INTO courses SET ?', [courseData]);
+    res.status(201).json({ id: result.insertId, ...req.body });
+  } catch (error) {
+    console.error('Error adding course:', error);
+    res.status(500).json({ error: 'Failed to add course' });
+  }
+});
+
+// Update course
+app.put('/courses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const courseData = {
+      ...req.body,
+      features: JSON.stringify(req.body.features)
+    };
+
+    const [result] = await pool.query('UPDATE courses SET ? WHERE id = ?', [courseData, id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+
+    res.status(200).json({ id, ...req.body });
+  } catch (error) {
+    console.error('Error updating course:', error);
+    res.status(500).json({ error: 'Failed to update course' });
+  }
+});
+
+// Delete course
+app.delete('/courses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query('DELETE FROM courses WHERE id = ?', [id]);
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+    
+    res.status(200).json({ message: 'Course deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting course:', error);
+    res.status(500).json({ error: 'Failed to delete course' });
+  }
 });
 
 app.get('/aptitude', async (req, res) => {
@@ -1161,6 +1224,148 @@ app.delete('/payroll/:id', async (req, res) => {
 });
 
 
+app.get('/jobs', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM jobs ORDER BY date_added DESC');
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching jobs:', error);
+    res.status(500).json({ error: 'Failed to fetch jobs' });
+  }
+});
+
+app.post('/jobs', async (req, res) => {
+  try {
+    const { student_name, courses_enrolled, job_type, designation, salary } = req.body;
+    const [result] = await pool.query(
+      'INSERT INTO jobs (student_name, courses_enrolled, job_type, designation, salary, date_added) VALUES (?, ?, ?, ?, ?, NOW())',
+      [student_name, courses_enrolled, job_type, designation, salary]
+    );
+    res.status(201).json({ id: result.insertId, ...req.body });
+  } catch (error) {
+    console.error('Error adding job:', error);
+    res.status(500).json({ error: 'Failed to add job' });
+  }
+});
+
+app.put('/jobs/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { student_name, courses_enrolled, job_type, designation, salary } = req.body;
+    const [result] = await pool.query(
+      'UPDATE jobs SET student_name = ?, courses_enrolled = ?, job_type = ?, designation = ?, salary = ? WHERE id = ?',
+      [student_name, courses_enrolled, job_type, designation, salary, id]
+    );
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+    res.status(200).json({ id, ...req.body });
+  } catch (error) {
+    console.error('Error updating job:', error);
+    res.status(500).json({ error: 'Failed to update job' });
+  }
+});
+
+app.delete('/jobs/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query('DELETE FROM jobs WHERE id = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+    res.status(200).json({ message: 'Job deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting job:', error);
+    res.status(500).json({ error: 'Failed to delete job' });
+  }
+});
+
+// Profile endpoints
+// Get all profiles
+app.get('/profiles', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM profiles');
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching profiles:', error);
+    res.status(500).json({ error: 'Failed to fetch profiles' });
+  }
+});
+
+// Get profile by ID
+app.get('/profiles/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query('SELECT * FROM profiles WHERE id = ?', [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).json({ error: 'Failed to fetch profile' });
+  }
+});
+
+// Create a new profile
+app.post('/profiles', async (req, res) => {
+  try {
+    const { name, role, email, login_id, registered_date, date_of_birth, phone_number } = req.body;
+    const [result] = await pool.query('INSERT INTO profiles SET ?', {
+      name,
+      role,
+      email,
+      login_id,
+      registered_date,
+      date_of_birth,
+      phone_number
+    });
+    res.status(201).json({ id: result.insertId, ...req.body });
+  } catch (error) {
+    console.error('Error creating profile:', error);
+    res.status(500).json({ error: 'Failed to create profile' });
+  }
+});
+
+// Update a profile
+app.put('/profiles/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, role, email, login_id, registered_date, date_of_birth, phone_number } = req.body;
+    const [result] = await pool.query('UPDATE profiles SET ? WHERE id = ?', [
+      { name, role, email, login_id, registered_date, date_of_birth, phone_number },
+      id
+    ]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+
+    res.status(200).json({ id, ...req.body });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
+
+// Delete a profile
+app.delete('/profiles/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query('DELETE FROM profiles WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+
+    res.status(200).json({ message: 'Profile deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting profile:', error);
+    res.status(500).json({ error: 'Failed to delete profile' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

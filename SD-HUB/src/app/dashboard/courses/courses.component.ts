@@ -1,73 +1,100 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CourseService } from '../../services/course.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CourseDialogComponent } from './course-dialog/course-dialog.component';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.css']
 })
-export class CoursesComponent {
-  courses = [
-    {
-      title: 'Web Development',
-      instructor: 'Mohammed Tajjamul Ali',
-      category: 'Programming',
-      description: 'Learn front-end, back-end, database, and deployment.',
-      features: ['React.js','Express.js','MySQL / MongoDB','Node.js','Real-Time Projects','Basic Linux Commands','Testing, Trouboleshooting & Deployment','Learn Interview skills, Telugu & English language'],
-      duration: '3 months',
-      startDate: '2024-03-01',
-      endDate: '2024-06-01',
-      status: 'ongoing'
-    },
-    {
-      title: 'Accounting + Tally ERP',
-      instructor: 'Syed Shaida Hussain',
-      category: '-------',
-      description: 'Complete accounting with Tally ERP software.',
-       features: ['Introduction on how Digital Marketing works','SEO & Google Ranking Strategies','Social Media Marketing','Google Ads & PPC Campaigns','Email & Content Marketing','Analytics & Performance Tracking','Hands-on Training with Live Projects','Learn Interview Skills, English & Telugu Language'
-      ],
-      duration: '3 months',
-      startDate: '2024-03-01',
-      endDate: '2024-06-01',
-      status: 'ongoing'
-    }
-  ];
-
+export class CoursesComponent implements OnInit {
+  courses: any[] = [];
   isDialogOpen = false;
   isEditing = false;
   newCourse: any = {};
   featuresInput: string = '';
+  isAdminView = false;
+  private routerSub!: Subscription; // Add subscription variable
+
+  constructor(private courseService: CourseService, private dialog: MatDialog, private route: ActivatedRoute, private router: Router) { }
+
+  ngOnInit(): void {
+    // Added to set admin view on initial load
+    this.isAdminView = this.router.url.includes('/admin');  // <<-- new line
+    this.loadCourses();
+    this.routerSub = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.isAdminView = event.url.includes('/admin');
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
+  }
+
+  loadCourses() {
+    this.courseService.getCourses().subscribe({
+      next: (data) => {
+        this.courses = data;
+      },
+      error: (err) => console.error('Error loading courses:', err)
+    });
+  }
 
   openAddCourseDialog() {
-    this.newCourse = {};
-    this.featuresInput = '';
-    this.isEditing = false;
-    this.isDialogOpen = true;
+    const dialogRef = this.dialog.open(CourseDialogComponent, {
+      width: '400px',
+      data: { isEditing: false, course: {} }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.saveCourse(result);
+      }
+    });
   }
 
   editCourse(index: number) {
-    this.newCourse = { ...this.courses[index] };
-    this.featuresInput = this.newCourse.features ? this.newCourse.features.join(', ') : '';
-    this.isEditing = true;
-    this.isDialogOpen = true;
+    const dialogRef = this.dialog.open(CourseDialogComponent, {
+      width: '400px',
+      data: { isEditing: true, course: this.courses[index] }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.saveCourse(result);
+      }
+    });
+  }
+
+  saveCourse(course: any) {
+    const operation = course.id 
+      ? this.courseService.updateCourse(course.id, course)
+      : this.courseService.addCourse(course);
+  
+    operation.subscribe({
+      next: (savedCourse) => {
+        this.loadCourses();
+        this.closeDialog();
+      },
+      error: (err) => console.error('Error saving course:', err)
+    });
   }
 
   deleteCourse(index: number) {
-    this.courses.splice(index, 1);
-  }
-
-  saveCourse() {
-    this.newCourse.features = this.featuresInput ? this.featuresInput.split(',').map(f => f.trim()) : [];
-
-    if (this.isEditing) {
-      const index = this.courses.findIndex(course => course.title === this.newCourse.title);
-      if (index !== -1) {
-        this.courses[index] = { ...this.newCourse };
-      }
-    } else {
-      this.courses.push({ ...this.newCourse });
-    }
-
-    this.closeDialog();
+    const courseId = this.courses[index].id;
+    this.courseService.deleteCourse(courseId).subscribe({
+      next: () => {
+        this.courses.splice(index, 1);
+      },
+      error: (err) => console.error('Error deleting course:', err)
+    });
   }
 
   closeDialog() {
@@ -75,6 +102,6 @@ export class CoursesComponent {
   }
 
   updateFeatures() {
-    this.newCourse.features = this.featuresInput ? this.featuresInput.split(',').map(f => f.trim()) : [];
+    this.newCourse.features = this.featuresInput.split(',').map(feature => feature.trim());
   }
 }
