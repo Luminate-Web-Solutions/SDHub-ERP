@@ -98,11 +98,13 @@ export class AptitudeService {
     return this.getQuestions().pipe(
       switchMap(questions => {
         let score = 0;
+        let totalQuestions = 0; // Add counter
         const selected_answers: string[] = [];
         const states: string[] = [];
-
+  
         ['aptitudeQuestions', 'generalKnowledgeQuestions', 'criticalThinkingQuestions'].forEach(section => {
           questions[0][section][0].questions.forEach((q: any, index: number) => {
+            totalQuestions++; // Increment for each question
             const questionId = section.split('Questions')[0] + '_' + index;
             const selectedAnswer = testData.answers[questionId];
             selected_answers.push(selectedAnswer || '');
@@ -115,19 +117,17 @@ export class AptitudeService {
             }
           });
         });
-
-      // Replace CSV with JSON
-      const selected_answers_json = JSON.stringify(selected_answers);
-      const states_json = JSON.stringify(states);
-
-
-      const submission = {
-        personalInfo: testData.personalInfo,
-        selected_answers: selected_answers_json, // Send as JSON string
-        states: states_json, // Send as JSON string
-        marksScored: `${score}/43`
-      };
-
+  
+        const selected_answers_json = JSON.stringify(selected_answers);
+        const states_json = JSON.stringify(states);
+  
+        const submission = {
+          personalInfo: testData.personalInfo,
+          selected_answers: selected_answers_json,
+          states: states_json,
+          marksScored: `${score}/${totalQuestions}` // Use dynamic total
+        };
+  
         return this.http.post(`${this.apiUrl}/submit-test`, submission);
       })
     );
