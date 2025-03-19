@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'; // Import the map operator
 
 export interface Expenditure {
   id: number;
@@ -40,7 +41,15 @@ export class ExpenditureService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  // Upload invoice
   uploadInvoice(formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/upload-invoice`, formData);
+  }
+
+  // Get total expenditure
+  getTotalExpenditure(): Observable<number> {
+    return this.http.get<{ total: number }>('http://localhost:3000/total-expenditure').pipe(
+      map(response => response.total) // Use the map operator and explicitly type the response
+    );
   }
 }

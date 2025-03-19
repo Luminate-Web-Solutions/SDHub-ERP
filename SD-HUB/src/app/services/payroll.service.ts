@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'; // Import the map operator
 
 export interface StaffPayroll {
   id: number;
@@ -15,10 +16,10 @@ export interface StaffPayroll {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class PayrollService{
-  private apiUrl = 'http://localhost:3000/payroll'; // Point to your backend API
+export class PayrollService {
+  private apiUrl = 'http://localhost:3000/payroll'; // Backend API URL
 
   constructor(private http: HttpClient) {}
 
@@ -40,5 +41,12 @@ export class PayrollService{
   // Delete a payroll entry
   deletePayroll(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // Fetch total payroll from the backend
+  getTotalPayroll(): Observable<number> {
+    return this.http.get<{ total: number }>(`${this.apiUrl}/total`).pipe(
+      map(response => response.total) // Extract the total from the response
+    );
   }
 }

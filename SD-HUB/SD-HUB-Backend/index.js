@@ -1154,6 +1154,18 @@ app.post('/expenditures', async (req, res) => {
   }
 });
 
+app.get('/total-expenditure', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT COALESCE(SUM(amount), 0) as total FROM expenditures');
+    const total = rows[0].total; // Get the total from the query result
+    res.json({ total }); // Send the total as a JSON response
+  } catch (err) {
+    console.error('Error fetching total expenditure:', err);
+    res.status(500).json({ error: 'Failed to fetch total expenditure' });
+  }
+});
+
+
 app.put('/expenditures/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -1242,6 +1254,28 @@ app.delete('/payroll/:id', async (req, res) => {
   } catch (error) {
     console.error('Error deleting payroll entry:', error);
     res.status(500).json({ error: 'Failed to delete payroll entry' });
+  }
+});
+
+app.get('/total-payroll', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT COALESCE(SUM(netSalary), 0) as total FROM payroll');
+    const total = rows[0].total; // Get the total from the query result
+    res.json({ total }); // Send the total as a JSON response
+  } catch (err) {
+    console.error('Error fetching total payroll:', err);
+    res.status(500).json({ error: 'Failed to fetch total payroll' });
+  }
+});
+
+app.get('/payroll/total', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT COALESCE(SUM(netSalary), 0) as total FROM payroll');
+    const total = rows[0].total; // Get the total from the query result
+    res.json({ total }); // Send the total as a JSON response
+  } catch (err) {
+    console.error('Error fetching total payroll:', err);
+    res.status(500).json({ error: 'Failed to fetch total payroll' });
   }
 });
 

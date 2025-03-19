@@ -109,6 +109,7 @@ const routes: Routes = [
     path: 'trainer', 
     component: TrainerDashComponent,
     // canActivate: [adminGuard],
+    // canActivate: [adminGuard],
     children: [
       { path: '', redirectTo: 'attendance', pathMatch: 'full' },
       { path: 'attendance', component: AttendanceComponent },

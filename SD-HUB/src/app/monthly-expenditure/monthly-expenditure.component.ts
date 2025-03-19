@@ -59,6 +59,7 @@ export class MonthlyExpenditureComponent implements OnInit {
     private snackBar: MatSnackBar,
     private expenditureService: ExpenditureService,
     private payrollService: PayrollService,
+    
   ) {
     this.expenditureDataSource = new MatTableDataSource<Expenditure>();
     this.payrollDataSource = new MatTableDataSource<StaffPayroll>();
@@ -67,6 +68,9 @@ export class MonthlyExpenditureComponent implements OnInit {
   ngOnInit() {
     this.loadExpenditureData();
     this.loadPayrollData();
+    // this.getExpenditures();
+    this.getTotalExpenditure();
+    this.getTotalPayroll(); 
   }
 
   ngAfterViewInit() {
@@ -126,14 +130,14 @@ export class MonthlyExpenditureComponent implements OnInit {
       width: '500px',
       data: { mode: 'add' },
     });
-
+  
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.expenditureService.addExpenditure(result).subscribe({
           next: (newExpenditure) => {
             const updatedData = [...this.expenditureDataSource.data, newExpenditure];
             this.expenditureDataSource.data = updatedData;
-            this.calculateTotalExpenditure();
+            this.totalExpenditure += newExpenditure.amount; // Update total expenditure
             this.snackBar.open('Expenditure added successfully', 'Close', { duration: 3000 });
           },
           error: (error) => {
@@ -266,5 +270,27 @@ deleteExpenditure(expenditure: Expenditure) {
   applyPayrollFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.payrollDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  getTotalExpenditure() {
+    this.expenditureService.getTotalExpenditure().subscribe({
+      next: (total) => {
+        this.totalExpenditure = total;
+      },
+      error: (error) => {
+        console.error('Error fetching total expenditure', error);
+      }
+    });
+  }
+
+  getTotalPayroll() {
+    this.payrollService.getTotalPayroll().subscribe({
+      next: (total) => {
+        this.totalPayroll = total; // Update the total payroll
+      },
+      error: (error) => {
+        console.error('Error fetching total payroll:', error);
+      },
+    });
   }
 }
