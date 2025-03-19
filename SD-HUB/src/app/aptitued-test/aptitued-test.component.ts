@@ -109,7 +109,7 @@ export class AptituedTestComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.submitTestData().subscribe(() => {
-          this.router.navigate(['/test-complete']);
+          this.router.navigate(['/registration']);
         });
       }
     });

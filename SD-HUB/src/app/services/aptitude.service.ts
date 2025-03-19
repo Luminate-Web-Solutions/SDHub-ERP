@@ -26,7 +26,6 @@ interface Question {
 })
 export class AptitudeService {
   private apiUrl = 'http://localhost:3000';
-  private readonly QUESTIONS_PER_SECTION = 40;
 
   constructor(private http: HttpClient) { }
 
@@ -75,21 +74,6 @@ export class AptitudeService {
       })
     );
   }
-
-  private randomizeQuestions(questions: any[]): any[] {
-    if (!questions || !questions.length) return questions;
-
-    const shuffled = [...questions];
-    // Fisher-Yates shuffle algorithm
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-
-    // Take only QUESTIONS_PER_SECTION questions
-    return shuffled.slice(0, this.QUESTIONS_PER_SECTION);
-  }
-
   calculateScore(answers: { [key: string]: string }, questions: any[]): number {
     let score = 0;
     let totalQuestions = 0;
@@ -99,7 +83,7 @@ export class AptitudeService {
       questions[0][section][0].questions.forEach((q: any, index: number) => {
         const questionId = section.split('Questions')[0] + '_' + index;
         console.log(`Question ID: ${questionId}, User Answer: ${answers[questionId]}, Correct Answer: ${q.correctAnswer}`);
-        if (answers[questionId] === q.correctAnswer) {
+        if (answers[questionId] === q.correctAnswer) { // Line 77: Updated to match actual string value
           score++;
         }
         totalQuestions++;
