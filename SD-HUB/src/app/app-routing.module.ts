@@ -13,7 +13,6 @@ import { DeansComponent } from './dashboard/deans/deans.component';
 import { CoursesComponent } from './dashboard/courses/courses.component';
 import { SyllabusComponent } from './dashboard/syllabus/syllabus.component';
 import { StaffComponent } from './staff/staff.component';
-
 import { AuthGuard } from './auth.guard';
 import { NewsComponent } from './dashboard/news/news.component';
 import { HomeComponent } from './home/home.component';
@@ -25,9 +24,7 @@ import { ContactComponent } from './contact/contact.component';
 import { TestResultComponent } from './test-result/test-result.component';
 import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
-
 import { LoginComponent } from './login/login.component';
-
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
 import { TrainerProfileComponent } from './trainer-dash/trainer-profile/trainer-profile.component';
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
@@ -41,10 +38,8 @@ import { MonthlyExpenditureComponent } from './monthly-expenditure/monthly-expen
 import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.component';
 import { JobSectionComponent } from './dashboard/job-section/job-section.component';
 import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.component';
-
-
 import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
-import { DataComponent } from './data/data.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -53,29 +48,24 @@ const routes: Routes = [
   { path: 'aboutus', component: AboutusComponent },
   // { path: 'staff', component: StaffComponent},
   { path: 'main-course', component: MainCourseComponent },
-  { path: 'navbar', component: NavbarComponent},
+  { path: 'navbar', component: NavbarComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'more-gallery', component: MoreGalleryComponent },
   { path: 'KanbanBoard', component: KanbanBoardComponent },
   { path: 'addphoto', component: AddGalleryComponent },
   { path: 'job-section', component: JobSectionComponent },
-  
+
   { path: 'expenditure', component: ExpenditureComponent },
   { path: 'test-result', component: TestResultComponent },
-  { path: 'data', component: DataComponent },
   // { path: 'man', component: TrainerManagementComponent },
-  
-
-  
   // {path: 'dashboard', component:DashboardComponent},
   // { path: 'profile', component: ProfileComponent },
   { path: 'evaluated-result/:id', component: EvaluatedResultComponent },
-  
-  
+
   { path: 'portal', component: LoginComponent },
-  { 
-    path: 'admin', 
+  {
+    path: 'admin',
     component: AdminComponent,
     // canActivate: [adminGuard],
     children: [
@@ -90,23 +80,22 @@ const routes: Routes = [
       { path: 'expenditure', component: MonthlyExpenditureComponent },
     ]
   },
-  
-  
+
+
   {
     path: '',
     component: StdDashboardComponent,
     // canActivate: [AuthGuard],
     children: [
       { path: 'aptitude', component: AptituedTestComponent },
-      { path: 'exam-submitted', component: ExamSubmittedComponent},
-      
+      { path: 'exam-submitted', component: ExamSubmittedComponent },
       { path: 'registration', component: RegistrationComponent },
     ]
   },
 
 
-  { 
-    path: 'trainer', 
+  {
+    path: 'trainer',
     component: TrainerDashComponent,
     // canActivate: [adminGuard],
     // canActivate: [adminGuard],
@@ -118,8 +107,8 @@ const routes: Routes = [
     ]
   },
 
-  { 
-    path: 'stakeholder', 
+  {
+    path: 'stakeholder',
     component: StakeholderDashComponent,
     // canActivate: [adminGuard],
     children: [
@@ -129,8 +118,8 @@ const routes: Routes = [
     ]
   },
 
-  { 
-    path: 'admin-staff', 
+  {
+    path: 'admin-staff',
     component: AdminStaffStdComponent,
     // canActivate: [adminGuard],
     children: [
@@ -146,7 +135,7 @@ const routes: Routes = [
     anchorScrolling: 'enabled', // Enables fragment scrolling
     scrollPositionRestoration: 'enabled', // Restores scroll position when navigating back
   }),
-],
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
