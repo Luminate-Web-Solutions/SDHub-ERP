@@ -139,7 +139,8 @@ export class AptituedTestComponent implements OnInit, OnDestroy {
   private handleAutoSubmit() {
     this.isTestActive = false;
     this.submitTestData().subscribe(() => {
-      this.router.navigate(['/exam-submitted']);
+      this.snackBar.open('Test auto-submitted due to timeout!', 'Close', { duration: 3000 });
+      this.router.navigate(['/registration']);
     });
   }
 
@@ -189,6 +190,6 @@ export class AptituedTestComponent implements OnInit, OnDestroy {
     this.testStarted = true;
     this.tabSwitchCount = 0;
     this.timerService.startTimer(40 * 60);
-    this.snackBar.open('Test started! Browser monitoring activated.', 'Close', { duration: 5000 });
+    this.snackBar.open('Test started! Browser monitoring activated.', 'Close', { duration: 7000 });
   }
 }
