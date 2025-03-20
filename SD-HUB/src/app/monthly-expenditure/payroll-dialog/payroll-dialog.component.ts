@@ -28,12 +28,23 @@ export class PayrollDialogComponent {
       allowances: [data.payroll?.allowances || 0, [Validators.required, Validators.min(0)]],
       deductions: [data.payroll?.deductions || 0, [Validators.required, Validators.min(0)]],
       paymentStatus: [data.payroll?.paymentStatus || 'Pending', Validators.required],
-      paymentDate: [data.payroll?.paymentDate || new Date(), Validators.required]
+      paymentDate: [data.payroll?.paymentDate || new Date(), Validators.required],
+      netSalary: [{ value: data.payroll?.netSalary || 0, disabled: true }] // Add netSalary control
     });
 
     // Calculate net salary whenever relevant fields change
     this.form.valueChanges.subscribe(() => {
       this.calculateNetSalary();
+    });
+
+    // Initial calculation of net salary
+    this.calculateNetSalary();
+  }
+
+  ngOnInit() {
+    console.log('Initial Payroll Data:', this.data.payroll); // Debug: Check initial data
+    this.form.valueChanges.subscribe((values) => {
+      console.log('Form Values:', values); // Debug: Check form values
     });
   }
 
@@ -42,7 +53,7 @@ export class PayrollDialogComponent {
     const allowances = this.form.get('allowances')?.value || 0;
     const deductions = this.form.get('deductions')?.value || 0;
     const netSalary = basicSalary + allowances - deductions;
-    this.form.patchValue({ netSalary: netSalary }, { emitEvent: false });
+    this.form.get('netSalary')?.setValue(netSalary, { emitEvent: false });
   }
 
   onSubmit() {

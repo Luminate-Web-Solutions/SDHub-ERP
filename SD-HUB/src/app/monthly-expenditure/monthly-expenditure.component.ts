@@ -193,56 +193,59 @@ deleteExpenditure(expenditure: Expenditure) {
 }
 
 
- addPayroll() {
-    const dialogRef = this.dialog.open(PayrollDialogComponent, {
-      width: '500px',
-      data: { mode: 'add' },
-    });
+addPayroll() {
+  const dialogRef = this.dialog.open(PayrollDialogComponent, {
+    width: '500px',
+    data: { mode: 'add' },
+  });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.payrollService.addPayroll(result).subscribe({
-          next: (newPayroll) => {
-            const updatedData = [...this.payrollDataSource.data, newPayroll];
-            this.payrollDataSource.data = updatedData;
-            this.calculateTotalPayroll();
-            this.snackBar.open('Payroll entry added successfully', 'Close', { duration: 3000 });
-          },
-          error: (error) => {
-            console.error('Error adding payroll entry:', error);
-            this.snackBar.open('Failed to add payroll entry', 'Close', { duration: 3000 });
-          },
-        });
-      }
-    });
-  }
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result) {
+      // Calculate netSalary before sending to the service
+      result.netSalary = result.basicSalary + result.allowances - result.deductions;
+      this.payrollService.addPayroll(result).subscribe({
+        next: (newPayroll) => {
+          const updatedData = [...this.payrollDataSource.data, newPayroll];
+          this.payrollDataSource.data = updatedData;
+          this.calculateTotalPayroll();
+          this.snackBar.open('Payroll entry added successfully', 'Close', { duration: 3000 });
+        },
+        error: (error) => {
+          console.error('Error adding payroll entry:', error);
+          this.snackBar.open('Failed to add payroll entry', 'Close', { duration: 3000 });
+        },
+      });
+    }
+  });
+}
 
+editPayroll(payroll: StaffPayroll) {
+  const dialogRef = this.dialog.open(PayrollDialogComponent, {
+    width: '500px',
+    data: { mode: 'edit', payroll },
+  });
 
-  editPayroll(payroll: StaffPayroll) {
-    const dialogRef = this.dialog.open(PayrollDialogComponent, {
-      width: '500px',
-      data: { mode: 'edit', payroll },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.payrollService.updatePayroll(payroll.id, result).subscribe({
-          next: (updatedPayroll) => {
-            const updatedData = this.payrollDataSource.data.map((item) =>
-              item.id === payroll.id ? updatedPayroll : item
-            );
-            this.payrollDataSource.data = updatedData;
-            this.calculateTotalPayroll();
-            this.snackBar.open('Payroll entry updated successfully', 'Close', { duration: 3000 });
-          },
-          error: (error) => {
-            console.error('Error updating payroll entry:', error);
-            this.snackBar.open('Failed to update payroll entry', 'Close', { duration: 3000 });
-          },
-        });
-      }
-    });
-  }
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result) {
+      // Calculate netSalary before sending to the service
+      result.netSalary = result.basicSalary + result.allowances - result.deductions;
+      this.payrollService.updatePayroll(payroll.id, result).subscribe({
+        next: (updatedPayroll) => {
+          const updatedData = this.payrollDataSource.data.map((item) =>
+            item.id === payroll.id ? updatedPayroll : item
+          );
+          this.payrollDataSource.data = updatedData;
+          this.calculateTotalPayroll();
+          this.snackBar.open('Payroll entry updated successfully', 'Close', { duration: 3000 });
+        },
+        error: (error) => {
+          console.error('Error updating payroll entry:', error);
+          this.snackBar.open('Failed to update payroll entry', 'Close', { duration: 3000 });
+        },
+      });
+    }
+  });
+}
 
   deletePayroll(payroll: StaffPayroll) {
     if (confirm('Are you sure you want to delete this payroll entry?')) {
