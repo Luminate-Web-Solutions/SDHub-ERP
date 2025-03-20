@@ -97,6 +97,15 @@ import { ProfileDialogComponent } from './dashboard/profile/profile-dialog/profi
 import { CourseDialogComponent } from './dashboard/courses/course-dialog/course-dialog.component';
 import { UploadInvoiceDialogComponent } from './upload-invoice-dialog/upload-invoice-dialog.component';
 import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.component';
+import { SessionService } from './services/session.service';
+import { TakeSessionComponent } from './take-session/take-session.component';
+import { TopicsComponent } from './topics/topics.component';
+import { TopicDialogComponent } from './topics/topic-dialog/topic-dialog.component';
+import { MemberFormDialogComponent } from './member-sessions/member-form-dialog/member-form-dialog.component';
+import { MembersComponent } from './member-sessions/members/members.component';
+import { SelectMemberDialogComponent } from './member-sessions/select-member-dialog/select-member-dialog.component';
+
+
 
 @NgModule({
   declarations: [
@@ -162,6 +171,14 @@ import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.compon
     CourseDialogComponent,
     UploadInvoiceDialogComponent,
     AdminStaffStdComponent,
+    TakeSessionComponent,
+    TopicsComponent,
+    TopicDialogComponent,
+    MemberFormDialogComponent,
+    MembersComponent,
+    SelectMemberDialogComponent,
+    
+
   ],
   imports: [
     BrowserModule,
@@ -203,6 +220,7 @@ import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.compon
   ],
   providers: [
     provideAnimationsAsync(),
+    SessionService,
     DatePipe,
     provideHttpClient()
   ],

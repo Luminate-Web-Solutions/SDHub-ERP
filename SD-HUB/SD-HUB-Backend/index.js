@@ -1423,6 +1423,104 @@ app.delete('/profiles/:id', async (req, res) => {
   }
 });
 
+// Topics Routes
+app.get('/session-topics', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM session_topics');
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch topics' });
+  }
+});
+
+app.post('/session-topics', async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    const [result] = await pool.query(
+      'INSERT INTO session_topics (name, description) VALUES (?, ?)',
+      [name, description]
+    );
+    res.status(201).json({ id: result.insertId, name, description });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create topic' });
+  }
+});
+
+app.put('/session-topics/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description } = req.body;
+    const [result] = await pool.query(
+      'UPDATE session_topics SET name = ?, description = ? WHERE id = ?',
+      [name, description, id]
+    );
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Topic not found' });
+    res.status(200).json({ id, name, description });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update topic' });
+  }
+});
+
+app.delete('/session-topics/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query('DELETE FROM session_topics WHERE id = ?', [id]);
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Topic not found' });
+    res.status(200).json({ message: 'Topic deleted' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete topic' });
+  }
+});
+
+// Members Routes
+app.get('/session-members', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM session_members');
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch members' });
+  }
+});
+
+app.post('/session-members', async (req, res) => {
+  try {
+    const { name, email, topic_id } = req.body;
+    const [result] = await pool.query(
+      'INSERT INTO session_members (name, email, topic_id) VALUES (?, ?, ?)',
+      [name, email, topic_id]
+    );
+    res.status(201).json({ id: result.insertId, name, email, topic_id });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create member' });
+  }
+});
+
+app.put('/session-members/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, topic_id } = req.body;
+    const [result] = await pool.query(
+      'UPDATE session_members SET name = ?, email = ?, topic_id = ? WHERE id = ?',
+      [name, email, topic_id, id]
+    );
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Member not found' });
+    res.status(200).json({ id, name, email, topic_id });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update member' });
+  }
+});
+
+app.delete('/session-members/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query('DELETE FROM session_members WHERE id = ?', [id]);
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Member not found' });
+    res.status(200).json({ message: 'Member deleted' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete member' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

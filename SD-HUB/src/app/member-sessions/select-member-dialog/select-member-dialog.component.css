@@ -1,0 +1,6 @@
+.member-item {
+    cursor: pointer;
+  }
+  .member-item:hover {
+    background-color: #f5f5f5;
+  }

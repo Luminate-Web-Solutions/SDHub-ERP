@@ -1,0 +1,16 @@
+<table mat-table [dataSource]="sessions">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let session">{{session.id}}</td>
+    </ng-container>
+    <ng-container matColumnDef="topic_name">
+      <th mat-header-cell *matHeaderCellDef>Topic</th>
+      <td mat-cell *matCellDef="let session">{{session.topic_name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="session_date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let session">{{session.session_date}}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>

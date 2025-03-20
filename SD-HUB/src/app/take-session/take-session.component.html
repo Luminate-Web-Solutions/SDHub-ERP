@@ -1,0 +1,21 @@
+<form [formGroup]="sessionForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-select placeholder="Select Topic" formControlName="topicId" (selectionChange)="onTopicChange($event.value)">
+        <mat-option *ngFor="let topic of topics" [value]="topic.id">{{topic.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <div *ngIf="members.length > 0">
+      <h3>Members</h3>
+      <div formArrayName="attendance">
+        <div *ngFor="let control of sessionForm.get('attendance')?.controls; let i=index" [formGroupName]="i">
+          <span>{{members[i].name}}</span>
+          <mat-radio-group formControlName="status">
+            <mat-radio-button value="present">Present</mat-radio-button>
+            <mat-radio-button value="absent">Absent</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <button mat-raised-button color="primary" type="submit">Save Session</button>
+    </div>
+  </form>
