@@ -40,6 +40,9 @@ import { JobSectionComponent } from './dashboard/job-section/job-section.compone
 import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.component';
 import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
 
+import { SessionAttendanceComponent } from './session-attendance/session-attendance.component';
+
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
