@@ -10,7 +10,8 @@
     <mat-card *ngFor="let course of courses; let i = index" class="course-card">
       <mat-card-header>
         <mat-card-title>{{ course.title }}</mat-card-title>
-        <mat-chip-listbox>
+        <!-- Conditionally render the status tag -->
+        <mat-chip-listbox *ngIf="isAdminView">
           <mat-chip [ngClass]="course.status">{{ course.status }}</mat-chip>
         </mat-chip-listbox>
       </mat-card-header>
@@ -20,18 +21,20 @@
         <img *ngIf="course.image" [src]="course.image" alt="{{ course.title }}" style="max-width: 100%; height: auto; margin-bottom: 16px;">
         <p><strong>Instructor:</strong> {{ course.instructor }}</p>
         <p><strong>Category:</strong> {{ course.category }}</p>
+        <p><strong>Course Duration:</strong> {{ course.duration }}</p>
         <p><strong>Description:</strong> {{ course.description }}</p>
         <div *ngIf="course.features && course.features.length">
           <p><strong>Features:</strong></p>
           <ul>
-            <li *ngFor="let feature of course.features">{{ feature }}</li>
+            <strong><li *ngFor="let feature of course.features">{{ feature }}</li></strong>
           </ul>
         </div>
-        <p><strong>Duration:</strong> {{ course.duration }}</p>
-        <p><strong>Start Date:</strong> {{ course.startDate }}</p>
-        <p><strong>End Date:</strong> {{ course.endDate }}</p>
+        <!-- Conditionally render start date and end date -->
+        <p *ngIf="isAdminView"><strong>Start Date:</strong> {{ course.startDate }}</p>
+        <p *ngIf="isAdminView"><strong>End Date:</strong> {{ course.endDate }}</p>
       </mat-card-content>
   
+      <!-- Conditionally render edit and delete buttons for admin view -->
       <mat-card-actions *ngIf="isAdminView">
         <button mat-button color="accent" (click)="editCourse(i)">
           <mat-icon>edit</mat-icon> Edit
