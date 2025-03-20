@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBarModule } from '@angular/material/snack-bar';  
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -34,13 +34,6 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-
-
-
-
-
-
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SigninComponent } from './signin/signin.component';
@@ -78,11 +71,8 @@ import { MoreGalleryComponent } from './more-gallery/more-gallery.component';
 import { TaskDialogComponent } from './staff/task-dialog/task-dialog.component';
 import { TaskCardComponent } from './staff/task-card/task-card.component';
 import { KanbanBoardComponent } from './staff/kanban-board/kanban-board.component';
-
-
 import { NewsDialogComponent } from './dashboard/news/news-dialog/news-dialog.component';
 import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
-
 import { ForgotPasswordDialogComponent } from './signin/forgot-password-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { TrainerDashComponent } from './trainer-dash/trainer-dash.component';
@@ -105,7 +95,6 @@ import { JobSectionComponent } from './dashboard/job-section/job-section.compone
 import { AddJobDialogComponent } from './dashboard/job-section/add-job-dialog/add-job-dialog.component';
 import { ProfileDialogComponent } from './dashboard/profile/profile-dialog/profile-dialog.component';
 import { CourseDialogComponent } from './dashboard/courses/course-dialog/course-dialog.component';
-
 import { UploadInvoiceDialogComponent } from './upload-invoice-dialog/upload-invoice-dialog.component';
 import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.component';
 
@@ -171,9 +160,8 @@ import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.compon
     JobSectionComponent,
     ProfileDialogComponent,
     CourseDialogComponent,
-   
     UploadInvoiceDialogComponent,
-         AdminStaffStdComponent,
+    AdminStaffStdComponent,
   ],
   imports: [
     BrowserModule,
