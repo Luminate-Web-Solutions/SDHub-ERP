@@ -41,6 +41,7 @@ import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.compon
 import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
 
 
+
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'signin', component: SigninComponent },
@@ -58,6 +59,7 @@ const routes: Routes = [
 
   { path: 'expenditure', component: ExpenditureComponent },
   { path: 'test-result', component: TestResultComponent },
+ 
   // { path: 'man', component: TrainerManagementComponent },
   // {path: 'dashboard', component:DashboardComponent},
   // { path: 'profile', component: ProfileComponent },
