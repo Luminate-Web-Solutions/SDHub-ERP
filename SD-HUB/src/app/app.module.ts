@@ -108,6 +108,7 @@ import { CourseDialogComponent } from './dashboard/courses/course-dialog/course-
 
 import { UploadInvoiceDialogComponent } from './upload-invoice-dialog/upload-invoice-dialog.component';
 import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.component';
+import { StdAttendanceComponent } from './std-attendance/std-attendance.component';
 
 @NgModule({
   declarations: [
@@ -174,6 +175,7 @@ import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.compon
    
     UploadInvoiceDialogComponent,
          AdminStaffStdComponent,
+         StdAttendanceComponent,
   ],
   imports: [
     BrowserModule,

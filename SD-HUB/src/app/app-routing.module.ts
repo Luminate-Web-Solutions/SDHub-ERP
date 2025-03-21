@@ -39,6 +39,7 @@ import { ExamSubmittedComponent } from './exam-submitted/exam-submitted.componen
 import { JobSectionComponent } from './dashboard/job-section/job-section.component';
 import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.component';
 import { EvaluatedResultComponent } from './evaluated-result/evaluated-result.component';
+import { StdAttendanceComponent } from './std-attendance/std-attendance.component';
 
 
 
@@ -127,6 +128,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'gallery', pathMatch: 'full' },
       { path: 'gallery', component: AddGalleryComponent },
+      { path: 'std-attendance', component: StdAttendanceComponent },
       { path: 'profile', component: StakeholderProfileComponent }
     ]
   },

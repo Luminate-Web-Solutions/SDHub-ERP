@@ -1,0 +1,28 @@
+.attendance-card {
+    max-width: 600px;
+    margin: 20px auto;
+   }
+   
+   .student-info {
+    flex-grow: 1;
+   }
+   
+   .attendance-actions {
+    display: flex;
+    gap: 10px;
+   }
+   
+   .active-link {
+      background-color: rgba(0, 0, 0, 0.04);
+   }
+   
+   .view-attendance-card {
+    max-width: 600px;
+    margin: 20px auto;
+   }
+   
+   .attendance-record {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+   }
