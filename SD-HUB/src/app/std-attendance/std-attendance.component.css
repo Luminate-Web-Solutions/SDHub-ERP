@@ -1,5 +1,5 @@
 .attendance-card {
-    max-width: 600px;
+    max-width: 1200px;
     margin: 20px auto;
    }
    
@@ -26,3 +26,97 @@
     justify-content: space-between;
     width: 100%;
    }
+
+   /* Course selection styling */
+.course-selection {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   margin-bottom: 20px;
+ }
+ 
+ /* Student card styling */
+ .student-card {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+ }
+ 
+ .student-info {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   margin-bottom: 10px;
+ }
+ 
+ .student-name {
+   font-size: 16px;
+   font-weight: bold;
+ }
+ 
+ .student-sno {
+   font-size: 14px;
+   color: #666;
+ }
+ 
+ .attendance-actions {
+   display: flex;
+   gap: 10px;
+ }
+ 
+ /* Grid list styling */
+ mat-grid-list {
+   margin-top: 20px;
+ }
+ 
+ mat-grid-tile {
+   padding: 10px;
+ }
+
+ /* Course selection styling */
+/* Course selection styling */
+.course-selection {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   margin-bottom: 20px;
+ }
+ 
+ /* Table styling */
+ .student-table {
+   width: 100%;
+   margin-top: 20px;
+ }
+ 
+ /* Pagination styling */
+ mat-paginator {
+   margin-top: 20px;
+ }
+ 
+ /* Highlight present rows */
+ .present-row {
+   background-color: #e8f5e9; /* Light green */
+ }
+ 
+ /* Highlight absent rows */
+ .absent-row {
+   background-color: #ffebee; /* Light red */
+ }
+
+ /* Date picker styling */
+.date-picker {
+   margin-bottom: 20px;
+ }
+ 
+ /* Confirmation message styling */
+ .confirmation-message {
+   margin-top: 20px;
+   padding: 10px;
+   background-color: #e8f5e9; /* Light green */
+   border-radius: 4px;
+   text-align: center;
+   font-weight: bold;
+ }

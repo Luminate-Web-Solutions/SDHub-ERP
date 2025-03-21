@@ -109,6 +109,9 @@ import { CourseDialogComponent } from './dashboard/courses/course-dialog/course-
 import { UploadInvoiceDialogComponent } from './upload-invoice-dialog/upload-invoice-dialog.component';
 import { AdminStaffStdComponent } from './admin-staff-std/admin-staff-std.component';
 import { StdAttendanceComponent } from './std-attendance/std-attendance.component';
+import { AddCourseDialogComponent } from './add-course-dialog/add-course-dialog.component';
+import { AddStudentDialogComponent } from './add-student-dialog/add-student-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -172,10 +175,14 @@ import { StdAttendanceComponent } from './std-attendance/std-attendance.componen
     JobSectionComponent,
     ProfileDialogComponent,
     CourseDialogComponent,
+    AddCourseDialogComponent,
    
     UploadInvoiceDialogComponent,
          AdminStaffStdComponent,
          StdAttendanceComponent,
+         AddCourseDialogComponent,
+         AddStudentDialogComponent,
+        
   ],
   imports: [
     BrowserModule,
@@ -214,6 +221,7 @@ import { StdAttendanceComponent } from './std-attendance/std-attendance.componen
     FullCalendarModule,
     MatProgressBarModule,
     CommonModule,
+    MatDialogModule,
   ],
   providers: [
     provideAnimationsAsync(),

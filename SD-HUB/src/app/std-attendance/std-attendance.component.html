@@ -1,81 +1,132 @@
 <mat-tab-group>
-    <mat-tab label="Mark Attendance">
-      <mat-card class="attendance-card">
-        <mat-card-content>
-          <mat-form-field appearance="outline">
-            <mat-label>Select Course</mat-label>
-            <mat-select [(ngModel)]="selectedCourse" (selectionChange)="onCourseChange()">
-              <mat-option *ngFor="let course of courses" [value]="course.id">
-                {{course.title}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-    
-          <div *ngIf="students && students.length > 0">
-            <mat-list>
-              <mat-list-item *ngFor="let student of students">
-                <div class="student-info">
-                  <span>{{student.firstName}} {{student.lastName}}</span>
-                </div>
-                <div class="attendance-actions">
-                  <button mat-icon-button color="primary" (click)="markPresent(student)">
-                    <mat-icon>check</mat-icon>
-                  </button>
-                  <button mat-icon-button color="warn" (click)="markAbsent(student)">
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </div>
-              </mat-list-item>
-            </mat-list>
-          </div>
-          <div *ngIf="students && students.length === 0">
-            <p>No students found for the selected course.</p>
-          </div>
-    
-          <button mat-raised-button color="primary" (click)="submitAttendance()">
-            Submit Attendance
-          </button>
-        </mat-card-content>
-      </mat-card>
-    </mat-tab>
-   
-    <mat-tab label="View Attendance">
-      <mat-card class="view-attendance-card">
-        <mat-card-content>
-          <mat-form-field appearance="outline">
-            <mat-label>Select Course</mat-label>
-            <mat-select [(ngModel)]="viewCourseId">
-              <mat-option *ngFor="let course of courses" [value]="course.id">
-                {{course.title}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-    
+  <mat-tab label="Mark Attendance">
+    <mat-card class="attendance-card">
+      <mat-card-content>
+        <!-- Date Picker -->
+        <div class="date-picker">
           <mat-form-field appearance="outline">
             <mat-label>Select Date</mat-label>
             <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-    
-          <button mat-raised-button color="primary" (click)="loadAttendance()">
-            Load Attendance
+        </div>
+
+        <!-- Select Course Dropdown with Add Course Button -->
+        <div class="course-selection">
+          <mat-form-field appearance="outline">
+            <mat-label>Select Course</mat-label>
+            <mat-select [(ngModel)]="selectedCourse" (selectionChange)="onCourseChange()">
+              <mat-option *ngFor="let course of courses" [value]="course.id">
+                {{ course.title }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Add Course Button -->
+          <button mat-icon-button color="primary" (click)="openAddCourseDialog()">
+            <mat-icon>add</mat-icon>
           </button>
-    
-          <div *ngIf="attendanceRecords && attendanceRecords.length > 0">
-            <mat-list>
-              <mat-list-item *ngFor="let record of attendanceRecords">
-                <div class="attendance-record">
-                  <span>{{record.studentName}}</span>
-                  <span>{{record.status}}</span>
-                </div>
-              </mat-list-item>
-            </mat-list>
-          </div>
-          <div *ngIf="attendanceRecords && attendanceRecords.length === 0">
-            <p>No attendance records found for the selected course and date.</p>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-tab>
-   </mat-tab-group>
+        </div>
+
+        <!-- Add Student Button (Visible only when a course is selected) -->
+        <div *ngIf="selectedCourse">
+          <button mat-raised-button color="accent" (click)="openAddStudentDialog()">
+            <mat-icon>person_add</mat-icon> Add Student
+          </button>
+        </div>
+
+        <!-- Student Table -->
+        <div *ngIf="students && students.length > 0">
+          <mat-table [dataSource]="students" class="student-table">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+              <mat-cell *matCellDef="let student"> {{ student.name }} </mat-cell>
+            </ng-container>
+
+            <!-- Contact Number Column -->
+            <ng-container matColumnDef="phone_number">
+              <mat-header-cell *matHeaderCellDef> Contact Number </mat-header-cell>
+              <mat-cell *matCellDef="let student"> {{ student.phone_number }} </mat-cell>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let student">
+                <button mat-icon-button color="primary" (click)="markPresent(student)">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="markAbsent(student)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Header Row -->
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <!-- Data Rows with Conditional Highlighting -->
+            <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'present-row': row.attendance === 'Present', 'absent-row': row.attendance === 'Absent'}"></mat-row>
+          </mat-table>
+
+          <!-- Pagination -->
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+        <div *ngIf="students && students.length === 0">
+          <p>No students found for the selected course.</p>
+        </div>
+
+        <!-- Submit Attendance Button -->
+        <button mat-raised-button color="primary" (click)="submitAttendance()">
+          Submit Attendance
+        </button>
+
+        <!-- Confirmation Message -->
+        <div *ngIf="submissionMessage" class="confirmation-message">
+          {{ submissionMessage }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+
+  <mat-tab label="View Attendance">
+    <mat-card class="view-attendance-card">
+      <mat-card-content>
+        <mat-form-field appearance="outline">
+          <mat-label>Select Course</mat-label>
+          <mat-select [(ngModel)]="viewCourseId">
+            <mat-option *ngFor="let course of courses" [value]="course.id">
+              {{course.title}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Select Date</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="loadAttendance()">
+          Load Attendance
+        </button>
+
+        <div *ngIf="attendanceRecords && attendanceRecords.length > 0">
+          <mat-list>
+            <mat-list-item *ngFor="let record of attendanceRecords">
+              <div class="attendance-record">
+                <span>{{record.name}}</span>
+                <span>{{record.status}}</span>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </div>
+        <div *ngIf="attendanceRecords && attendanceRecords.length === 0">
+          <p>No attendance records found for the selected course and date.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

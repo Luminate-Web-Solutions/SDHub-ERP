@@ -27,15 +27,6 @@
      </mat-sidenav>
  
      <!-- Main Content -->
-     <mat-sidenav-content class="content">
-       <mat-tab-group (selectedTabChange)="tabChanged($event)">
-         <!-- <mat-tab label="Dashboard">
-           <router-outlet></router-outlet>
-         </mat-tab> -->
-         <mat-tab label="Student Attendance" >
-         <app-std-attendance></app-std-attendance>
-         </mat-tab>
-       </mat-tab-group>
-     </mat-sidenav-content>
+     <router-outlet></router-outlet>
    </mat-sidenav-container>
  </div>

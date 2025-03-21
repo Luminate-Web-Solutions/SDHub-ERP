@@ -1426,3 +1426,200 @@ app.delete('/profiles/:id', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+// Add these endpoints to your existing index.js file
+
+// Get all courses
+app.get('/std-courses', async (req, res) => {
+  try {
+      const [rows] = await pool.query('SELECT * FROM std_courses');
+      res.status(200).json(rows);
+  } catch (error) {
+      console.error('Error fetching courses:', error);
+      res.status(500).json({ error: 'Failed to fetch courses' });
+  }
+});
+
+// Add a new course
+app.post('/std-courses', async (req, res) => {
+  try {
+      const { title, description } = req.body;
+      const [result] = await pool.query('INSERT INTO std_courses (title, description) VALUES (?, ?)', [title, description]);
+      res.status(201).json({ id: result.insertId, title, description });
+  } catch (error) {
+      console.error('Error adding course:', error);
+      res.status(500).json({ error: 'Failed to add course' });
+  }
+});
+
+// Get students by course ID
+app.get('/std-students/:courseId', async (req, res) => {
+  try {
+      const { courseId } = req.params;
+      const [rows] = await pool.query('SELECT * FROM std_students WHERE course_id = ?', [courseId]);
+      res.status(200).json(rows);
+  } catch (error) {
+      console.error('Error fetching students:', error);
+      res.status(500).json({ error: 'Failed to fetch students' });
+  }
+});
+
+// Add a new student
+app.post('/std-students', async (req, res) => {
+  try {
+      const { course_id, name, s_no, phone_number } = req.body;
+      const [result] = await pool.query('INSERT INTO std_students (course_id, name, s_no, phone_number) VALUES (?, ?, ?, ?)', [course_id, name, s_no, phone_number]);
+      res.status(201).json({ id: result.insertId, course_id, name, s_no, phone_number });
+  } catch (error) {
+      console.error('Error adding student:', error);
+      res.status(500).json({ error: 'Failed to add student' });
+  }
+});
+
+// Mark attendance for students
+app.post('/std-attendance', async (req, res) => {
+  try {
+      const { student_id, course_id, attendance_date, status } = req.body;
+      const [result] = await pool.query('INSERT INTO std_attendance (student_id, course_id, attendance_date, status) VALUES (?, ?, ?, ?)', [student_id, course_id, attendance_date, status]);
+      res.status(201).json({ id: result.insertId, student_id, course_id, attendance_date, status });
+  } catch (error) {
+      console.error('Error marking attendance:', error);
+      res.status(500).json({ error: 'Failed to mark attendance' });
+  }
+});
+
+// View attendance by course and date
+app.get('/std-attendance/:courseId/:date', async (req, res) => {
+  try {
+      const { courseId, date } = req.params;
+      const [rows] = await pool.query('SELECT s.name, a.status FROM std_attendance a JOIN std_students s ON a.student_id = s.id WHERE a.course_id = ? AND a.attendance_date = ?', [courseId, date]);
+      res.status(200).json(rows);
+  } catch (error) {
+      console.error('Error fetching attendance:', error);
+      res.status(500).json({ error: 'Failed to fetch attendance' });
+  }
+});
+
+// Bulk mark attendance (for multiple students at once)
+app.post('/std-attendance/bulk', async (req, res) => {
+  try {
+      const attendanceData = req.body; // Array of attendance records
+      const query = 'INSERT INTO std_attendance (student_id, course_id, attendance_date, status) VALUES ?';
+      const values = attendanceData.map(record => [record.student_id, record.course_id, record.attendance_date, record.status]);
+
+      const [result] = await pool.query(query, [values]);
+      res.status(201).json({ message: 'Attendance marked successfully', affectedRows: result.affectedRows });
+  } catch (error) {
+      console.error('Error marking bulk attendance:', error);
+      res.status(500).json({ error: 'Failed to mark bulk attendance' });
+  }
+});
+
+// Update a student's details
+app.put('/std-students/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const { name, s_no, phone_number } = req.body;
+      const [result] = await pool.query('UPDATE std_students SET name = ?, s_no = ?, phone_number = ? WHERE id = ?', [name, s_no, phone_number, id]);
+
+      if (result.affectedRows === 0) {
+          return res.status(404).json({ error: 'Student not found' });
+      }
+
+      res.status(200).json({ id, ...req.body });
+  } catch (error) {
+      console.error('Error updating student:', error);
+      res.status(500).json({ error: 'Failed to update student' });
+  }
+});
+
+// Delete a student
+app.delete('/std-students/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const [result] = await pool.query('DELETE FROM std_students WHERE id = ?', [id]);
+
+      if (result.affectedRows === 0) {
+          return res.status(404).json({ error: 'Student not found' });
+      }
+
+      res.status(200).json({ message: 'Student deleted successfully' });
+  } catch (error) {
+      console.error('Error deleting student:', error);
+      res.status(500).json({ error: 'Failed to delete student' });
+  }
+});
+
+// Update a course
+app.put('/std-courses/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const { title, description } = req.body;
+      const [result] = await pool.query('UPDATE std_courses SET title = ?, description = ? WHERE id = ?', [title, description, id]);
+
+      if (result.affectedRows === 0) {
+          return res.status(404).json({ error: 'Course not found' });
+      }
+
+      res.status(200).json({ id, ...req.body });
+  } catch (error) {
+      console.error('Error updating course:', error);
+      res.status(500).json({ error: 'Failed to update course' });
+  }
+});
+
+// Delete a course
+app.delete('/std-courses/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const [result] = await pool.query('DELETE FROM std_courses WHERE id = ?', [id]);
+
+      if (result.affectedRows === 0) {
+          return res.status(404).json({ error: 'Course not found' });
+      }
+
+      res.status(200).json({ message: 'Course deleted successfully' });
+  } catch (error) {
+      console.error('Error deleting course:', error);
+      res.status(500).json({ error: 'Failed to delete course' });
+  }
+});
+
+app.post('/std-students', async (req, res) => {
+  try {
+    const { course_id, name, s_no, phone_number } = req.body;
+    const [result] = await pool.query('INSERT INTO std_students (course_id, name, s_no, phone_number) VALUES (?, ?, ?, ?)', [course_id, name, s_no, phone_number]);
+    res.status(201).json({ id: result.insertId, course_id, name, s_no, phone_number });
+  } catch (error) {
+    console.error('Error adding student:', error);
+    res.status(500).json({ error: 'Failed to add student' });
+  }
+});
+
+app.post('/std-attendance', async (req, res) => {
+  try {
+    const attendanceData = req.body; // Array of attendance records
+
+    // Validate attendance data
+    if (!Array.isArray(attendanceData)) {
+      return res.status(400).json({ error: 'Attendance data must be an array' });
+    }
+
+    // Insert each attendance record
+    for (const record of attendanceData) {
+      if (!record.student_id || !record.course_id || !record.attendance_date || !record.status) {
+        return res.status(400).json({ error: 'All fields are required for each attendance record' });
+      }
+
+      await pool.query(
+        'INSERT INTO std_attendance (student_id, course_id, attendance_date, status) VALUES (?, ?, ?, ?)',
+        [record.student_id, record.course_id, record.attendance_date, record.status]
+      );
+    }
+
+    res.status(201).json({ message: 'Attendance submitted successfully' });
+  } catch (error) {
+    console.error('Error marking attendance:', error);
+    res.status(500).json({ error: 'Failed to mark attendance' });
+  }
+});
