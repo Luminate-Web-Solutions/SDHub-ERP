@@ -12,7 +12,7 @@ export class AdminStaffStdComponent {
  @ViewChild('sidenav') sidenav!: MatSidenav;
 
  navItems = [
-   { icon: 'gallery_thumbnail', label: 'Gallery', link: '/admin-staff/gallery' },
+   { icon: 'width_normal', label: 'Gallery', link: '/admin-staff/gallery' },
    { icon: 'check_box', label: 'Student Attendance', link: '/admin-staff/std-attendance' },
    { icon: 'account_circle', label: 'Profile', link: '/admin-staff/profile' },
  ];
