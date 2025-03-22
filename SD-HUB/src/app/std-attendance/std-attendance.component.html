@@ -93,40 +93,65 @@
   <mat-tab label="View Attendance">
     <mat-card class="view-attendance-card">
       <mat-card-content>
+        <!-- Course Selection -->
         <mat-form-field appearance="outline">
           <mat-label>Select Course</mat-label>
           <mat-select [(ngModel)]="viewCourseId">
             <mat-option *ngFor="let course of courses" [value]="course.id">
-              {{course.title}}
+              {{ course.title }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-
+  
+        <!-- Date Picker -->
         <mat-form-field appearance="outline">
           <mat-label>Select Date</mat-label>
           <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-
-        <button mat-raised-button color="primary" (click)="loadAttendance()">
-          Load Attendance
+  
+        <!-- Load Attendance Button -->
+        <button mat-raised-button color="primary" (click)="loadAttendance()" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Load Attendance</span>
+          <span *ngIf="isLoading">Loading...</span>
         </button>
-
-        <div *ngIf="attendanceRecords && attendanceRecords.length > 0">
-          <mat-list>
-            <mat-list-item *ngFor="let record of attendanceRecords">
-              <div class="attendance-record">
-                <span>{{record.name}}</span>
-                <span>{{record.status}}</span>
-              </div>
-            </mat-list-item>
-          </mat-list>
+  
+        <!-- Loading Spinner -->
+        <div *ngIf="isLoading" class="loading-spinner">
+          <mat-spinner diameter="40"></mat-spinner>
         </div>
-        <div *ngIf="attendanceRecords && attendanceRecords.length === 0">
+  
+        <!-- Attendance Records Table -->
+        <div *ngIf="attendanceRecords && attendanceRecords.length > 0">
+          <mat-table [dataSource]="attendanceRecords" class="attendance-table">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+              <mat-cell *matCellDef="let record"> {{ record.name }} </mat-cell>
+            </ng-container>
+  
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+              <mat-cell *matCellDef="let record">
+                <span [ngClass]="{'present': record.status === 'Present', 'absent': record.status === 'Absent'}">
+                  {{ record.status }}
+                </span>
+              </mat-cell>
+            </ng-container>
+  
+            <!-- Header Row -->
+            <mat-header-row *matHeaderRowDef="['name', 'status']"></mat-header-row>
+            <!-- Data Rows -->
+            <mat-row *matRowDef="let row; columns: ['name', 'status'];"></mat-row>
+          </mat-table>
+        </div>
+  
+        <!-- No Records Found Message -->
+        <div *ngIf="attendanceRecords && attendanceRecords.length === 0 && !isLoading">
           <p>No attendance records found for the selected course and date.</p>
         </div>
       </mat-card-content>
     </mat-card>
   </mat-tab>
-</mat-tab-group>

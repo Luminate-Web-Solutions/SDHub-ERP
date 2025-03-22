@@ -1423,9 +1423,6 @@ app.delete('/profiles/:id', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
 
 // Add these endpoints to your existing index.js file
 
@@ -1473,18 +1470,6 @@ app.post('/std-students', async (req, res) => {
   } catch (error) {
       console.error('Error adding student:', error);
       res.status(500).json({ error: 'Failed to add student' });
-  }
-});
-
-// Mark attendance for students
-app.post('/std-attendance', async (req, res) => {
-  try {
-      const { student_id, course_id, attendance_date, status } = req.body;
-      const [result] = await pool.query('INSERT INTO std_attendance (student_id, course_id, attendance_date, status) VALUES (?, ?, ?, ?)', [student_id, course_id, attendance_date, status]);
-      res.status(201).json({ id: result.insertId, student_id, course_id, attendance_date, status });
-  } catch (error) {
-      console.error('Error marking attendance:', error);
-      res.status(500).json({ error: 'Failed to mark attendance' });
   }
 });
 
@@ -1599,18 +1584,29 @@ app.post('/std-students', async (req, res) => {
 app.post('/std-attendance', async (req, res) => {
   try {
     const attendanceData = req.body; // Array of attendance records
+    console.log('Received attendance data:', attendanceData); // Log the data
 
     // Validate attendance data
     if (!Array.isArray(attendanceData)) {
       return res.status(400).json({ error: 'Attendance data must be an array' });
     }
 
+    // Check if all required fields are present for each record
+    for (const record of attendanceData) {
+      if (
+        !record.student_id ||
+        !record.course_id ||
+        !record.attendance_date ||
+        !record.status
+      ) {
+        return res.status(400).json({
+          error: 'All fields (student_id, course_id, attendance_date, status) are required for each attendance record',
+        });
+      }
+    }
+
     // Insert each attendance record
     for (const record of attendanceData) {
-      if (!record.student_id || !record.course_id || !record.attendance_date || !record.status) {
-        return res.status(400).json({ error: 'All fields are required for each attendance record' });
-      }
-
       await pool.query(
         'INSERT INTO std_attendance (student_id, course_id, attendance_date, status) VALUES (?, ?, ?, ?)',
         [record.student_id, record.course_id, record.attendance_date, record.status]
@@ -1620,6 +1616,10 @@ app.post('/std-attendance', async (req, res) => {
     res.status(201).json({ message: 'Attendance submitted successfully' });
   } catch (error) {
     console.error('Error marking attendance:', error);
-    res.status(500).json({ error: 'Failed to mark attendance' });
+    res.status(500).json({ error: 'Failed to mark attendance', details: error.message });
   }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

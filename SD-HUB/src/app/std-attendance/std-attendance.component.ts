@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddCourseDialogComponent } from '../add-course-dialog/add-course-dialog.component';
 import { AddStudentDialogComponent } from '../add-student-dialog/add-student-dialog.component';
 
@@ -19,6 +20,7 @@ export class StdAttendanceComponent implements OnInit {
   attendanceRecords: any[] = []; // Array to store attendance records
   viewCourseId: any; // Course ID for viewing attendance
   submissionMessage: string = ''; // Confirmation message
+  isLoading: boolean = false; // Loading flag for API calls
 
   // Table properties
   displayedColumns: string[] = ['name', 'phone_number', 'actions'];
@@ -26,7 +28,11 @@ export class StdAttendanceComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private http: HttpClient, private dialog: MatDialog) {}
+  constructor(
+    private http: HttpClient,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadCourses(); // Load courses when the component initializes
@@ -35,11 +41,15 @@ export class StdAttendanceComponent implements OnInit {
   // Load all courses
   loadCourses() {
     this.http.get<any[]>('http://localhost:3000/std-courses')
-      .subscribe(data => {
-        this.courses = data;
-      }, error => {
-        console.error('Error loading courses:', error);
-      });
+      .subscribe(
+        data => {
+          this.courses = data;
+        },
+        error => {
+          console.error('Error loading courses:', error);
+          this.snackBar.open('Failed to load courses. Please try again.', 'Close', { duration: 3000 });
+        }
+      );
   }
 
   // Open Add Course Dialog
@@ -59,13 +69,16 @@ export class StdAttendanceComponent implements OnInit {
   // Add a new course
   addCourse(course: { title: string, description: string }) {
     this.http.post('http://localhost:3000/std-courses', course)
-      .subscribe(() => {
-        alert('Course added successfully!');
-        this.loadCourses(); // Reload the courses list
-      }, error => {
-        console.error('Error adding course:', error);
-        alert('Failed to add course.');
-      });
+      .subscribe(
+        () => {
+          this.snackBar.open('Course added successfully!', 'Close', { duration: 3000 });
+          this.loadCourses(); // Reload the courses list
+        },
+        error => {
+          console.error('Error adding course:', error);
+          this.snackBar.open('Failed to add course.', 'Close', { duration: 3000 });
+        }
+      );
   }
 
   // Open Add Student Dialog
@@ -86,13 +99,16 @@ export class StdAttendanceComponent implements OnInit {
   addStudent(student: { name: string, s_no: string, phone_number: string }) {
     const studentData = { ...student, course_id: this.selectedCourse };
     this.http.post('http://localhost:3000/std-students', studentData)
-      .subscribe(() => {
-        alert('Student added successfully!');
-        this.loadStudents(this.selectedCourse); // Reload students for the selected course
-      }, error => {
-        console.error('Error adding student:', error);
-        alert('Failed to add student.');
-      });
+      .subscribe(
+        () => {
+          this.snackBar.open('Student added successfully!', 'Close', { duration: 3000 });
+          this.loadStudents(this.selectedCourse); // Reload students for the selected course
+        },
+        error => {
+          console.error('Error adding student:', error);
+          this.snackBar.open('Failed to add student.', 'Close', { duration: 3000 });
+        }
+      );
   }
 
   // Handle course selection change
@@ -108,13 +124,17 @@ export class StdAttendanceComponent implements OnInit {
   // Load students for a specific course
   loadStudents(courseId: number) {
     this.http.get<any[]>(`http://localhost:3000/std-students/${courseId}`)
-      .subscribe(data => {
-        this.students = data;
-        this.dataSource.data = data; // Update the table data
-        this.dataSource.paginator = this.paginator; // Attach paginator
-      }, error => {
-        console.error('Error loading students:', error);
-      });
+      .subscribe(
+        data => {
+          this.students = data;
+          this.dataSource.data = data; // Update the table data
+          this.dataSource.paginator = this.paginator; // Attach paginator
+        },
+        error => {
+          console.error('Error loading students:', error);
+          this.snackBar.open('Failed to load students.', 'Close', { duration: 3000 });
+        }
+      );
   }
 
   // Mark a student as present
@@ -130,7 +150,7 @@ export class StdAttendanceComponent implements OnInit {
   // Submit attendance for all students
   submitAttendance() {
     if (!this.selectedDate) {
-      alert('Please select a date.');
+      this.snackBar.open('Please select a date.', 'Close', { duration: 3000 });
       return;
     }
 
@@ -142,17 +162,21 @@ export class StdAttendanceComponent implements OnInit {
     }));
 
     this.http.post('http://localhost:3000/std-attendance', attendanceData)
-      .subscribe(() => {
-        // Reset the page
-        this.selectedDate = null;
-        this.selectedCourse = null;
-        this.students = [];
-        this.dataSource.data = [];
-        this.submissionMessage = `Attendance for ${this.getCourseName(this.selectedCourse)} on ${this.selectedDate.toDateString()} submitted successfully!`;
-      }, error => {
-        console.error('Error submitting attendance:', error);
-        alert('Failed to submit attendance.');
-      });
+      .subscribe(
+        () => {
+          // Reset the page
+          this.selectedDate = null;
+          this.selectedCourse = null;
+          this.students = [];
+          this.dataSource.data = [];
+          this.submissionMessage = `Attendance for ${this.getCourseName(this.selectedCourse)} on ${this.selectedDate.toDateString()} submitted successfully!`;
+          this.snackBar.open('Attendance submitted successfully!', 'Close', { duration: 3000 });
+        },
+        error => {
+          console.error('Error submitting attendance:', error);
+          this.snackBar.open('Failed to submit attendance.', 'Close', { duration: 3000 });
+        }
+      );
   }
 
   // Get course name by ID
@@ -163,13 +187,28 @@ export class StdAttendanceComponent implements OnInit {
 
   // Load attendance records for a specific course and date
   loadAttendance() {
-    if (this.viewCourseId && this.selectedDate) {
-      this.http.get<any[]>(`http://localhost:3000/std-attendance/${this.viewCourseId}/${this.selectedDate}`)
-        .subscribe(data => {
-          this.attendanceRecords = data;
-        }, error => {
-          console.error('Error loading attendance records:', error);
-        });
+    if (!this.viewCourseId || !this.selectedDate) {
+      this.snackBar.open('Please select both a course and a date.', 'Close', { duration: 3000 });
+      return;
     }
+
+    // Format the date as YYYY-MM-DD
+    const formattedDate = this.selectedDate.toISOString().split('T')[0];
+
+    this.isLoading = true; // Show loading spinner
+    this.attendanceRecords = []; // Clear previous records
+
+    this.http.get<any[]>(`http://localhost:3000/std-attendance/${this.viewCourseId}/${formattedDate}`)
+      .subscribe(
+        data => {
+          this.attendanceRecords = data;
+          this.isLoading = false; // Hide loading spinner
+        },
+        error => {
+          console.error('Error loading attendance records:', error);
+          this.snackBar.open('Failed to load attendance records. Please try again.', 'Close', { duration: 3000 });
+          this.isLoading = false; // Hide loading spinner
+        }
+      );
   }
 }
