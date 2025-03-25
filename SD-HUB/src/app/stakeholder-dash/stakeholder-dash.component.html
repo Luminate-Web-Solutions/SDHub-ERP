@@ -5,6 +5,15 @@
         <mat-icon>menu</mat-icon>
       </button>
       <img src="sd M logo white 1.png" alt="" class="logo">
+      <div class="remark-input-container">
+        <input
+          type="text"
+          placeholder="Write a remark..."
+          [(ngModel)]="remarkText"
+          (keydown.enter)="submitRemark()"
+        />
+        <button (click)="submitRemark()">Send</button>
+      </div>
       <div class="header-actions">
         <button mat-icon-button (click)="logout()">
           <mat-icon>logout</mat-icon>

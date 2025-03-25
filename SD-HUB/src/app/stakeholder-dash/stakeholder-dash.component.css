@@ -24,6 +24,7 @@ mat-icon{
 .logo{
   width: auto;
   height: 60px;
+  margin-left: 30px;
 }
 
 .header {
@@ -85,3 +86,29 @@ mat-icon{
       width: 200px;
     }
   }
+
+  .remark-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+  
+  .remark-input-container input {
+    padding: 6px 10px;
+    border-radius: 16px;
+    border: 1px solid #ccc;
+    width: 200px;
+    outline: none;
+  }
+  
+  .remark-input-container button {
+    padding: 4px 12px;
+    border: none;
+    border-radius: 16px;
+    background-color: #dc143c;
+    color: white;
+    cursor: pointer;
+    margin-right: 30px;
+  }
+  

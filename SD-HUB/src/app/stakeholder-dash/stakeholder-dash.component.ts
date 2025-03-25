@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-stakeholder-dash',
@@ -17,6 +19,7 @@ export class StakeholderDashComponent {
 
   constructor(
     private router: Router,
+    private http: HttpClient,
     // private AuthService: AuthService
   ) {}
 
@@ -28,5 +31,22 @@ export class StakeholderDashComponent {
     // this.AuthService.logout();
     this.router.navigate(['/portal']);
   }
+
+  remarkText: string = '';
+
+submitRemark() {
+  if (this.remarkText.trim()) {
+    this.http.post('http://localhost:3000/api/remarks', { remark: this.remarkText })
+      .subscribe({
+        next: () => {
+          this.remarkText = '';
+        },
+        error: (err) => {
+          console.error('Error submitting remark:', err);
+        }
+      });
+  }
+}
+
 }
 
